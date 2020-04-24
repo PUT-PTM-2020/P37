@@ -1,0 +1,8 @@
+&timers2 {
+    status = "okay";
+
+    pwm {
+        status = "okay";
+        label = "PWM_2";
+    };
+};
