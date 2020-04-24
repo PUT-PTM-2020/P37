@@ -1,39 +1,107 @@
-/*
- * Copyright (c) 2012-2014 Wind River Systems, Inc.
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
 #include <zephyr.h>
 #include <device.h>
-#include <devicetree.h>
 #include <drivers/gpio.h>
+#include <sys/printk.h>
+#include <drivers/pwm.h>
+#include <kernel.h>
 
-#define IN1_NODE DT_ALIAS(in1)
-#define IN2_NODE DT_ALIAS(in2)
-3
-#if DT_HAS_NODE(IN1_NODE)
-#define IN1 DT_GPIO_LABEL(IN1_NODE, gpios)
-#define PIN1 DT_GPIO_PIN(IN1_NODE, gpios)
-#endif
+#define ENGINE_PORT "GPIOA"
+#define IN1_PIN 5
+#define IN2_PIN 2
+#define IN3_PIN 3
+#define IN4_PIN 4
 
-#if DT_HAS_NODE(IN2_NODE)
-#define IN2 DT_GPIO_LABEL(IN2_NODE, gpios)
-#define PIN2 DT_GPIO_PIN(IN2_NODE, gpios)
-#endif
+#define SONIC_SENSOR_PORT "GPIOE"
+#define TRIG1_PIN 1
+#define ECHO1_PIN 0
+#define TRIG2_PIN 3
+#define ECHO2_PIN 2
+#define TRIG3_PIN 5
+#define ECHO3_PIN 4
 
-#ifndef FLAGS
+#define TRANSCEIVER_PORT "GPIOB"
+#define CE_PIN 0
+#define SPI_SCK_PIN 3
+#define MOSI_PIN 5
+#define MISO_PIN 4
+#define IRQ_PIN 1
+
 #define FLAGS 0
+
+#define DT_ALIAS_PWM_2_LABEL "PWM_2"
+#define DT_ALIAS_PWM_3_LABEL "PWM_3"
+
+#ifndef DT_ALIAS_PWM_2_LABEL
+#error "PWM_2 device label not defined"
 #endif
+
+#ifndef DT_ALIAS_PWM_3_LABEL
+#error "PWM_3 device label not defined"
+#endif
+
+/* period of servo motor signal ->  2.4ms */
+#define PERIOD (USEC_PER_SEC / 490U)
+
+/* all in micro second */
+#define STEP 1
+#define MINPULSEWIDTH 50 /* Servo 0 degrees */
+//#define MIDDLEPULSEWIDTH 1500 /* Servo 90 degrees */
+#define MAXPULSEWIDTH 255 /* Servo 180 degrees */
+
+struct device *gpio_engine_dev;
+struct device *gpio_sonic_sensor_dev;
+struct device *gpio_transceiver_dev;
+struct device *pwm2_dev, *pwm3_dev;
+
+uint8_t gpio_init(void){
+	uint8_t ret = 0;
+	gpio_Engine_dev = device_get_binding(ENGINE_PORT);
+	if (gpio_Engine_dev == NULL) {
+		return 1;
+	}
+
+	/* Engines IN1 - IN4 pins cofiguration */
+	gpio_pin_configure(gpio_Engine_dev, IN1_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
+	gpio_pin_configure(gpio_Engine_dev, IN2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+	gpio_pin_configure(gpio_Engine_dev, IN3_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
+	gpio_pin_configure(gpio_Engine_dev, IN4_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+
+	/* Sonic sensors ECHO and TRIG pins cofiguration */
+	gpio_pin_configure(gpio_sonic_sensor_dev, ECHO1_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+	gpio_pin_configure(gpio_sonic_sensor_dev, ECHO2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+	gpio_pin_configure(gpio_sonic_sensor_dev, ECHO3_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+	gpio_pin_configure(gpio_sonic_sensor_dev, TRIG1_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+	gpio_pin_configure(gpio_sonic_sensor_dev, TRIG2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+	gpio_pin_configure(gpio_sonic_sensor_dev, TRIG3_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+
+	/* Wireless radio component pin configuration */
+	gpio_pin_configure(gpio_transceiver_dev, CE_PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
+	gpio_pin_configure(gpio_transceiver_dev, MOSI_PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
+	gpio_pin_configure(gpio_transceiver_dev, MISO_PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
+	gpio_pin_configure(gpio_transceiver_dev, IRQ_PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
+
+	return ret;
+}
+
+uint8_t pwm_init(void){
+	pwm2_dev = device_get_binding(DT_ALIAS_PWM_2_LABEL);
+	pwm3_dev = device_get_binding(DT_ALIAS_PWM_3_LABEL);
+}
 
 void main(void)
 {
-	struct device *dev;
-	struct device *dev1;
-
-	dev = device_get_binding(IN1);
-	dev1 = device_get_binding(IN2);
-	gpio_pin_set(dev, PIN1, true);
-	gpio_pin_set(dev1, PIN2, true);
-	//pwm_dev = device_get_binding(DT_ALIAS_PWM_1_LABEL);
+	gpio_init();
+	pwm_init();
+	int fill = 500;
+	
+	while (1) {
+		pwm_pin_set_usec(pwm2_dev, 1, PERIOD, fill, 0);
+		pwm_pin_set_usec(pwm2_dev, 2, PERIOD, fill, 0);
+		if (fill < 2040) {
+			fill += STEP;
+		} else {
+			fill = 300;
+		}
+		k_sleep(K_MSEC(10));
+	}
 }
