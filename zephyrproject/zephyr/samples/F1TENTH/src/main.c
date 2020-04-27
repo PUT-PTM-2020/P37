@@ -55,43 +55,36 @@ struct device *pwm2_dev, *pwm3_dev;
 
 uint8_t gpio_init(void){
 	uint8_t ret = 0;
-	gpio_Engine_dev = device_get_binding(ENGINE_PORT);
-	if (gpio_Engine_dev == NULL) {
+	gpio_engine_dev = device_get_binding(ENGINE_PORT);
+	if (gpio_engine_dev == NULL) {
 		return 1;
 	}
 
 	/* Engines IN1 - IN4 pins cofiguration */
-	gpio_pin_configure(gpio_Engine_dev, IN1_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
-	gpio_pin_configure(gpio_Engine_dev, IN2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-	gpio_pin_configure(gpio_Engine_dev, IN3_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
-	gpio_pin_configure(gpio_Engine_dev, IN4_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-
-	/* Sonic sensors ECHO and TRIG pins cofiguration */
-	gpio_pin_configure(gpio_sonic_sensor_dev, ECHO1_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-	gpio_pin_configure(gpio_sonic_sensor_dev, ECHO2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-	gpio_pin_configure(gpio_sonic_sensor_dev, ECHO3_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-	gpio_pin_configure(gpio_sonic_sensor_dev, TRIG1_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-	gpio_pin_configure(gpio_sonic_sensor_dev, TRIG2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-	gpio_pin_configure(gpio_sonic_sensor_dev, TRIG3_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-
-	/* Wireless radio component pin configuration */
-	gpio_pin_configure(gpio_transceiver_dev, CE_PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
-	gpio_pin_configure(gpio_transceiver_dev, MOSI_PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
-	gpio_pin_configure(gpio_transceiver_dev, MISO_PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
-	gpio_pin_configure(gpio_transceiver_dev, IRQ_PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
+	gpio_pin_configure(gpio_engine_dev, IN1_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
+	gpio_pin_configure(gpio_engine_dev, IN2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+	gpio_pin_configure(gpio_engine_dev, IN3_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
+	gpio_pin_configure(gpio_engine_dev, IN4_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
 
 	return ret;
 }
 
 uint8_t pwm_init(void){
-	pwm2_dev = device_get_binding(DT_ALIAS_PWM_2_LABEL);
-	pwm3_dev = device_get_binding(DT_ALIAS_PWM_3_LABEL);
+   uint8_t ret = 0;
+   pwm2_dev = device_get_binding(DT_ALIAS_PWM_2_LABEL);
+	
+	if (pwm2_dev == NULL){
+		return 1;
+	}
+
+	return ret;
 }
+
 
 void main(void)
 {
 	gpio_init();
-	pwm_init();
+	pwm2_dev = device_get_binding(DT_ALIAS_PWM_2_LABEL);
 	int fill = 500;
 	
 	while (1) {
@@ -100,8 +93,10 @@ void main(void)
 		if (fill < 2040) {
 			fill += STEP;
 		} else {
-			fill = 300;
+			pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 0, 0);
+			k_sleep(K_MSEC(800));
+			fill = 0;
 		}
-		k_sleep(K_MSEC(10));
+		k_sleep(K_MSEC(2));
 	}
 }

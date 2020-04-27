@@ -2393,7 +2393,7 @@
 #define DT_ST_STM32_PWM_40000400_PWM_LABEL          "PWM_3"
 #define DT_INST_1_ST_STM32_PWM_LABEL                __WARN("Macro is deprecated") DT_ST_STM32_PWM_40000400_PWM_LABEL
 /* Clock prescaler at the input of the timer */
-#define DT_ST_STM32_PWM_40000400_PWM_ST_PRESCALER   10
+#define DT_ST_STM32_PWM_40000400_PWM_ST_PRESCALER   0
 #define DT_INST_1_ST_STM32_PWM_ST_PRESCALER         __WARN("Macro is deprecated") DT_ST_STM32_PWM_40000400_PWM_ST_PRESCALER
 #define DT_INST_1_ST_STM32_PWM                      1
 

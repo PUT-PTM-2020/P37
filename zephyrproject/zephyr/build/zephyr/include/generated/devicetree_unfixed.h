@@ -3132,7 +3132,7 @@
 /* Generic property macros: */
 #define DT_N_S_soc_S_timers_40000400_S_pwm_P_label "PWM_3"
 #define DT_N_S_soc_S_timers_40000400_S_pwm_P_label_EXISTS 1
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_st_prescaler 10
+#define DT_N_S_soc_S_timers_40000400_S_pwm_P_st_prescaler 0
 #define DT_N_S_soc_S_timers_40000400_S_pwm_P_st_prescaler_EXISTS 1
 #define DT_N_S_soc_S_timers_40000400_S_pwm_P_status "okay"
 #define DT_N_S_soc_S_timers_40000400_S_pwm_P_status_ENUM_IDX 1
