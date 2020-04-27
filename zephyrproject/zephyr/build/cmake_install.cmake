@@ -1,4 +1,4 @@
-# Install script for directory: /home/mateusz/zephyrproject/zephyr/samples/basic/servo
+# Install script for directory: /home/mateusz/zephyrproject/zephyr/samples/F1TENTH
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -294,7 +294,7 @@
 			pwm {
 				compatible = "st,stm32-pwm";
 				status = "okay";
-				st,prescaler = < 0xa >;
+				st,prescaler = < 0x0 >;
 				label = "PWM_3";
 				#pwm-cells = < 0x2 >;
 			};
