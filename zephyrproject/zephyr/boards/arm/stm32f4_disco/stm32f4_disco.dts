@@ -37,22 +37,6 @@
 			gpios = <&gpiod 15 GPIO_ACTIVE_HIGH>;
 			label = "User LD6";
 		};
-		engine_input1: engine_in1 {
-			gpios = <&gpioa 1 GPIO_ACTIVE_LOW>;
-			label = "Engine Input 1";
-		};
-		engine_input2: engine_in2 {
-			gpios = <&gpioa 2 GPIO_ACTIVE_LOW>;
-			label = "Engine Input 2";
-		};
-		engine_input3: engine_in3 {
-			gpios = <&gpioa 3 GPIO_ACTIVE_LOW>;
-			label = "Engine Input 3";
-		};
-		engine_input4: engine_in4 {
-			gpios = <&gpioa 4 GPIO_ACTIVE_LOW>;
-			label = "Engine Input 4";
-		};
 	};
 
 	gpio_keys {
@@ -70,11 +54,6 @@
 		led2 = &red_led_5;
 		led3 = &blue_led_6;
 		sw0 = &user_button;
-		in1 = &engine_input1;
-		in2 = &engine_input2;
-		in3 = &engine_input3;
-		in4 = &engine_input4;
-		pwm1 = &timers1;
 	};
 };
 
@@ -95,15 +74,6 @@
 		status = "okay";
 	};
 };
-
-&timers3 {
-	status = "okay";
-
-	pwm {
-		status = "okay";
-	};
-};
-
 
 &rtc {
 	status = "okay";

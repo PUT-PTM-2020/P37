@@ -3,13 +3,13 @@
 # List all architectures, export the list in list_var
 function(list_archs list_var)
 
-  FILE(GLOB arch_contents RELATIVE ${ZEPHYR_BASE}/arch ${ZEPHYR_BASE}/arch/*)
+  FILE(GLOB arch_contents RELATIVE $ENV{ZEPHYR_BASE}/arch $ENV{ZEPHYR_BASE}/arch/*)
   set(_arch_list)
   foreach(f ${arch_contents})
     if ("${f}" STREQUAL "common")
       continue()
     endif()
-    if (IS_DIRECTORY "${ZEPHYR_BASE}/arch/${f}")
+    if (IS_DIRECTORY "$ENV{ZEPHYR_BASE}/arch/${f}")
       list(APPEND _arch_list "${f}")
     endif()
   endforeach()
@@ -95,17 +95,18 @@ if(CMAKE_SCRIPT_MODE_FILE AND NOT CMAKE_PARENT_LIST_FILE)
 # some other script
 
 # The options available are:
-# BOARD_ROOT: Semi-colon separated board roots
+# BOARD_ROOT_SPACE_SEPARATED: Space-separated board roots
 # FILE_OUT: Set to a file path to save the boards to a file. If not defined the
 #           the contents will be printed to stdout
-cmake_minimum_required(VERSION 3.13.1)
+if(NOT DEFINED ENV{ZEPHYR_BASE})
+  message(FATAL_ERROR "ZEPHYR_BASE not set")
+endif()
 
-set(NO_BOILERPLATE TRUE)
-find_package(Zephyr HINTS $ENV{ZEPHYR_BASE})
+if (NOT BOARD_ROOT_SPACE_SEPARATED)
+  message(FATAL_ERROR "BOARD_ROOT_SPACE_SEPARATED not defined")
+endif()
 
-# Appending Zephyr base to list of board roots, as this is also done in boilerplate.cmake.
-# But as this file was executed in script mode, it must also be done here, to give same output.
-list(APPEND BOARD_ROOT ${ZEPHYR_BASE})
+string(REPLACE " " ";" BOARD_ROOT "${BOARD_ROOT_SPACE_SEPARATED}")
 
 if (NOT FILE_OUT)
   set(FILE_OUT FALSE)

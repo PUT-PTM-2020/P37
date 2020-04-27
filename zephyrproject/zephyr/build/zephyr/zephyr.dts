@@ -20,11 +20,6 @@
 		led2 = &red_led_5;
 		led3 = &blue_led_6;
 		sw0 = &user_button;
-		in1 = &engine_input1;
-		in2 = &engine_input2;
-		in3 = &engine_input3;
-		in4 = &engine_input4;
-		pwm1 = &timers1;
 	};
 	soc {
 		#address-cells = < 0x1 >;
@@ -289,11 +284,15 @@
 			compatible = "st,stm32-timers";
 			reg = < 0x40000400 0x400 >;
 			clocks = < &rcc 0x2 0x2 >;
-			status = "okay";
+			status = "disabled";
 			label = "TIMERS_3";
 			pwm {
 				compatible = "st,stm32-pwm";
+<<<<<<< HEAD
 				status = "okay";
+=======
+				status = "disabled";
+>>>>>>> someLogic
 				st,prescaler = < 0x0 >;
 				label = "PWM_3";
 				#pwm-cells = < 0x2 >;
@@ -669,22 +668,6 @@
 		blue_led_6: led_6 {
 			gpios = < &gpiod 0xf 0x0 >;
 			label = "User LD6";
-		};
-		engine_input1: engine_in1 {
-			gpios = < &gpioa 0x1 0x1 >;
-			label = "Engine Input 1";
-		};
-		engine_input2: engine_in2 {
-			gpios = < &gpioa 0x2 0x1 >;
-			label = "Engine Input 2";
-		};
-		engine_input3: engine_in3 {
-			gpios = < &gpioa 0x3 0x1 >;
-			label = "Engine Input 3";
-		};
-		engine_input4: engine_in4 {
-			gpios = < &gpioa 0x4 0x1 >;
-			label = "Engine Input 4";
 		};
 	};
 	gpio_keys {

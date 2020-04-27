@@ -1,10 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0
 if(CONFIG_ARM64)
-  list(APPEND TOOLCHAIN_C_FLAGS   -mcpu=${GCC_M_CPU})
-  list(APPEND TOOLCHAIN_LD_FLAGS  -mcpu=${GCC_M_CPU})
-
-  list(APPEND TOOLCHAIN_C_FLAGS   -mabi=lp64)
-  list(APPEND TOOLCHAIN_LD_FLAGS  -mabi=lp64)
+  list(APPEND TOOLCHAIN_C_FLAGS
+    -mcpu=${GCC_M_CPU}
+    )
+  list(APPEND TOOLCHAIN_LD_FLAGS
+    -mcpu=${GCC_M_CPU}
+    )
 else()
   list(APPEND TOOLCHAIN_C_FLAGS   -mcpu=${GCC_M_CPU})
   list(APPEND TOOLCHAIN_LD_FLAGS  -mcpu=${GCC_M_CPU})
@@ -13,9 +14,6 @@ else()
     list(APPEND TOOLCHAIN_C_FLAGS   -mthumb)
     list(APPEND TOOLCHAIN_LD_FLAGS  -mthumb)
   endif()
-
-  list(APPEND TOOLCHAIN_C_FLAGS -mabi=aapcs)
-  list(APPEND TOOLCHAIN_LD_FLAGS -mabi=aapcs)
 
   # Defines a mapping from GCC_M_CPU to FPU
 
