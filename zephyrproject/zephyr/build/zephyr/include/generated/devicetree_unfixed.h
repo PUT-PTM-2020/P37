@@ -5,7 +5,7 @@
  *   stm32f4_disco.dts.pre.tmp
  *
  * Directories with bindings:
- *   $ZEPHYR_BASE\dts\bindings
+ *   $ZEPHYR_BASE/dts/bindings
  *
  * Nodes in dependency order (ordinal and path):
  *   0   /
@@ -160,7 +160,7 @@
  * Node's generated path identifier: DT_N_S_memory_10000000
  *
  * Binding (compatible = st,stm32-ccm):
- *   $ZEPHYR_BASE\dts\bindings\arm\st,stm32-ccm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/arm/st,stm32-ccm.yaml
  *
  * Dependency Ordinal: 3
  *
@@ -203,7 +203,7 @@
  * Node's generated path identifier: DT_N_S_memory_20000000
  *
  * Binding (compatible = mmio-sram):
- *   $ZEPHYR_BASE\dts\bindings\sram\mmio-sram.yaml
+ *   $ZEPHYR_BASE/dts/bindings/sram/mmio-sram.yaml
  *
  * Dependency Ordinal: 4
  *
@@ -265,7 +265,7 @@
  * Node's generated path identifier: DT_N_S_cpus_S_cpu_0
  *
  * Binding (compatible = arm,cortex-m4f):
- *   $ZEPHYR_BASE\dts\bindings\cpu\arm,cortex-m4f.yaml
+ *   $ZEPHYR_BASE/dts/bindings/cpu/arm,cortex-m4f.yaml
  *
  * Dependency Ordinal: 6
  *
@@ -305,7 +305,7 @@
  * Node's generated path identifier: DT_N_S_gpio_keys
  *
  * Binding (compatible = gpio-keys):
- *   $ZEPHYR_BASE\dts\bindings\gpio\gpio-keys.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-keys.yaml
  *
  * Dependency Ordinal: 7
  *
@@ -403,7 +403,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000
  *
  * Binding (compatible = st,stm32-pinmux):
- *   $ZEPHYR_BASE\dts\bindings\pinctrl\st,stm32-pinmux.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pinctrl/st,stm32-pinmux.yaml
  *
  * Dependency Ordinal: 9
  *
@@ -457,7 +457,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_rcc_40023800
  *
  * Binding (compatible = st,stm32-rcc):
- *   $ZEPHYR_BASE\dts\bindings\clock\st,stm32-rcc.yaml
+ *   $ZEPHYR_BASE/dts/bindings/clock/st,stm32-rcc.yaml
  *
  * Dependency Ordinal: 10
  *
@@ -553,7 +553,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40020000
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 11
  *
@@ -613,7 +613,7 @@
  * Node's generated path identifier: DT_N_S_gpio_keys_S_button
  *
  * Binding (compatible = gpio-keys):
- *   $ZEPHYR_BASE\dts\bindings\gpio\gpio-keys.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-keys.yaml
  *
  * Dependency Ordinal: 12
  *
@@ -654,7 +654,7 @@
  * Node's generated path identifier: DT_N_S_leds
  *
  * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE\dts\bindings\gpio\gpio-leds.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
  * Dependency Ordinal: 13
  *
@@ -691,7 +691,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40020c00
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 14
  *
@@ -754,7 +754,7 @@
  * Node's generated path identifier: DT_N_S_leds_S_led_3
  *
  * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE\dts\bindings\gpio\gpio-leds.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
  * Dependency Ordinal: 15
  *
@@ -795,7 +795,7 @@
  * Node's generated path identifier: DT_N_S_leds_S_led_4
  *
  * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE\dts\bindings\gpio\gpio-leds.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
  * Dependency Ordinal: 16
  *
@@ -836,7 +836,7 @@
  * Node's generated path identifier: DT_N_S_leds_S_led_5
  *
  * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE\dts\bindings\gpio\gpio-leds.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
  * Dependency Ordinal: 17
  *
@@ -877,7 +877,7 @@
  * Node's generated path identifier: DT_N_S_leds_S_led_6
  *
  * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE\dts\bindings\gpio\gpio-leds.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
  * Dependency Ordinal: 18
  *
@@ -918,7 +918,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_interrupt_controller_e000e100
  *
  * Binding (compatible = arm,v7m-nvic):
- *   $ZEPHYR_BASE\dts\bindings\interrupt-controller\arm,v7m-nvic.yaml
+ *   $ZEPHYR_BASE/dts/bindings/interrupt-controller/arm,v7m-nvic.yaml
  *
  * Dependency Ordinal: 19
  *
@@ -993,7 +993,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_adc_40012000
  *
  * Binding (compatible = st,stm32-adc):
- *   $ZEPHYR_BASE\dts\bindings\iio\adc\st,stm32-adc.yaml
+ *   $ZEPHYR_BASE/dts/bindings/iio/adc/st,stm32-adc.yaml
  *
  * Dependency Ordinal: 20
  *
@@ -1017,7 +1017,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_can_40006400
  *
  * Binding (compatible = st,stm32-can):
- *   $ZEPHYR_BASE\dts\bindings\can\st,stm32-can.yaml
+ *   $ZEPHYR_BASE/dts/bindings/can/st,stm32-can.yaml
  *
  * Dependency Ordinal: 21
  *
@@ -1141,7 +1141,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_can_40006800
  *
  * Binding (compatible = st,stm32-can):
- *   $ZEPHYR_BASE\dts\bindings\can\st,stm32-can.yaml
+ *   $ZEPHYR_BASE/dts/bindings/can/st,stm32-can.yaml
  *
  * Dependency Ordinal: 22
  *
@@ -1266,7 +1266,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_i2c_40005400
  *
  * Binding (compatible = st,stm32-i2c-v1):
- *   $ZEPHYR_BASE\dts\bindings\i2c\st,stm32-i2c-v1.yaml
+ *   $ZEPHYR_BASE/dts/bindings/i2c/st,stm32-i2c-v1.yaml
  *
  * Dependency Ordinal: 23
  *
@@ -1290,7 +1290,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_i2c_40005800
  *
  * Binding (compatible = st,stm32-i2c-v1):
- *   $ZEPHYR_BASE\dts\bindings\i2c\st,stm32-i2c-v1.yaml
+ *   $ZEPHYR_BASE/dts/bindings/i2c/st,stm32-i2c-v1.yaml
  *
  * Dependency Ordinal: 24
  *
@@ -1314,7 +1314,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_i2c_40005c00
  *
  * Binding (compatible = st,stm32-i2c-v1):
- *   $ZEPHYR_BASE\dts\bindings\i2c\st,stm32-i2c-v1.yaml
+ *   $ZEPHYR_BASE/dts/bindings/i2c/st,stm32-i2c-v1.yaml
  *
  * Dependency Ordinal: 25
  *
@@ -1338,7 +1338,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_dma_40026000
  *
  * Binding (compatible = st,stm32-dma):
- *   $ZEPHYR_BASE\dts\bindings\dma\st,stm32-dma.yaml
+ *   $ZEPHYR_BASE/dts/bindings/dma/st,stm32-dma.yaml
  *
  * Dependency Ordinal: 26
  *
@@ -1419,7 +1419,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_i2s_40003800
  *
  * Binding (compatible = st,stm32-i2s):
- *   $ZEPHYR_BASE\dts\bindings\i2s\st,stm32-i2s.yaml
+ *   $ZEPHYR_BASE/dts/bindings/i2s/st,stm32-i2s.yaml
  *
  * Dependency Ordinal: 27
  *
@@ -1444,7 +1444,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_i2s_40003c00
  *
  * Binding (compatible = st,stm32-i2s):
- *   $ZEPHYR_BASE\dts\bindings\i2s\st,stm32-i2s.yaml
+ *   $ZEPHYR_BASE/dts/bindings/i2s/st,stm32-i2s.yaml
  *
  * Dependency Ordinal: 28
  *
@@ -1469,7 +1469,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_dma_40026400
  *
  * Binding (compatible = st,stm32-dma):
- *   $ZEPHYR_BASE\dts\bindings\dma\st,stm32-dma.yaml
+ *   $ZEPHYR_BASE/dts/bindings/dma/st,stm32-dma.yaml
  *
  * Dependency Ordinal: 29
  *
@@ -1549,7 +1549,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_i2s_40013000
  *
  * Binding (compatible = st,stm32-i2s):
- *   $ZEPHYR_BASE\dts\bindings\i2s\st,stm32-i2s.yaml
+ *   $ZEPHYR_BASE/dts/bindings/i2s/st,stm32-i2s.yaml
  *
  * Dependency Ordinal: 30
  *
@@ -1574,7 +1574,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_rng_50060800
  *
  * Binding (compatible = st,stm32-rng):
- *   $ZEPHYR_BASE\dts\bindings\rng\st,stm32-rng.yaml
+ *   $ZEPHYR_BASE/dts/bindings/rng/st,stm32-rng.yaml
  *
  * Dependency Ordinal: 31
  *
@@ -1597,7 +1597,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_rtc_40002800
  *
  * Binding (compatible = st,stm32-rtc):
- *   $ZEPHYR_BASE\dts\bindings\rtc\st,stm32-rtc.yaml
+ *   $ZEPHYR_BASE/dts/bindings/rtc/st,stm32-rtc.yaml
  *
  * Dependency Ordinal: 32
  *
@@ -1666,7 +1666,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_serial_40004400
  *
  * Binding (compatible = st,stm32-usart):
- *   $ZEPHYR_BASE\dts\bindings\serial\st,stm32-usart.yaml
+ *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-usart.yaml
  *
  * Dependency Ordinal: 33
  *
@@ -1740,7 +1740,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_serial_40004800
  *
  * Binding (compatible = st,stm32-usart):
- *   $ZEPHYR_BASE\dts\bindings\serial\st,stm32-usart.yaml
+ *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-usart.yaml
  *
  * Dependency Ordinal: 34
  *
@@ -1764,7 +1764,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_serial_40004c00
  *
  * Binding (compatible = st,stm32-uart):
- *   $ZEPHYR_BASE\dts\bindings\serial\st,stm32-uart.yaml
+ *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-uart.yaml
  *
  * Dependency Ordinal: 35
  *
@@ -1788,7 +1788,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_serial_40005000
  *
  * Binding (compatible = st,stm32-uart):
- *   $ZEPHYR_BASE\dts\bindings\serial\st,stm32-uart.yaml
+ *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-uart.yaml
  *
  * Dependency Ordinal: 36
  *
@@ -1812,7 +1812,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_serial_40011000
  *
  * Binding (compatible = st,stm32-usart):
- *   $ZEPHYR_BASE\dts\bindings\serial\st,stm32-usart.yaml
+ *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-usart.yaml
  *
  * Dependency Ordinal: 37
  *
@@ -1886,7 +1886,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_serial_40011400
  *
  * Binding (compatible = st,stm32-usart):
- *   $ZEPHYR_BASE\dts\bindings\serial\st,stm32-usart.yaml
+ *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-usart.yaml
  *
  * Dependency Ordinal: 38
  *
@@ -1910,7 +1910,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_spi_40003800
  *
  * Binding (compatible = st,stm32-spi):
- *   $ZEPHYR_BASE\dts\bindings\spi\st,stm32-spi.yaml
+ *   $ZEPHYR_BASE/dts/bindings/spi/st,stm32-spi.yaml
  *
  * Dependency Ordinal: 39
  *
@@ -1934,7 +1934,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_spi_40003c00
  *
  * Binding (compatible = st,stm32-spi):
- *   $ZEPHYR_BASE\dts\bindings\spi\st,stm32-spi.yaml
+ *   $ZEPHYR_BASE/dts/bindings/spi/st,stm32-spi.yaml
  *
  * Dependency Ordinal: 40
  *
@@ -1958,7 +1958,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_spi_40013000
  *
  * Binding (compatible = st,stm32-spi):
- *   $ZEPHYR_BASE\dts\bindings\spi\st,stm32-spi.yaml
+ *   $ZEPHYR_BASE/dts/bindings/spi/st,stm32-spi.yaml
  *
  * Dependency Ordinal: 41
  *
@@ -1974,7 +1974,50 @@
 /* Node parent (/soc) identifier: */
 #define DT_N_S_soc_S_spi_40013000_PARENT DT_N_S_soc
 
-/* No node macros: node is disabled */
+/* Existence and alternate IDs: */
+#define DT_N_S_soc_S_spi_40013000_EXISTS 1
+#define DT_N_INST_0_st_stm32_spi DT_N_S_soc_S_spi_40013000
+#define DT_N_NODELABEL_spi1      DT_N_S_soc_S_spi_40013000
+
+/* Special property macros: */
+#define DT_N_S_soc_S_spi_40013000_REG_NUM 1
+#define DT_N_S_soc_S_spi_40013000_REG_IDX_0_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_REG_IDX_0_VAL_ADDRESS 1073819648 /* 0x40013000 */
+#define DT_N_S_soc_S_spi_40013000_REG_IDX_0_VAL_SIZE 1024 /* 0x400 */
+#define DT_N_S_soc_S_spi_40013000_IRQ_NUM 1
+#define DT_N_S_soc_S_spi_40013000_IRQ_IDX_0_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_IRQ_IDX_0_VAL_irq 35
+#define DT_N_S_soc_S_spi_40013000_IRQ_IDX_0_VAL_irq_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_IRQ_IDX_0_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_IRQ_IDX_0_VAL_priority 5
+#define DT_N_S_soc_S_spi_40013000_IRQ_IDX_0_VAL_priority_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_COMPAT_MATCHES_st_stm32_spi 1
+
+/* Generic property macros: */
+#define DT_N_S_soc_S_spi_40013000_P_reg {1073819648 /* 0x40013000 */, 1024 /* 0x400 */}
+#define DT_N_S_soc_S_spi_40013000_P_reg_IDX_0 1073819648
+#define DT_N_S_soc_S_spi_40013000_P_reg_IDX_1 1024
+#define DT_N_S_soc_S_spi_40013000_P_reg_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_P_interrupts {35 /* 0x23 */, 5 /* 0x5 */}
+#define DT_N_S_soc_S_spi_40013000_P_interrupts_IDX_0 35
+#define DT_N_S_soc_S_spi_40013000_P_interrupts_IDX_1 5
+#define DT_N_S_soc_S_spi_40013000_P_interrupts_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_P_label "SPI_1"
+#define DT_N_S_soc_S_spi_40013000_P_label_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_P_status "okay"
+#define DT_N_S_soc_S_spi_40013000_P_status_ENUM_IDX 1
+#define DT_N_S_soc_S_spi_40013000_P_status_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_P_compatible {"st,stm32-spi"}
+#define DT_N_S_soc_S_spi_40013000_P_compatible_IDX_0 "st,stm32-spi"
+#define DT_N_S_soc_S_spi_40013000_P_compatible_LEN 1
+#define DT_N_S_soc_S_spi_40013000_P_compatible_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_P_clocks_IDX_0_PH DT_N_S_soc_S_rcc_40023800
+#define DT_N_S_soc_S_spi_40013000_P_clocks_IDX_0_VAL_bus 3
+#define DT_N_S_soc_S_spi_40013000_P_clocks_IDX_0_VAL_bus_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_P_clocks_IDX_0_VAL_bits 4096
+#define DT_N_S_soc_S_spi_40013000_P_clocks_IDX_0_VAL_bits_EXISTS 1
+#define DT_N_S_soc_S_spi_40013000_P_clocks_LEN 1
+#define DT_N_S_soc_S_spi_40013000_P_clocks_EXISTS 1
 
 /*
  * Devicetree node: /soc/spi@40013400
@@ -1982,7 +2025,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_spi_40013400
  *
  * Binding (compatible = st,stm32-spi):
- *   $ZEPHYR_BASE\dts\bindings\spi\st,stm32-spi.yaml
+ *   $ZEPHYR_BASE/dts/bindings/spi/st,stm32-spi.yaml
  *
  * Dependency Ordinal: 42
  *
@@ -2022,7 +2065,7 @@
  * Node's generated path identifier: DT_N_S_otghs_fs_phy
  *
  * Binding (compatible = usb-nop-xceiv):
- *   $ZEPHYR_BASE\dts\bindings\phy\usb-nop-xceiv.yaml
+ *   $ZEPHYR_BASE/dts/bindings/phy/usb-nop-xceiv.yaml
  *
  * Dependency Ordinal: 44
  *
@@ -2064,7 +2107,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_usb_40040000
  *
  * Binding (compatible = st,stm32-otghs):
- *   $ZEPHYR_BASE\dts\bindings\usb\st,stm32-otghs.yaml
+ *   $ZEPHYR_BASE/dts/bindings/usb/st,stm32-otghs.yaml
  *
  * Dependency Ordinal: 45
  *
@@ -2089,7 +2132,7 @@
  * Node's generated path identifier: DT_N_S_otgfs_phy
  *
  * Binding (compatible = usb-nop-xceiv):
- *   $ZEPHYR_BASE\dts\bindings\phy\usb-nop-xceiv.yaml
+ *   $ZEPHYR_BASE/dts/bindings/phy/usb-nop-xceiv.yaml
  *
  * Dependency Ordinal: 46
  *
@@ -2131,7 +2174,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_usb_50000000
  *
  * Binding (compatible = st,stm32-otgfs):
- *   $ZEPHYR_BASE\dts\bindings\usb\st,stm32-otgfs.yaml
+ *   $ZEPHYR_BASE/dts/bindings/usb/st,stm32-otgfs.yaml
  *
  * Dependency Ordinal: 47
  *
@@ -2217,7 +2260,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_watchdog_40002c00
  *
  * Binding (compatible = st,stm32-window-watchdog):
- *   $ZEPHYR_BASE\dts\bindings\watchdog\st,stm32-window-watchdog.yaml
+ *   $ZEPHYR_BASE/dts/bindings/watchdog/st,stm32-window-watchdog.yaml
  *
  * Dependency Ordinal: 48
  *
@@ -2241,7 +2284,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_watchdog_40003000
  *
  * Binding (compatible = st,stm32-watchdog):
- *   $ZEPHYR_BASE\dts\bindings\watchdog\st,stm32-watchdog.yaml
+ *   $ZEPHYR_BASE/dts/bindings/watchdog/st,stm32-watchdog.yaml
  *
  * Dependency Ordinal: 49
  *
@@ -2263,7 +2306,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_flash_controller_40023c00
  *
  * Binding (compatible = st,stm32-flash-controller):
- *   $ZEPHYR_BASE\dts\bindings\flash_controller\st,stm32-flash-controller.yaml
+ *   $ZEPHYR_BASE/dts/bindings/flash_controller/st,stm32-flash-controller.yaml
  *
  * Dependency Ordinal: 50
  *
@@ -2324,7 +2367,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_flash_controller_40023c00_S_flash_8000000
  *
  * Binding (compatible = soc-nv-flash):
- *   $ZEPHYR_BASE\dts\bindings\mtd\soc-nv-flash.yaml
+ *   $ZEPHYR_BASE/dts/bindings/mtd/soc-nv-flash.yaml
  *
  * Dependency Ordinal: 51
  *
@@ -2371,7 +2414,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40020400
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 52
  *
@@ -2428,7 +2471,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40020800
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 53
  *
@@ -2485,7 +2528,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40021000
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 54
  *
@@ -2542,7 +2585,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40021400
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 55
  *
@@ -2599,7 +2642,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40021800
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 56
  *
@@ -2656,7 +2699,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40021c00
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 57
  *
@@ -2713,7 +2756,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_pin_controller_40020000_S_gpio_40022000
  *
  * Binding (compatible = st,stm32-gpio):
- *   $ZEPHYR_BASE\dts\bindings\gpio\st,stm32-gpio.yaml
+ *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
  * Dependency Ordinal: 58
  *
@@ -2770,7 +2813,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40000000
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 59
  *
@@ -2829,7 +2872,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40000000_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 60
  *
@@ -2871,7 +2914,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40000400
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 61
  *
@@ -2897,7 +2940,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40000400_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 62
  *
@@ -2911,31 +2954,7 @@
 /* Node parent (/soc/timers@40000400) identifier: */
 #define DT_N_S_soc_S_timers_40000400_S_pwm_PARENT DT_N_S_soc_S_timers_40000400
 
-<<<<<<< HEAD
-/* Existence and alternate IDs: */
-#define DT_N_S_soc_S_timers_40000400_S_pwm_EXISTS 1
-#define DT_N_INST_1_st_stm32_pwm DT_N_S_soc_S_timers_40000400_S_pwm
-
-/* Special property macros: */
-#define DT_N_S_soc_S_timers_40000400_S_pwm_REG_NUM 0
-#define DT_N_S_soc_S_timers_40000400_S_pwm_IRQ_NUM 0
-#define DT_N_S_soc_S_timers_40000400_S_pwm_COMPAT_MATCHES_st_stm32_pwm 1
-
-/* Generic property macros: */
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_label "PWM_3"
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_label_EXISTS 1
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_st_prescaler 0
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_st_prescaler_EXISTS 1
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_status "okay"
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_status_ENUM_IDX 1
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_status_EXISTS 1
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_compatible {"st,stm32-pwm"}
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_compatible_IDX_0 "st,stm32-pwm"
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_compatible_LEN 1
-#define DT_N_S_soc_S_timers_40000400_S_pwm_P_compatible_EXISTS 1
-=======
 /* No node macros: node is disabled */
->>>>>>> someLogic
 
 /*
  * Devicetree node: /soc/timers@40000800
@@ -2943,7 +2962,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40000800
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 63
  *
@@ -2969,7 +2988,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40000800_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 64
  *
@@ -2991,7 +3010,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40000c00
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 65
  *
@@ -3017,7 +3036,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40000c00_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 66
  *
@@ -3039,7 +3058,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40001000
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 67
  *
@@ -3065,7 +3084,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40001000_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 68
  *
@@ -3087,7 +3106,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40001400
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 69
  *
@@ -3113,7 +3132,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40001400_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 70
  *
@@ -3135,7 +3154,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40001800
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 71
  *
@@ -3161,7 +3180,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40001800_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 72
  *
@@ -3183,7 +3202,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40001c00
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 73
  *
@@ -3209,7 +3228,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40001c00_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 74
  *
@@ -3231,7 +3250,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40002000
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 75
  *
@@ -3257,7 +3276,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40002000_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 76
  *
@@ -3279,7 +3298,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40010000
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 77
  *
@@ -3305,7 +3324,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40010000_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 78
  *
@@ -3327,7 +3346,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40010400
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 79
  *
@@ -3353,7 +3372,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40010400_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 80
  *
@@ -3375,7 +3394,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40014000
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 81
  *
@@ -3401,7 +3420,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40014000_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 82
  *
@@ -3423,7 +3442,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40014400
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 83
  *
@@ -3449,7 +3468,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40014400_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 84
  *
@@ -3471,7 +3490,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40014800
  *
  * Binding (compatible = st,stm32-timers):
- *   $ZEPHYR_BASE\dts\bindings\timer\st,stm32-timers.yaml
+ *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
  * Dependency Ordinal: 85
  *
@@ -3497,7 +3516,7 @@
  * Node's generated path identifier: DT_N_S_soc_S_timers_40014800_S_pwm
  *
  * Binding (compatible = st,stm32-pwm):
- *   $ZEPHYR_BASE\dts\bindings\pwm\st,stm32-pwm.yaml
+ *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
  * Dependency Ordinal: 86
  *
@@ -3557,6 +3576,7 @@
 #define DT_N_INST_st_stm32_gpio_NUM 9
 #define DT_N_INST_st_stm32_usart_NUM 2
 #define DT_N_INST_st_stm32_uart_NUM 2
+#define DT_N_INST_st_stm32_spi_NUM 1
 #define DT_N_INST_st_stm32_otgfs_NUM 1
 #define DT_N_INST_st_stm32_timers_NUM 1
 #define DT_N_INST_st_stm32_pwm_NUM 1
@@ -3580,6 +3600,7 @@
 #define DT_FOREACH_INST_st_stm32_gpio(fn) DT_FOREACH_IMPL_9(fn)
 #define DT_FOREACH_INST_st_stm32_usart(fn) DT_FOREACH_IMPL_2(fn)
 #define DT_FOREACH_INST_st_stm32_uart(fn) DT_FOREACH_IMPL_2(fn)
+#define DT_FOREACH_INST_st_stm32_spi(fn) DT_FOREACH_IMPL_1(fn)
 #define DT_FOREACH_INST_st_stm32_otgfs(fn) DT_FOREACH_IMPL_1(fn)
 #define DT_FOREACH_INST_st_stm32_timers(fn) DT_FOREACH_IMPL_1(fn)
 #define DT_FOREACH_INST_st_stm32_pwm(fn) DT_FOREACH_IMPL_1(fn)

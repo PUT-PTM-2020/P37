@@ -15,10 +15,10 @@ file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/include/generated)
 # functions in kconfigfunctions.py.
 #
 # See the Devicetree user guide in the Zephyr documentation for details.
+set(GEN_DEFINES_SCRIPT          ${ZEPHYR_BASE}/scripts/dts/gen_defines.py)
 set(ZEPHYR_DTS                  ${PROJECT_BINARY_DIR}/zephyr.dts)
 set(DEVICETREE_UNFIXED_H        ${PROJECT_BINARY_DIR}/include/generated/devicetree_unfixed.h)
 set(DEVICETREE_UNFIXED_LEGACY_H ${PROJECT_BINARY_DIR}/include/generated/devicetree_legacy_unfixed.h)
-set(DEVICETREE_CONF             ${PROJECT_BINARY_DIR}/include/generated/devicetree.conf)
 set(DTS_POST_CPP                ${PROJECT_BINARY_DIR}/${BOARD}.dts.pre.tmp)
 
 set_ifndef(DTS_SOURCE ${BOARD_DIR}/${BOARD}.dts)
@@ -157,6 +157,7 @@ if(SUPPORTS_DTS)
   set_property(DIRECTORY APPEND PROPERTY
     CMAKE_CONFIGURE_DEPENDS
     ${include_files}
+    ${GEN_DEFINES_SCRIPT}
     )
 
   #
@@ -199,7 +200,7 @@ if(SUPPORTS_DTS)
   # Run gen_defines.py to create a header file and zephyr.dts.
   #
 
-  set(CMD_EXTRACT ${PYTHON_EXECUTABLE} ${ZEPHYR_BASE}/scripts/dts/gen_defines.py
+  set(CMD_EXTRACT ${PYTHON_EXECUTABLE} ${GEN_DEFINES_SCRIPT}
   --dts ${BOARD}.dts.pre.tmp
   --dtc-flags '${EXTRA_DTC_FLAGS}'
   --bindings-dirs ${DTS_ROOT_BINDINGS}
@@ -217,7 +218,6 @@ if(SUPPORTS_DTS)
   --dtc-flags '${EXTRA_DTC_FLAGS}'
   --bindings-dirs ${DTS_ROOT_BINDINGS}
   --header-out ${DEVICETREE_UNFIXED_LEGACY_H}
-  --conf-out ${DEVICETREE_CONF}
   )
 
   execute_process(

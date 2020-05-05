@@ -1,4 +1,4 @@
-# Install script for directory: /home/mateusz/zephyrproject/zephyr/samples/F1TENTH
+# Install script for directory: /home/mateusz/projektptm/zephyrproject/zephyr/samples/F1tenth-nrf
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/mateusz/zephyrproject/zephyr/build/zephyr/cmake_install.cmake")
+  include("/home/mateusz/projektptm/zephyrproject/zephyr/build/zephyr/cmake_install.cmake")
 
 endif()
 
@@ -46,5 +46,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mateusz/zephyrproject/zephyr/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/mateusz/projektptm/zephyrproject/zephyr/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

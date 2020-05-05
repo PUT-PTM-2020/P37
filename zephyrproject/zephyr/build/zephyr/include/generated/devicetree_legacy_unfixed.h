@@ -22,83 +22,79 @@
  *   11  /soc/pin-controller@40020000/gpio@40020000
  *   12  /gpio_keys/button
  *   13  /leds
- *   14  /leds/engine_in1
- *   15  /leds/engine_in2
- *   16  /leds/engine_in3
- *   17  /leds/engine_in4
- *   18  /soc/pin-controller@40020000/gpio@40020c00
- *   19  /leds/led_3
- *   20  /leds/led_4
- *   21  /leds/led_5
- *   22  /leds/led_6
- *   23  /soc/interrupt-controller@e000e100
- *   24  /soc/adc@40012000
- *   25  /soc/can@40006400
- *   26  /soc/can@40006800
- *   27  /soc/i2c@40005400
- *   28  /soc/i2c@40005800
- *   29  /soc/i2c@40005c00
- *   30  /soc/dma@40026000
- *   31  /soc/i2s@40003800
- *   32  /soc/i2s@40003c00
- *   33  /soc/dma@40026400
- *   34  /soc/i2s@40013000
- *   35  /soc/rng@50060800
- *   36  /soc/rtc@40002800
- *   37  /soc/serial@40004400
- *   38  /soc/serial@40004800
- *   39  /soc/serial@40004c00
- *   40  /soc/serial@40005000
- *   41  /soc/serial@40011000
- *   42  /soc/serial@40011400
- *   43  /soc/spi@40003800
- *   44  /soc/spi@40003c00
- *   45  /soc/spi@40013000
- *   46  /soc/spi@40013400
- *   47  /soc/timer@e000e010
- *   48  /otghs_fs_phy
- *   49  /soc/usb@40040000
- *   50  /otgfs_phy
- *   51  /soc/usb@50000000
- *   52  /soc/watchdog@40002c00
- *   53  /soc/watchdog@40003000
- *   54  /soc/flash-controller@40023c00
- *   55  /soc/flash-controller@40023c00/flash@8000000
- *   56  /soc/pin-controller@40020000/gpio@40020400
- *   57  /soc/pin-controller@40020000/gpio@40020800
- *   58  /soc/pin-controller@40020000/gpio@40021000
- *   59  /soc/pin-controller@40020000/gpio@40021400
- *   60  /soc/pin-controller@40020000/gpio@40021800
- *   61  /soc/pin-controller@40020000/gpio@40021c00
- *   62  /soc/pin-controller@40020000/gpio@40022000
- *   63  /soc/timers@40000000
- *   64  /soc/timers@40000000/pwm
- *   65  /soc/timers@40000400
- *   66  /soc/timers@40000400/pwm
- *   67  /soc/timers@40000800
- *   68  /soc/timers@40000800/pwm
- *   69  /soc/timers@40000c00
- *   70  /soc/timers@40000c00/pwm
- *   71  /soc/timers@40001000
- *   72  /soc/timers@40001000/pwm
- *   73  /soc/timers@40001400
- *   74  /soc/timers@40001400/pwm
- *   75  /soc/timers@40001800
- *   76  /soc/timers@40001800/pwm
- *   77  /soc/timers@40001c00
- *   78  /soc/timers@40001c00/pwm
- *   79  /soc/timers@40002000
- *   80  /soc/timers@40002000/pwm
- *   81  /soc/timers@40010000
- *   82  /soc/timers@40010000/pwm
- *   83  /soc/timers@40010400
- *   84  /soc/timers@40010400/pwm
- *   85  /soc/timers@40014000
- *   86  /soc/timers@40014000/pwm
- *   87  /soc/timers@40014400
- *   88  /soc/timers@40014400/pwm
- *   89  /soc/timers@40014800
- *   90  /soc/timers@40014800/pwm
+ *   14  /soc/pin-controller@40020000/gpio@40020c00
+ *   15  /leds/led_3
+ *   16  /leds/led_4
+ *   17  /leds/led_5
+ *   18  /leds/led_6
+ *   19  /soc/interrupt-controller@e000e100
+ *   20  /soc/adc@40012000
+ *   21  /soc/can@40006400
+ *   22  /soc/can@40006800
+ *   23  /soc/i2c@40005400
+ *   24  /soc/i2c@40005800
+ *   25  /soc/i2c@40005c00
+ *   26  /soc/dma@40026000
+ *   27  /soc/i2s@40003800
+ *   28  /soc/i2s@40003c00
+ *   29  /soc/dma@40026400
+ *   30  /soc/i2s@40013000
+ *   31  /soc/rng@50060800
+ *   32  /soc/rtc@40002800
+ *   33  /soc/serial@40004400
+ *   34  /soc/serial@40004800
+ *   35  /soc/serial@40004c00
+ *   36  /soc/serial@40005000
+ *   37  /soc/serial@40011000
+ *   38  /soc/serial@40011400
+ *   39  /soc/spi@40003800
+ *   40  /soc/spi@40003c00
+ *   41  /soc/spi@40013000
+ *   42  /soc/spi@40013400
+ *   43  /soc/timer@e000e010
+ *   44  /otghs_fs_phy
+ *   45  /soc/usb@40040000
+ *   46  /otgfs_phy
+ *   47  /soc/usb@50000000
+ *   48  /soc/watchdog@40002c00
+ *   49  /soc/watchdog@40003000
+ *   50  /soc/flash-controller@40023c00
+ *   51  /soc/flash-controller@40023c00/flash@8000000
+ *   52  /soc/pin-controller@40020000/gpio@40020400
+ *   53  /soc/pin-controller@40020000/gpio@40020800
+ *   54  /soc/pin-controller@40020000/gpio@40021000
+ *   55  /soc/pin-controller@40020000/gpio@40021400
+ *   56  /soc/pin-controller@40020000/gpio@40021800
+ *   57  /soc/pin-controller@40020000/gpio@40021c00
+ *   58  /soc/pin-controller@40020000/gpio@40022000
+ *   59  /soc/timers@40000000
+ *   60  /soc/timers@40000000/pwm
+ *   61  /soc/timers@40000400
+ *   62  /soc/timers@40000400/pwm
+ *   63  /soc/timers@40000800
+ *   64  /soc/timers@40000800/pwm
+ *   65  /soc/timers@40000c00
+ *   66  /soc/timers@40000c00/pwm
+ *   67  /soc/timers@40001000
+ *   68  /soc/timers@40001000/pwm
+ *   69  /soc/timers@40001400
+ *   70  /soc/timers@40001400/pwm
+ *   71  /soc/timers@40001800
+ *   72  /soc/timers@40001800/pwm
+ *   73  /soc/timers@40001c00
+ *   74  /soc/timers@40001c00/pwm
+ *   75  /soc/timers@40002000
+ *   76  /soc/timers@40002000/pwm
+ *   77  /soc/timers@40010000
+ *   78  /soc/timers@40010000/pwm
+ *   79  /soc/timers@40010400
+ *   80  /soc/timers@40010400/pwm
+ *   81  /soc/timers@40014000
+ *   82  /soc/timers@40014000/pwm
+ *   83  /soc/timers@40014400
+ *   84  /soc/timers@40014400/pwm
+ *   85  /soc/timers@40014800
+ *   86  /soc/timers@40014800/pwm
  *
  * Definitions derived from these nodes in dependency order are next,
  * followed by tree-wide information (active compatibles, chosen nodes,
@@ -121,8 +117,8 @@
  *   13  /leds
  *   3   /memory@10000000
  *   4   /memory@20000000
- *   50  /otgfs_phy
- *   48  /otghs_fs_phy
+ *   46  /otgfs_phy
+ *   44  /otghs_fs_phy
  *   8   /soc
  */
 
@@ -258,52 +254,52 @@
  *   0   /
  *
  * Supports:
- *   24  /soc/adc@40012000
- *   25  /soc/can@40006400
- *   26  /soc/can@40006800
- *   30  /soc/dma@40026000
- *   33  /soc/dma@40026400
- *   54  /soc/flash-controller@40023c00
- *   27  /soc/i2c@40005400
- *   28  /soc/i2c@40005800
- *   29  /soc/i2c@40005c00
- *   31  /soc/i2s@40003800
- *   32  /soc/i2s@40003c00
- *   34  /soc/i2s@40013000
- *   23  /soc/interrupt-controller@e000e100
+ *   20  /soc/adc@40012000
+ *   21  /soc/can@40006400
+ *   22  /soc/can@40006800
+ *   26  /soc/dma@40026000
+ *   29  /soc/dma@40026400
+ *   50  /soc/flash-controller@40023c00
+ *   23  /soc/i2c@40005400
+ *   24  /soc/i2c@40005800
+ *   25  /soc/i2c@40005c00
+ *   27  /soc/i2s@40003800
+ *   28  /soc/i2s@40003c00
+ *   30  /soc/i2s@40013000
+ *   19  /soc/interrupt-controller@e000e100
  *   9   /soc/pin-controller@40020000
  *   10  /soc/rcc@40023800
- *   35  /soc/rng@50060800
- *   36  /soc/rtc@40002800
- *   37  /soc/serial@40004400
- *   38  /soc/serial@40004800
- *   39  /soc/serial@40004c00
- *   40  /soc/serial@40005000
- *   41  /soc/serial@40011000
- *   42  /soc/serial@40011400
- *   43  /soc/spi@40003800
- *   44  /soc/spi@40003c00
- *   45  /soc/spi@40013000
- *   46  /soc/spi@40013400
- *   47  /soc/timer@e000e010
- *   63  /soc/timers@40000000
- *   65  /soc/timers@40000400
- *   67  /soc/timers@40000800
- *   69  /soc/timers@40000c00
- *   71  /soc/timers@40001000
- *   73  /soc/timers@40001400
- *   75  /soc/timers@40001800
- *   77  /soc/timers@40001c00
- *   79  /soc/timers@40002000
- *   81  /soc/timers@40010000
- *   83  /soc/timers@40010400
- *   85  /soc/timers@40014000
- *   87  /soc/timers@40014400
- *   89  /soc/timers@40014800
- *   49  /soc/usb@40040000
- *   51  /soc/usb@50000000
- *   52  /soc/watchdog@40002c00
- *   53  /soc/watchdog@40003000
+ *   31  /soc/rng@50060800
+ *   32  /soc/rtc@40002800
+ *   33  /soc/serial@40004400
+ *   34  /soc/serial@40004800
+ *   35  /soc/serial@40004c00
+ *   36  /soc/serial@40005000
+ *   37  /soc/serial@40011000
+ *   38  /soc/serial@40011400
+ *   39  /soc/spi@40003800
+ *   40  /soc/spi@40003c00
+ *   41  /soc/spi@40013000
+ *   42  /soc/spi@40013400
+ *   43  /soc/timer@e000e010
+ *   59  /soc/timers@40000000
+ *   61  /soc/timers@40000400
+ *   63  /soc/timers@40000800
+ *   65  /soc/timers@40000c00
+ *   67  /soc/timers@40001000
+ *   69  /soc/timers@40001400
+ *   71  /soc/timers@40001800
+ *   73  /soc/timers@40001c00
+ *   75  /soc/timers@40002000
+ *   77  /soc/timers@40010000
+ *   79  /soc/timers@40010400
+ *   81  /soc/timers@40014000
+ *   83  /soc/timers@40014400
+ *   85  /soc/timers@40014800
+ *   45  /soc/usb@40040000
+ *   47  /soc/usb@50000000
+ *   48  /soc/watchdog@40002c00
+ *   49  /soc/watchdog@40003000
  */
 
 /*
@@ -320,14 +316,14 @@
  *
  * Supports:
  *   11  /soc/pin-controller@40020000/gpio@40020000
- *   56  /soc/pin-controller@40020000/gpio@40020400
- *   57  /soc/pin-controller@40020000/gpio@40020800
- *   18  /soc/pin-controller@40020000/gpio@40020c00
- *   58  /soc/pin-controller@40020000/gpio@40021000
- *   59  /soc/pin-controller@40020000/gpio@40021400
- *   60  /soc/pin-controller@40020000/gpio@40021800
- *   61  /soc/pin-controller@40020000/gpio@40021c00
- *   62  /soc/pin-controller@40020000/gpio@40022000
+ *   52  /soc/pin-controller@40020000/gpio@40020400
+ *   53  /soc/pin-controller@40020000/gpio@40020800
+ *   14  /soc/pin-controller@40020000/gpio@40020c00
+ *   54  /soc/pin-controller@40020000/gpio@40021000
+ *   55  /soc/pin-controller@40020000/gpio@40021400
+ *   56  /soc/pin-controller@40020000/gpio@40021800
+ *   57  /soc/pin-controller@40020000/gpio@40021c00
+ *   58  /soc/pin-controller@40020000/gpio@40022000
  *
  * Description:
  *   STM32 PINMUX
@@ -351,55 +347,55 @@
  *   8   /soc
  *
  * Supports:
- *   24  /soc/adc@40012000
- *   25  /soc/can@40006400
- *   26  /soc/can@40006800
- *   30  /soc/dma@40026000
- *   33  /soc/dma@40026400
- *   27  /soc/i2c@40005400
- *   28  /soc/i2c@40005800
- *   29  /soc/i2c@40005c00
- *   31  /soc/i2s@40003800
- *   32  /soc/i2s@40003c00
- *   34  /soc/i2s@40013000
- *   35  /soc/rng@50060800
- *   36  /soc/rtc@40002800
- *   37  /soc/serial@40004400
- *   38  /soc/serial@40004800
- *   39  /soc/serial@40004c00
- *   40  /soc/serial@40005000
- *   41  /soc/serial@40011000
- *   42  /soc/serial@40011400
- *   43  /soc/spi@40003800
- *   44  /soc/spi@40003c00
- *   45  /soc/spi@40013000
- *   46  /soc/spi@40013400
- *   63  /soc/timers@40000000
- *   65  /soc/timers@40000400
- *   67  /soc/timers@40000800
- *   69  /soc/timers@40000c00
- *   71  /soc/timers@40001000
- *   73  /soc/timers@40001400
- *   75  /soc/timers@40001800
- *   77  /soc/timers@40001c00
- *   79  /soc/timers@40002000
- *   81  /soc/timers@40010000
- *   83  /soc/timers@40010400
- *   85  /soc/timers@40014000
- *   87  /soc/timers@40014400
- *   89  /soc/timers@40014800
- *   49  /soc/usb@40040000
- *   51  /soc/usb@50000000
- *   52  /soc/watchdog@40002c00
+ *   20  /soc/adc@40012000
+ *   21  /soc/can@40006400
+ *   22  /soc/can@40006800
+ *   26  /soc/dma@40026000
+ *   29  /soc/dma@40026400
+ *   23  /soc/i2c@40005400
+ *   24  /soc/i2c@40005800
+ *   25  /soc/i2c@40005c00
+ *   27  /soc/i2s@40003800
+ *   28  /soc/i2s@40003c00
+ *   30  /soc/i2s@40013000
+ *   31  /soc/rng@50060800
+ *   32  /soc/rtc@40002800
+ *   33  /soc/serial@40004400
+ *   34  /soc/serial@40004800
+ *   35  /soc/serial@40004c00
+ *   36  /soc/serial@40005000
+ *   37  /soc/serial@40011000
+ *   38  /soc/serial@40011400
+ *   39  /soc/spi@40003800
+ *   40  /soc/spi@40003c00
+ *   41  /soc/spi@40013000
+ *   42  /soc/spi@40013400
+ *   59  /soc/timers@40000000
+ *   61  /soc/timers@40000400
+ *   63  /soc/timers@40000800
+ *   65  /soc/timers@40000c00
+ *   67  /soc/timers@40001000
+ *   69  /soc/timers@40001400
+ *   71  /soc/timers@40001800
+ *   73  /soc/timers@40001c00
+ *   75  /soc/timers@40002000
+ *   77  /soc/timers@40010000
+ *   79  /soc/timers@40010400
+ *   81  /soc/timers@40014000
+ *   83  /soc/timers@40014400
+ *   85  /soc/timers@40014800
+ *   45  /soc/usb@40040000
+ *   47  /soc/usb@50000000
+ *   48  /soc/watchdog@40002c00
  *   11  /soc/pin-controller@40020000/gpio@40020000
- *   56  /soc/pin-controller@40020000/gpio@40020400
- *   57  /soc/pin-controller@40020000/gpio@40020800
- *   18  /soc/pin-controller@40020000/gpio@40020c00
- *   58  /soc/pin-controller@40020000/gpio@40021000
- *   59  /soc/pin-controller@40020000/gpio@40021400
- *   60  /soc/pin-controller@40020000/gpio@40021800
- *   61  /soc/pin-controller@40020000/gpio@40021c00
- *   62  /soc/pin-controller@40020000/gpio@40022000
+ *   52  /soc/pin-controller@40020000/gpio@40020400
+ *   53  /soc/pin-controller@40020000/gpio@40020800
+ *   14  /soc/pin-controller@40020000/gpio@40020c00
+ *   54  /soc/pin-controller@40020000/gpio@40021000
+ *   55  /soc/pin-controller@40020000/gpio@40021400
+ *   56  /soc/pin-controller@40020000/gpio@40021800
+ *   57  /soc/pin-controller@40020000/gpio@40021c00
+ *   58  /soc/pin-controller@40020000/gpio@40022000
  *
  * Description:
  *   STM32 RCC (Reset and Clock Controller)
@@ -428,10 +424,6 @@
  *
  * Supports:
  *   12  /gpio_keys/button
- *   14  /leds/engine_in1
- *   15  /leds/engine_in2
- *   16  /leds/engine_in3
- *   17  /leds/engine_in4
  *
  * Description:
  *   STM32 GPIO node
@@ -504,14 +496,10 @@
  *   0   /
  *
  * Supports:
- *   14  /leds/engine_in1
- *   15  /leds/engine_in2
- *   16  /leds/engine_in3
- *   17  /leds/engine_in4
- *   19  /leds/led_3
- *   20  /leds/led_4
- *   21  /leds/led_5
- *   22  /leds/led_6
+ *   15  /leds/led_3
+ *   16  /leds/led_4
+ *   17  /leds/led_5
+ *   18  /leds/led_6
  *
  * Description:
  *   GPIO LEDs parent node
@@ -520,154 +508,22 @@
 
 /*
  * Devicetree node:
- *   /leds/engine_in1
- *
- * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
- *
- * Dependency Ordinal: 14
- *
- * Requires:
- *   13  /leds
- *   11  /soc/pin-controller@40020000/gpio@40020000
- *
- * Description:
- *   GPIO LED child node
- */
-#define DT_GPIO_LEDS_ENGINE_IN1_GPIOS_CONTROLLER    "GPIOA"
-#define DT_ALIAS_IN1_GPIOS_CONTROLLER               DT_GPIO_LEDS_ENGINE_IN1_GPIOS_CONTROLLER
-#define DT_GPIO_LEDS_IN1_GPIOS_CONTROLLER           DT_GPIO_LEDS_ENGINE_IN1_GPIOS_CONTROLLER
-#define DT_GPIO_LEDS_ENGINE_IN1_GPIOS_PIN           1
-#define DT_ALIAS_IN1_GPIOS_PIN                      DT_GPIO_LEDS_ENGINE_IN1_GPIOS_PIN
-#define DT_GPIO_LEDS_IN1_GPIOS_PIN                  DT_GPIO_LEDS_ENGINE_IN1_GPIOS_PIN
-#define DT_GPIO_LEDS_ENGINE_IN1_GPIOS_FLAGS         1
-#define DT_ALIAS_IN1_GPIOS_FLAGS                    DT_GPIO_LEDS_ENGINE_IN1_GPIOS_FLAGS
-#define DT_GPIO_LEDS_IN1_GPIOS_FLAGS                DT_GPIO_LEDS_ENGINE_IN1_GPIOS_FLAGS
-#define DT_GPIO_LEDS_ENGINE_IN1_GPIOS               {"GPIOA", 1, 1}
-#define DT_ALIAS_IN1_GPIOS                          DT_GPIO_LEDS_ENGINE_IN1_GPIOS
-#define DT_GPIO_LEDS_IN1_GPIOS                      DT_GPIO_LEDS_ENGINE_IN1_GPIOS
-/* Human readable string describing the device (used by Zephyr for API name) */
-#define DT_GPIO_LEDS_ENGINE_IN1_LABEL               "Engine Input 1"
-#define DT_ALIAS_IN1_LABEL                          DT_GPIO_LEDS_ENGINE_IN1_LABEL
-#define DT_GPIO_LEDS_IN1_LABEL                      DT_GPIO_LEDS_ENGINE_IN1_LABEL
-
-/*
- * Devicetree node:
- *   /leds/engine_in2
- *
- * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
- *
- * Dependency Ordinal: 15
- *
- * Requires:
- *   13  /leds
- *   11  /soc/pin-controller@40020000/gpio@40020000
- *
- * Description:
- *   GPIO LED child node
- */
-#define DT_GPIO_LEDS_ENGINE_IN2_GPIOS_CONTROLLER    "GPIOA"
-#define DT_ALIAS_IN2_GPIOS_CONTROLLER               DT_GPIO_LEDS_ENGINE_IN2_GPIOS_CONTROLLER
-#define DT_GPIO_LEDS_IN2_GPIOS_CONTROLLER           DT_GPIO_LEDS_ENGINE_IN2_GPIOS_CONTROLLER
-#define DT_GPIO_LEDS_ENGINE_IN2_GPIOS_PIN           2
-#define DT_ALIAS_IN2_GPIOS_PIN                      DT_GPIO_LEDS_ENGINE_IN2_GPIOS_PIN
-#define DT_GPIO_LEDS_IN2_GPIOS_PIN                  DT_GPIO_LEDS_ENGINE_IN2_GPIOS_PIN
-#define DT_GPIO_LEDS_ENGINE_IN2_GPIOS_FLAGS         1
-#define DT_ALIAS_IN2_GPIOS_FLAGS                    DT_GPIO_LEDS_ENGINE_IN2_GPIOS_FLAGS
-#define DT_GPIO_LEDS_IN2_GPIOS_FLAGS                DT_GPIO_LEDS_ENGINE_IN2_GPIOS_FLAGS
-#define DT_GPIO_LEDS_ENGINE_IN2_GPIOS               {"GPIOA", 2, 1}
-#define DT_ALIAS_IN2_GPIOS                          DT_GPIO_LEDS_ENGINE_IN2_GPIOS
-#define DT_GPIO_LEDS_IN2_GPIOS                      DT_GPIO_LEDS_ENGINE_IN2_GPIOS
-/* Human readable string describing the device (used by Zephyr for API name) */
-#define DT_GPIO_LEDS_ENGINE_IN2_LABEL               "Engine Input 2"
-#define DT_ALIAS_IN2_LABEL                          DT_GPIO_LEDS_ENGINE_IN2_LABEL
-#define DT_GPIO_LEDS_IN2_LABEL                      DT_GPIO_LEDS_ENGINE_IN2_LABEL
-
-/*
- * Devicetree node:
- *   /leds/engine_in3
- *
- * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
- *
- * Dependency Ordinal: 16
- *
- * Requires:
- *   13  /leds
- *   11  /soc/pin-controller@40020000/gpio@40020000
- *
- * Description:
- *   GPIO LED child node
- */
-#define DT_GPIO_LEDS_ENGINE_IN3_GPIOS_CONTROLLER    "GPIOA"
-#define DT_ALIAS_IN3_GPIOS_CONTROLLER               DT_GPIO_LEDS_ENGINE_IN3_GPIOS_CONTROLLER
-#define DT_GPIO_LEDS_IN3_GPIOS_CONTROLLER           DT_GPIO_LEDS_ENGINE_IN3_GPIOS_CONTROLLER
-#define DT_GPIO_LEDS_ENGINE_IN3_GPIOS_PIN           3
-#define DT_ALIAS_IN3_GPIOS_PIN                      DT_GPIO_LEDS_ENGINE_IN3_GPIOS_PIN
-#define DT_GPIO_LEDS_IN3_GPIOS_PIN                  DT_GPIO_LEDS_ENGINE_IN3_GPIOS_PIN
-#define DT_GPIO_LEDS_ENGINE_IN3_GPIOS_FLAGS         1
-#define DT_ALIAS_IN3_GPIOS_FLAGS                    DT_GPIO_LEDS_ENGINE_IN3_GPIOS_FLAGS
-#define DT_GPIO_LEDS_IN3_GPIOS_FLAGS                DT_GPIO_LEDS_ENGINE_IN3_GPIOS_FLAGS
-#define DT_GPIO_LEDS_ENGINE_IN3_GPIOS               {"GPIOA", 3, 1}
-#define DT_ALIAS_IN3_GPIOS                          DT_GPIO_LEDS_ENGINE_IN3_GPIOS
-#define DT_GPIO_LEDS_IN3_GPIOS                      DT_GPIO_LEDS_ENGINE_IN3_GPIOS
-/* Human readable string describing the device (used by Zephyr for API name) */
-#define DT_GPIO_LEDS_ENGINE_IN3_LABEL               "Engine Input 3"
-#define DT_ALIAS_IN3_LABEL                          DT_GPIO_LEDS_ENGINE_IN3_LABEL
-#define DT_GPIO_LEDS_IN3_LABEL                      DT_GPIO_LEDS_ENGINE_IN3_LABEL
-
-/*
- * Devicetree node:
- *   /leds/engine_in4
- *
- * Binding (compatible = gpio-leds):
- *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
- *
- * Dependency Ordinal: 17
- *
- * Requires:
- *   13  /leds
- *   11  /soc/pin-controller@40020000/gpio@40020000
- *
- * Description:
- *   GPIO LED child node
- */
-#define DT_GPIO_LEDS_ENGINE_IN4_GPIOS_CONTROLLER    "GPIOA"
-#define DT_ALIAS_IN4_GPIOS_CONTROLLER               DT_GPIO_LEDS_ENGINE_IN4_GPIOS_CONTROLLER
-#define DT_GPIO_LEDS_IN4_GPIOS_CONTROLLER           DT_GPIO_LEDS_ENGINE_IN4_GPIOS_CONTROLLER
-#define DT_GPIO_LEDS_ENGINE_IN4_GPIOS_PIN           4
-#define DT_ALIAS_IN4_GPIOS_PIN                      DT_GPIO_LEDS_ENGINE_IN4_GPIOS_PIN
-#define DT_GPIO_LEDS_IN4_GPIOS_PIN                  DT_GPIO_LEDS_ENGINE_IN4_GPIOS_PIN
-#define DT_GPIO_LEDS_ENGINE_IN4_GPIOS_FLAGS         1
-#define DT_ALIAS_IN4_GPIOS_FLAGS                    DT_GPIO_LEDS_ENGINE_IN4_GPIOS_FLAGS
-#define DT_GPIO_LEDS_IN4_GPIOS_FLAGS                DT_GPIO_LEDS_ENGINE_IN4_GPIOS_FLAGS
-#define DT_GPIO_LEDS_ENGINE_IN4_GPIOS               {"GPIOA", 4, 1}
-#define DT_ALIAS_IN4_GPIOS                          DT_GPIO_LEDS_ENGINE_IN4_GPIOS
-#define DT_GPIO_LEDS_IN4_GPIOS                      DT_GPIO_LEDS_ENGINE_IN4_GPIOS
-/* Human readable string describing the device (used by Zephyr for API name) */
-#define DT_GPIO_LEDS_ENGINE_IN4_LABEL               "Engine Input 4"
-#define DT_ALIAS_IN4_LABEL                          DT_GPIO_LEDS_ENGINE_IN4_LABEL
-#define DT_GPIO_LEDS_IN4_LABEL                      DT_GPIO_LEDS_ENGINE_IN4_LABEL
-
-/*
- * Devicetree node:
  *   /soc/pin-controller@40020000/gpio@40020c00
  *
  * Binding (compatible = st,stm32-gpio):
  *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
- * Dependency Ordinal: 18
+ * Dependency Ordinal: 14
  *
  * Requires:
  *   9   /soc/pin-controller@40020000
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   19  /leds/led_3
- *   20  /leds/led_4
- *   21  /leds/led_5
- *   22  /leds/led_6
+ *   15  /leds/led_3
+ *   16  /leds/led_4
+ *   17  /leds/led_5
+ *   18  /leds/led_6
  *
  * Description:
  *   STM32 GPIO node
@@ -701,11 +557,11 @@
  * Binding (compatible = gpio-leds):
  *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
- * Dependency Ordinal: 19
+ * Dependency Ordinal: 15
  *
  * Requires:
  *   13  /leds
- *   18  /soc/pin-controller@40020000/gpio@40020c00
+ *   14  /soc/pin-controller@40020000/gpio@40020c00
  *
  * Description:
  *   GPIO LED child node
@@ -734,11 +590,11 @@
  * Binding (compatible = gpio-leds):
  *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
- * Dependency Ordinal: 20
+ * Dependency Ordinal: 16
  *
  * Requires:
  *   13  /leds
- *   18  /soc/pin-controller@40020000/gpio@40020c00
+ *   14  /soc/pin-controller@40020000/gpio@40020c00
  *
  * Description:
  *   GPIO LED child node
@@ -767,11 +623,11 @@
  * Binding (compatible = gpio-leds):
  *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
- * Dependency Ordinal: 21
+ * Dependency Ordinal: 17
  *
  * Requires:
  *   13  /leds
- *   18  /soc/pin-controller@40020000/gpio@40020c00
+ *   14  /soc/pin-controller@40020000/gpio@40020c00
  *
  * Description:
  *   GPIO LED child node
@@ -800,11 +656,11 @@
  * Binding (compatible = gpio-leds):
  *   $ZEPHYR_BASE/dts/bindings/gpio/gpio-leds.yaml
  *
- * Dependency Ordinal: 22
+ * Dependency Ordinal: 18
  *
  * Requires:
  *   13  /leds
- *   18  /soc/pin-controller@40020000/gpio@40020c00
+ *   14  /soc/pin-controller@40020000/gpio@40020c00
  *
  * Description:
  *   GPIO LED child node
@@ -833,38 +689,38 @@
  * Binding (compatible = arm,v7m-nvic):
  *   $ZEPHYR_BASE/dts/bindings/interrupt-controller/arm,v7m-nvic.yaml
  *
- * Dependency Ordinal: 23
+ * Dependency Ordinal: 19
  *
  * Requires:
  *   8   /soc
  *
  * Supports:
- *   24  /soc/adc@40012000
- *   25  /soc/can@40006400
- *   26  /soc/can@40006800
- *   30  /soc/dma@40026000
- *   33  /soc/dma@40026400
- *   54  /soc/flash-controller@40023c00
- *   27  /soc/i2c@40005400
- *   28  /soc/i2c@40005800
- *   29  /soc/i2c@40005c00
- *   31  /soc/i2s@40003800
- *   32  /soc/i2s@40003c00
- *   34  /soc/i2s@40013000
- *   36  /soc/rtc@40002800
- *   37  /soc/serial@40004400
- *   38  /soc/serial@40004800
- *   39  /soc/serial@40004c00
- *   40  /soc/serial@40005000
- *   41  /soc/serial@40011000
- *   42  /soc/serial@40011400
- *   43  /soc/spi@40003800
- *   44  /soc/spi@40003c00
- *   45  /soc/spi@40013000
- *   46  /soc/spi@40013400
- *   49  /soc/usb@40040000
- *   51  /soc/usb@50000000
- *   52  /soc/watchdog@40002c00
+ *   20  /soc/adc@40012000
+ *   21  /soc/can@40006400
+ *   22  /soc/can@40006800
+ *   26  /soc/dma@40026000
+ *   29  /soc/dma@40026400
+ *   50  /soc/flash-controller@40023c00
+ *   23  /soc/i2c@40005400
+ *   24  /soc/i2c@40005800
+ *   25  /soc/i2c@40005c00
+ *   27  /soc/i2s@40003800
+ *   28  /soc/i2s@40003c00
+ *   30  /soc/i2s@40013000
+ *   32  /soc/rtc@40002800
+ *   33  /soc/serial@40004400
+ *   34  /soc/serial@40004800
+ *   35  /soc/serial@40004c00
+ *   36  /soc/serial@40005000
+ *   37  /soc/serial@40011000
+ *   38  /soc/serial@40011400
+ *   39  /soc/spi@40003800
+ *   40  /soc/spi@40003c00
+ *   41  /soc/spi@40013000
+ *   42  /soc/spi@40013400
+ *   45  /soc/usb@40040000
+ *   47  /soc/usb@50000000
+ *   48  /soc/watchdog@40002c00
  *
  * Description:
  *   ARMv7-M NVIC (Nested Vectored Interrupt Controller)
@@ -885,11 +741,11 @@
  * Binding (compatible = st,stm32-adc):
  *   $ZEPHYR_BASE/dts/bindings/iio/adc/st,stm32-adc.yaml
  *
- * Dependency Ordinal: 24
+ * Dependency Ordinal: 20
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -905,11 +761,11 @@
  * Binding (compatible = st,stm32-can):
  *   $ZEPHYR_BASE/dts/bindings/can/st,stm32-can.yaml
  *
- * Dependency Ordinal: 25
+ * Dependency Ordinal: 21
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -997,11 +853,11 @@
  * Binding (compatible = st,stm32-can):
  *   $ZEPHYR_BASE/dts/bindings/can/st,stm32-can.yaml
  *
- * Dependency Ordinal: 26
+ * Dependency Ordinal: 22
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1155,11 +1011,11 @@
  * Binding (compatible = st,stm32-i2c-v1):
  *   $ZEPHYR_BASE/dts/bindings/i2c/st,stm32-i2c-v1.yaml
  *
- * Dependency Ordinal: 27
+ * Dependency Ordinal: 23
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1175,11 +1031,11 @@
  * Binding (compatible = st,stm32-i2c-v1):
  *   $ZEPHYR_BASE/dts/bindings/i2c/st,stm32-i2c-v1.yaml
  *
- * Dependency Ordinal: 28
+ * Dependency Ordinal: 24
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1195,11 +1051,11 @@
  * Binding (compatible = st,stm32-i2c-v1):
  *   $ZEPHYR_BASE/dts/bindings/i2c/st,stm32-i2c-v1.yaml
  *
- * Dependency Ordinal: 29
+ * Dependency Ordinal: 25
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1215,16 +1071,16 @@
  * Binding (compatible = st,stm32-dma):
  *   $ZEPHYR_BASE/dts/bindings/dma/st,stm32-dma.yaml
  *
- * Dependency Ordinal: 30
+ * Dependency Ordinal: 26
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   31  /soc/i2s@40003800
- *   32  /soc/i2s@40003c00
+ *   27  /soc/i2s@40003800
+ *   28  /soc/i2s@40003c00
  *
  * Description:
  *   The STM32 DMA is a general-purpose direct memory access controller
@@ -1292,12 +1148,12 @@
  * Binding (compatible = st,stm32-i2s):
  *   $ZEPHYR_BASE/dts/bindings/i2s/st,stm32-i2s.yaml
  *
- * Dependency Ordinal: 31
+ * Dependency Ordinal: 27
  *
  * Requires:
  *   8   /soc
- *   30  /soc/dma@40026000
- *   23  /soc/interrupt-controller@e000e100
+ *   26  /soc/dma@40026000
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1313,12 +1169,12 @@
  * Binding (compatible = st,stm32-i2s):
  *   $ZEPHYR_BASE/dts/bindings/i2s/st,stm32-i2s.yaml
  *
- * Dependency Ordinal: 32
+ * Dependency Ordinal: 28
  *
  * Requires:
  *   8   /soc
- *   30  /soc/dma@40026000
- *   23  /soc/interrupt-controller@e000e100
+ *   26  /soc/dma@40026000
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1334,15 +1190,15 @@
  * Binding (compatible = st,stm32-dma):
  *   $ZEPHYR_BASE/dts/bindings/dma/st,stm32-dma.yaml
  *
- * Dependency Ordinal: 33
+ * Dependency Ordinal: 29
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   34  /soc/i2s@40013000
+ *   30  /soc/i2s@40013000
  *
  * Description:
  *   The STM32 DMA is a general-purpose direct memory access controller
@@ -1410,12 +1266,12 @@
  * Binding (compatible = st,stm32-i2s):
  *   $ZEPHYR_BASE/dts/bindings/i2s/st,stm32-i2s.yaml
  *
- * Dependency Ordinal: 34
+ * Dependency Ordinal: 30
  *
  * Requires:
  *   8   /soc
- *   33  /soc/dma@40026400
- *   23  /soc/interrupt-controller@e000e100
+ *   29  /soc/dma@40026400
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1431,7 +1287,7 @@
  * Binding (compatible = st,stm32-rng):
  *   $ZEPHYR_BASE/dts/bindings/rng/st,stm32-rng.yaml
  *
- * Dependency Ordinal: 35
+ * Dependency Ordinal: 31
  *
  * Requires:
  *   8   /soc
@@ -1450,11 +1306,11 @@
  * Binding (compatible = st,stm32-rtc):
  *   $ZEPHYR_BASE/dts/bindings/rtc/st,stm32-rtc.yaml
  *
- * Dependency Ordinal: 36
+ * Dependency Ordinal: 32
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1493,11 +1349,11 @@
  * Binding (compatible = st,stm32-usart):
  *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-usart.yaml
  *
- * Dependency Ordinal: 37
+ * Dependency Ordinal: 33
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1552,11 +1408,11 @@
  * Binding (compatible = st,stm32-usart):
  *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-usart.yaml
  *
- * Dependency Ordinal: 38
+ * Dependency Ordinal: 34
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1572,11 +1428,11 @@
  * Binding (compatible = st,stm32-uart):
  *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-uart.yaml
  *
- * Dependency Ordinal: 39
+ * Dependency Ordinal: 35
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1592,11 +1448,11 @@
  * Binding (compatible = st,stm32-uart):
  *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-uart.yaml
  *
- * Dependency Ordinal: 40
+ * Dependency Ordinal: 36
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1612,11 +1468,11 @@
  * Binding (compatible = st,stm32-usart):
  *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-usart.yaml
  *
- * Dependency Ordinal: 41
+ * Dependency Ordinal: 37
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1671,11 +1527,11 @@
  * Binding (compatible = st,stm32-usart):
  *   $ZEPHYR_BASE/dts/bindings/serial/st,stm32-usart.yaml
  *
- * Dependency Ordinal: 42
+ * Dependency Ordinal: 38
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1691,11 +1547,11 @@
  * Binding (compatible = st,stm32-spi):
  *   $ZEPHYR_BASE/dts/bindings/spi/st,stm32-spi.yaml
  *
- * Dependency Ordinal: 43
+ * Dependency Ordinal: 39
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1711,11 +1567,11 @@
  * Binding (compatible = st,stm32-spi):
  *   $ZEPHYR_BASE/dts/bindings/spi/st,stm32-spi.yaml
  *
- * Dependency Ordinal: 44
+ * Dependency Ordinal: 40
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1731,18 +1587,38 @@
  * Binding (compatible = st,stm32-spi):
  *   $ZEPHYR_BASE/dts/bindings/spi/st,stm32-spi.yaml
  *
- * Dependency Ordinal: 45
+ * Dependency Ordinal: 41
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
  *   STM32 SPI controller
- *
- * Node is disabled.
  */
+#define DT_ST_STM32_SPI_40013000_BASE_ADDRESS       0x40013000
+#define DT_INST_0_ST_STM32_SPI_BASE_ADDRESS         __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_BASE_ADDRESS
+#define DT_ST_STM32_SPI_40013000_SIZE               1024
+#define DT_INST_0_ST_STM32_SPI_SIZE                 __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_SIZE
+#define DT_ST_STM32_SPI_40013000_IRQ_0              35
+#define DT_INST_0_ST_STM32_SPI_IRQ_0                __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_IRQ_0
+#define DT_ST_STM32_SPI_40013000_IRQ_0_PRIORITY     5
+#define DT_INST_0_ST_STM32_SPI_IRQ_0_PRIORITY       __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_IRQ_0_PRIORITY
+/* Human readable string describing the device (used by Zephyr for API name) */
+#define DT_ST_STM32_SPI_40013000_LABEL              "SPI_1"
+#define DT_INST_0_ST_STM32_SPI_LABEL                __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_LABEL
+#define DT_ST_STM32_SPI_40013000_CLOCK_CONTROLLER   "STM32_CLK_RCC"
+#define DT_INST_0_ST_STM32_SPI_CLOCK_CONTROLLER     __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_CLOCK_CONTROLLER
+#define DT_ST_STM32_SPI_40013000_CLOCK_BUS_0        3
+#define DT_INST_0_ST_STM32_SPI_CLOCK_BUS_0          __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_CLOCK_BUS_0
+#define DT_ST_STM32_SPI_40013000_CLOCK_BUS          DT_ST_STM32_SPI_40013000_CLOCK_BUS_0
+#define DT_INST_0_ST_STM32_SPI_CLOCK_BUS            __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_CLOCK_BUS_0
+#define DT_ST_STM32_SPI_40013000_CLOCK_BITS_0       4096
+#define DT_INST_0_ST_STM32_SPI_CLOCK_BITS_0         __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_CLOCK_BITS_0
+#define DT_ST_STM32_SPI_40013000_CLOCK_BITS         DT_ST_STM32_SPI_40013000_CLOCK_BITS_0
+#define DT_INST_0_ST_STM32_SPI_CLOCK_BITS           __WARN("Macro is deprecated") DT_ST_STM32_SPI_40013000_CLOCK_BITS_0
+#define DT_INST_0_ST_STM32_SPI                      1
 
 /*
  * Devicetree node:
@@ -1751,11 +1627,11 @@
  * Binding (compatible = st,stm32-spi):
  *   $ZEPHYR_BASE/dts/bindings/spi/st,stm32-spi.yaml
  *
- * Dependency Ordinal: 46
+ * Dependency Ordinal: 42
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1770,7 +1646,7 @@
  *
  * No matching binding.
  *
- * Dependency Ordinal: 47
+ * Dependency Ordinal: 43
  *
  * Requires:
  *   8   /soc
@@ -1785,13 +1661,13 @@
  * Binding (compatible = usb-nop-xceiv):
  *   $ZEPHYR_BASE/dts/bindings/phy/usb-nop-xceiv.yaml
  *
- * Dependency Ordinal: 48
+ * Dependency Ordinal: 44
  *
  * Requires:
  *   0   /
  *
  * Supports:
- *   49  /soc/usb@40040000
+ *   45  /soc/usb@40040000
  *
  * Description:
  *   This binding is to be used by all the usb transceivers which are built-in
@@ -1809,12 +1685,12 @@
  * Binding (compatible = st,stm32-otghs):
  *   $ZEPHYR_BASE/dts/bindings/usb/st,stm32-otghs.yaml
  *
- * Dependency Ordinal: 49
+ * Dependency Ordinal: 45
  *
  * Requires:
- *   48  /otghs_fs_phy
+ *   44  /otghs_fs_phy
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1830,13 +1706,13 @@
  * Binding (compatible = usb-nop-xceiv):
  *   $ZEPHYR_BASE/dts/bindings/phy/usb-nop-xceiv.yaml
  *
- * Dependency Ordinal: 50
+ * Dependency Ordinal: 46
  *
  * Requires:
  *   0   /
  *
  * Supports:
- *   51  /soc/usb@50000000
+ *   47  /soc/usb@50000000
  *
  * Description:
  *   This binding is to be used by all the usb transceivers which are built-in
@@ -1854,12 +1730,12 @@
  * Binding (compatible = st,stm32-otgfs):
  *   $ZEPHYR_BASE/dts/bindings/usb/st,stm32-otgfs.yaml
  *
- * Dependency Ordinal: 51
+ * Dependency Ordinal: 47
  *
  * Requires:
- *   50  /otgfs_phy
+ *   46  /otgfs_phy
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1913,11 +1789,11 @@
  * Binding (compatible = st,stm32-window-watchdog):
  *   $ZEPHYR_BASE/dts/bindings/watchdog/st,stm32-window-watchdog.yaml
  *
- * Dependency Ordinal: 52
+ * Dependency Ordinal: 48
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *   10  /soc/rcc@40023800
  *
  * Description:
@@ -1933,7 +1809,7 @@
  * Binding (compatible = st,stm32-watchdog):
  *   $ZEPHYR_BASE/dts/bindings/watchdog/st,stm32-watchdog.yaml
  *
- * Dependency Ordinal: 53
+ * Dependency Ordinal: 49
  *
  * Requires:
  *   8   /soc
@@ -1951,14 +1827,14 @@
  * Binding (compatible = st,stm32-flash-controller):
  *   $ZEPHYR_BASE/dts/bindings/flash_controller/st,stm32-flash-controller.yaml
  *
- * Dependency Ordinal: 54
+ * Dependency Ordinal: 50
  *
  * Requires:
  *   8   /soc
- *   23  /soc/interrupt-controller@e000e100
+ *   19  /soc/interrupt-controller@e000e100
  *
  * Supports:
- *   55  /soc/flash-controller@40023c00/flash@8000000
+ *   51  /soc/flash-controller@40023c00/flash@8000000
  *
  * Description:
  *   STM32 Family flash controller
@@ -1989,10 +1865,10 @@
  * Binding (compatible = soc-nv-flash):
  *   $ZEPHYR_BASE/dts/bindings/mtd/soc-nv-flash.yaml
  *
- * Dependency Ordinal: 55
+ * Dependency Ordinal: 51
  *
  * Requires:
- *   54  /soc/flash-controller@40023c00
+ *   50  /soc/flash-controller@40023c00
  *
  * Description:
  *   Flash node
@@ -2016,7 +1892,7 @@
  * Binding (compatible = st,stm32-gpio):
  *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
- * Dependency Ordinal: 56
+ * Dependency Ordinal: 52
  *
  * Requires:
  *   9   /soc/pin-controller@40020000
@@ -2054,7 +1930,7 @@
  * Binding (compatible = st,stm32-gpio):
  *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
- * Dependency Ordinal: 57
+ * Dependency Ordinal: 53
  *
  * Requires:
  *   9   /soc/pin-controller@40020000
@@ -2092,7 +1968,7 @@
  * Binding (compatible = st,stm32-gpio):
  *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
- * Dependency Ordinal: 58
+ * Dependency Ordinal: 54
  *
  * Requires:
  *   9   /soc/pin-controller@40020000
@@ -2130,7 +2006,7 @@
  * Binding (compatible = st,stm32-gpio):
  *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
- * Dependency Ordinal: 59
+ * Dependency Ordinal: 55
  *
  * Requires:
  *   9   /soc/pin-controller@40020000
@@ -2168,7 +2044,7 @@
  * Binding (compatible = st,stm32-gpio):
  *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
- * Dependency Ordinal: 60
+ * Dependency Ordinal: 56
  *
  * Requires:
  *   9   /soc/pin-controller@40020000
@@ -2206,7 +2082,7 @@
  * Binding (compatible = st,stm32-gpio):
  *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
- * Dependency Ordinal: 61
+ * Dependency Ordinal: 57
  *
  * Requires:
  *   9   /soc/pin-controller@40020000
@@ -2244,7 +2120,7 @@
  * Binding (compatible = st,stm32-gpio):
  *   $ZEPHYR_BASE/dts/bindings/gpio/st,stm32-gpio.yaml
  *
- * Dependency Ordinal: 62
+ * Dependency Ordinal: 58
  *
  * Requires:
  *   9   /soc/pin-controller@40020000
@@ -2282,14 +2158,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 63
+ * Dependency Ordinal: 59
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   64  /soc/timers@40000000/pwm
+ *   60  /soc/timers@40000000/pwm
  *
  * Description:
  *   STM32 timers
@@ -2320,10 +2196,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 64
+ * Dependency Ordinal: 60
  *
  * Requires:
- *   63  /soc/timers@40000000
+ *   59  /soc/timers@40000000
  *
  * Description:
  *   STM32 PWM
@@ -2343,36 +2219,20 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 65
+ * Dependency Ordinal: 61
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   66  /soc/timers@40000400/pwm
+ *   62  /soc/timers@40000400/pwm
  *
  * Description:
  *   STM32 timers
+ *
+ * Node is disabled.
  */
-#define DT_ST_STM32_TIMERS_40000400_BASE_ADDRESS    0x40000400
-#define DT_INST_1_ST_STM32_TIMERS_BASE_ADDRESS      __WARN("Macro is deprecated") DT_ST_STM32_TIMERS_40000400_BASE_ADDRESS
-#define DT_ST_STM32_TIMERS_40000400_SIZE            1024
-#define DT_INST_1_ST_STM32_TIMERS_SIZE              __WARN("Macro is deprecated") DT_ST_STM32_TIMERS_40000400_SIZE
-/* Human readable string describing the device (used by Zephyr for API name) */
-#define DT_ST_STM32_TIMERS_40000400_LABEL           "TIMERS_3"
-#define DT_INST_1_ST_STM32_TIMERS_LABEL             __WARN("Macro is deprecated") DT_ST_STM32_TIMERS_40000400_LABEL
-#define DT_ST_STM32_TIMERS_40000400_CLOCK_CONTROLLER "STM32_CLK_RCC"
-#define DT_INST_1_ST_STM32_TIMERS_CLOCK_CONTROLLER  __WARN("Macro is deprecated") DT_ST_STM32_TIMERS_40000400_CLOCK_CONTROLLER
-#define DT_ST_STM32_TIMERS_40000400_CLOCK_BUS_0     2
-#define DT_INST_1_ST_STM32_TIMERS_CLOCK_BUS_0       __WARN("Macro is deprecated") DT_ST_STM32_TIMERS_40000400_CLOCK_BUS_0
-#define DT_ST_STM32_TIMERS_40000400_CLOCK_BUS       DT_ST_STM32_TIMERS_40000400_CLOCK_BUS_0
-#define DT_INST_1_ST_STM32_TIMERS_CLOCK_BUS         __WARN("Macro is deprecated") DT_ST_STM32_TIMERS_40000400_CLOCK_BUS_0
-#define DT_ST_STM32_TIMERS_40000400_CLOCK_BITS_0    2
-#define DT_INST_1_ST_STM32_TIMERS_CLOCK_BITS_0      __WARN("Macro is deprecated") DT_ST_STM32_TIMERS_40000400_CLOCK_BITS_0
-#define DT_ST_STM32_TIMERS_40000400_CLOCK_BITS      DT_ST_STM32_TIMERS_40000400_CLOCK_BITS_0
-#define DT_INST_1_ST_STM32_TIMERS_CLOCK_BITS        __WARN("Macro is deprecated") DT_ST_STM32_TIMERS_40000400_CLOCK_BITS_0
-#define DT_INST_1_ST_STM32_TIMERS                   1
 
 /*
  * Devicetree node:
@@ -2381,21 +2241,16 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 66
+ * Dependency Ordinal: 62
  *
  * Requires:
- *   65  /soc/timers@40000400
+ *   61  /soc/timers@40000400
  *
  * Description:
  *   STM32 PWM
+ *
+ * Node is disabled.
  */
-/* Human readable string describing the device (used by Zephyr for API name) */
-#define DT_ST_STM32_PWM_40000400_PWM_LABEL          "PWM_3"
-#define DT_INST_1_ST_STM32_PWM_LABEL                __WARN("Macro is deprecated") DT_ST_STM32_PWM_40000400_PWM_LABEL
-/* Clock prescaler at the input of the timer */
-#define DT_ST_STM32_PWM_40000400_PWM_ST_PRESCALER   0
-#define DT_INST_1_ST_STM32_PWM_ST_PRESCALER         __WARN("Macro is deprecated") DT_ST_STM32_PWM_40000400_PWM_ST_PRESCALER
-#define DT_INST_1_ST_STM32_PWM                      1
 
 /*
  * Devicetree node:
@@ -2404,14 +2259,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 67
+ * Dependency Ordinal: 63
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   68  /soc/timers@40000800/pwm
+ *   64  /soc/timers@40000800/pwm
  *
  * Description:
  *   STM32 timers
@@ -2426,10 +2281,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 68
+ * Dependency Ordinal: 64
  *
  * Requires:
- *   67  /soc/timers@40000800
+ *   63  /soc/timers@40000800
  *
  * Description:
  *   STM32 PWM
@@ -2444,14 +2299,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 69
+ * Dependency Ordinal: 65
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   70  /soc/timers@40000c00/pwm
+ *   66  /soc/timers@40000c00/pwm
  *
  * Description:
  *   STM32 timers
@@ -2466,10 +2321,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 70
+ * Dependency Ordinal: 66
  *
  * Requires:
- *   69  /soc/timers@40000c00
+ *   65  /soc/timers@40000c00
  *
  * Description:
  *   STM32 PWM
@@ -2484,14 +2339,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 71
+ * Dependency Ordinal: 67
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   72  /soc/timers@40001000/pwm
+ *   68  /soc/timers@40001000/pwm
  *
  * Description:
  *   STM32 timers
@@ -2506,10 +2361,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 72
+ * Dependency Ordinal: 68
  *
  * Requires:
- *   71  /soc/timers@40001000
+ *   67  /soc/timers@40001000
  *
  * Description:
  *   STM32 PWM
@@ -2524,14 +2379,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 73
+ * Dependency Ordinal: 69
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   74  /soc/timers@40001400/pwm
+ *   70  /soc/timers@40001400/pwm
  *
  * Description:
  *   STM32 timers
@@ -2546,10 +2401,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 74
+ * Dependency Ordinal: 70
  *
  * Requires:
- *   73  /soc/timers@40001400
+ *   69  /soc/timers@40001400
  *
  * Description:
  *   STM32 PWM
@@ -2564,14 +2419,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 75
+ * Dependency Ordinal: 71
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   76  /soc/timers@40001800/pwm
+ *   72  /soc/timers@40001800/pwm
  *
  * Description:
  *   STM32 timers
@@ -2586,10 +2441,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 76
+ * Dependency Ordinal: 72
  *
  * Requires:
- *   75  /soc/timers@40001800
+ *   71  /soc/timers@40001800
  *
  * Description:
  *   STM32 PWM
@@ -2604,14 +2459,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 77
+ * Dependency Ordinal: 73
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   78  /soc/timers@40001c00/pwm
+ *   74  /soc/timers@40001c00/pwm
  *
  * Description:
  *   STM32 timers
@@ -2626,10 +2481,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 78
+ * Dependency Ordinal: 74
  *
  * Requires:
- *   77  /soc/timers@40001c00
+ *   73  /soc/timers@40001c00
  *
  * Description:
  *   STM32 PWM
@@ -2644,14 +2499,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 79
+ * Dependency Ordinal: 75
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   80  /soc/timers@40002000/pwm
+ *   76  /soc/timers@40002000/pwm
  *
  * Description:
  *   STM32 timers
@@ -2666,10 +2521,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 80
+ * Dependency Ordinal: 76
  *
  * Requires:
- *   79  /soc/timers@40002000
+ *   75  /soc/timers@40002000
  *
  * Description:
  *   STM32 PWM
@@ -2684,14 +2539,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 81
+ * Dependency Ordinal: 77
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   82  /soc/timers@40010000/pwm
+ *   78  /soc/timers@40010000/pwm
  *
  * Description:
  *   STM32 timers
@@ -2706,10 +2561,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 82
+ * Dependency Ordinal: 78
  *
  * Requires:
- *   81  /soc/timers@40010000
+ *   77  /soc/timers@40010000
  *
  * Description:
  *   STM32 PWM
@@ -2724,14 +2579,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 83
+ * Dependency Ordinal: 79
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   84  /soc/timers@40010400/pwm
+ *   80  /soc/timers@40010400/pwm
  *
  * Description:
  *   STM32 timers
@@ -2746,10 +2601,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 84
+ * Dependency Ordinal: 80
  *
  * Requires:
- *   83  /soc/timers@40010400
+ *   79  /soc/timers@40010400
  *
  * Description:
  *   STM32 PWM
@@ -2764,14 +2619,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 85
+ * Dependency Ordinal: 81
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   86  /soc/timers@40014000/pwm
+ *   82  /soc/timers@40014000/pwm
  *
  * Description:
  *   STM32 timers
@@ -2786,10 +2641,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 86
+ * Dependency Ordinal: 82
  *
  * Requires:
- *   85  /soc/timers@40014000
+ *   81  /soc/timers@40014000
  *
  * Description:
  *   STM32 PWM
@@ -2804,14 +2659,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 87
+ * Dependency Ordinal: 83
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   88  /soc/timers@40014400/pwm
+ *   84  /soc/timers@40014400/pwm
  *
  * Description:
  *   STM32 timers
@@ -2826,10 +2681,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 88
+ * Dependency Ordinal: 84
  *
  * Requires:
- *   87  /soc/timers@40014400
+ *   83  /soc/timers@40014400
  *
  * Description:
  *   STM32 PWM
@@ -2844,14 +2699,14 @@
  * Binding (compatible = st,stm32-timers):
  *   $ZEPHYR_BASE/dts/bindings/timer/st,stm32-timers.yaml
  *
- * Dependency Ordinal: 89
+ * Dependency Ordinal: 85
  *
  * Requires:
  *   8   /soc
  *   10  /soc/rcc@40023800
  *
  * Supports:
- *   90  /soc/timers@40014800/pwm
+ *   86  /soc/timers@40014800/pwm
  *
  * Description:
  *   STM32 timers
@@ -2866,10 +2721,10 @@
  * Binding (compatible = st,stm32-pwm):
  *   $ZEPHYR_BASE/dts/bindings/pwm/st,stm32-pwm.yaml
  *
- * Dependency Ordinal: 90
+ * Dependency Ordinal: 86
  *
  * Requires:
- *   89  /soc/timers@40014800
+ *   85  /soc/timers@40014800
  *
  * Description:
  *   STM32 PWM
@@ -2894,6 +2749,7 @@
 #define DT_COMPAT_ST_STM32_PWM                      1
 #define DT_COMPAT_ST_STM32_RCC                      1
 #define DT_COMPAT_ST_STM32_RTC                      1
+#define DT_COMPAT_ST_STM32_SPI                      1
 #define DT_COMPAT_ST_STM32_TIMERS                   1
 #define DT_COMPAT_ST_STM32_UART                     1
 #define DT_COMPAT_ST_STM32_USART                    1

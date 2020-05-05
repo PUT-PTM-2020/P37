@@ -54,6 +54,7 @@ struct device *gpio_transceiver_dev;
 struct device *pwm2_dev, *pwm3_dev;
 
 uint8_t gpio_init(void){
+	printk("dupa");
 	uint8_t ret = 0;
 	gpio_engine_dev = device_get_binding(ENGINE_PORT);
 	gpio_sonic_sensor_dev = device_get_binding(SONIC_SENSOR_PORT);

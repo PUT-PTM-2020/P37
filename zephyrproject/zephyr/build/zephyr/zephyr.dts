@@ -224,7 +224,7 @@
 			reg = < 0x40013000 0x400 >;
 			clocks = < &rcc 0x3 0x1000 >;
 			interrupts = < 0x23 0x5 >;
-			status = "disabled";
+			status = "okay";
 			label = "SPI_1";
 		};
 		i2s1: i2s@40013000 {
@@ -288,11 +288,7 @@
 			label = "TIMERS_3";
 			pwm {
 				compatible = "st,stm32-pwm";
-<<<<<<< HEAD
-				status = "okay";
-=======
 				status = "disabled";
->>>>>>> someLogic
 				st,prescaler = < 0x0 >;
 				label = "PWM_3";
 				#pwm-cells = < 0x2 >;

@@ -11,7 +11,7 @@
 
 #define IN1_NODE DT_ALIAS(in1)
 #define IN2_NODE DT_ALIAS(in2)
-3
+
 #if DT_HAS_NODE(IN1_NODE)
 #define IN1 DT_GPIO_LABEL(IN1_NODE, gpios)
 #define PIN1 DT_GPIO_PIN(IN1_NODE, gpios)
@@ -35,5 +35,6 @@ void main(void)
 	dev1 = device_get_binding(IN2);
 	gpio_pin_set(dev, PIN1, true);
 	gpio_pin_set(dev1, PIN2, true);
+	printk("dupa");
 	//pwm_dev = device_get_binding(DT_ALIAS_PWM_1_LABEL);
 }
