@@ -1,6 +1,0 @@
-common:
-  tags: dac drivers userspace
-tests:
-  drivers.dac:
-    platform_whitelist: nucleo_l073rz
-    depends_on: dac
