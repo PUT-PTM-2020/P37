@@ -107,6 +107,7 @@ uint8_t spi_send_test(void){
 		printk("RX recv: %x\n", rx_buffer[0]);
 		tx_buffer[0]++;
 	}
+	return err;
 }
 
 /*
@@ -174,6 +175,7 @@ uint8_t read_register(uint8_t reg){
 
 	spi_send(R_REGISTER | (REGISTER_MASK & reg));
 	status = spi_send(0xFF);
+	return status;
 }
 
 bool set_data_rate(rf24_datarate_e speed){
