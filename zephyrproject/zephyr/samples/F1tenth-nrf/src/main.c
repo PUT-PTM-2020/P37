@@ -181,22 +181,29 @@ uint8_t read_register(uint8_t reg){
 bool set_data_rate(rf24_datarate_e speed){
     bool result = false;
     uint8_t setup = read_register(RF_SETUP);
-
+	printk("cokolwiek\n");
     setup &= ~(_BV(RF_DR_LOW) | _BV(RF_DR_HIGH));
 
     if (speed == RF24_250KBPS) {
 		setup |= _BV(RF_DR_LOW);
+		printk("cokolwiek1\n");
 
 	}
 	else{
+			printk("cokolwiek2\n");
+
 		if (speed == RF24_2MBPS) {
             setup |= _BV(RF_DR_HIGH);
+				printk("cokolwiek3\n");
+
 		}
 	}
 	
 	write_register(RF_SETUP, setup);
 	if (read_register(RF_SETUP) == setup) {
         result = true;
+		printk("cokolwiek4\n");
+
     }
     return result;
 }
@@ -307,6 +314,7 @@ void main(void){
 	}
 	else{
 		printk("NRF FAILED\n");
+		spi_send_test();
 		return;
 	}
 
