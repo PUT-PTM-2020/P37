@@ -54,7 +54,9 @@ struct device *gpio_engine_dev;
 struct device *gpio_sonic_sensor_dev;
 struct device *gpio_transceiver_dev;
 struct device *pwm2_dev, *pwm3_dev;
- 
+int left_dist, front_dist, right_dist;
+int *distance = NULL;
+
 uint8_t gpio_init(void){
     uint8_t ret = 0;
     gpio_engine_dev = device_get_binding(ENGINE_PORT);
@@ -65,10 +67,10 @@ uint8_t gpio_init(void){
     }
  
     /* Engines IN1 - IN4 pins cofiguration */
-    gpio_pin_configure(gpio_engine_dev, IN1_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
-    gpio_pin_configure(gpio_engine_dev, IN2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
-    gpio_pin_configure(gpio_engine_dev, IN3_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
-    gpio_pin_configure(gpio_engine_dev, IN4_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+    gpio_pin_configure(gpio_engine_dev, IN2_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
+    gpio_pin_configure(gpio_engine_dev, IN1_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
+    gpio_pin_configure(gpio_engine_dev, IN4_PIN, GPIO_OUTPUT_ACTIVE   | FLAGS);
+    gpio_pin_configure(gpio_engine_dev, IN3_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
  
     /* Sonic sensors ECHO and TRIG pins cofiguration */
     gpio_pin_configure(gpio_sonic_sensor_dev, ECHO1_PIN, GPIO_INPUT | FLAGS);
@@ -109,64 +111,101 @@ void print2(void){
 }
  
 /* Returns distance measured by sensor with given id. */
-int get_distance(int id){
-	int distance = 0;
+void get_distance(int id){
     while(1){
-		int trig_pin, echo_pin;
-		if(id == 1){
-			trig_pin = TRIG1_PIN;
-			echo_pin = ECHO1_PIN;
-		}
-		else if(id == 2){
-			trig_pin = TRIG2_PIN;
-			echo_pin = ECHO2_PIN;
-		}
-		else if(id == 3){
-			trig_pin = TRIG3_PIN;
-			echo_pin = ECHO3_PIN;
-		}
-		else{
-			printk("Invalid sensor id.\n");
-			return -1;
-		}
-	
-		u32_t start_time;
-		u32_t stop_time;
-		u32_t cycles_spent;
-		u32_t nsec_spent;
-		
-		gpio_pin_set(gpio_sonic_sensor_dev, trig_pin, true);
+        int trig_pin = 0, echo_pin = 0;
+        if(id == 1){
+            trig_pin = TRIG1_PIN;
+            echo_pin = ECHO1_PIN;
+            distance = &front_dist;
+        }
+        else if(id == 2){
+            trig_pin = TRIG2_PIN;
+            echo_pin = ECHO2_PIN;
+            distance = &left_dist;
+        }
+        else if(id == 3){
+            trig_pin = TRIG3_PIN;
+            echo_pin = ECHO3_PIN;
+            distance = &right_dist;
+        }
+        else{
+            printk("Invalid sensor id.\n");
+        }
+ 
+        gpio_pin_set(gpio_sonic_sensor_dev, trig_pin, true);
         k_sleep(K_USEC(11));
         gpio_pin_set(gpio_sonic_sensor_dev, trig_pin, false);
-        while(!gpio_pin_get(gpio_sonic_sensor_dev, echo_pin)){}
-		start_time = k_cycle_get_32();
-		while(gpio_pin_get(gpio_sonic_sensor_dev, echo_pin)){}
+ 
+        u32_t start_time;
+        u32_t stop_time;
+        u32_t cycles_spent;
+        u32_t usec_spent;
+
+        while(!gpio_pin_get(gpio_sonic_sensor_dev, echo_pin));
+        start_time = k_cycle_get_32();
+        while(gpio_pin_get(gpio_sonic_sensor_dev, echo_pin));
         stop_time = k_cycle_get_32();
         cycles_spent = stop_time - start_time;
-        nsec_spent = SYS_CLOCK_HW_CYCLES_TO_NS(cycles_spent);
-        distance = nsec_spent / 58000;
-		printk("Sensor %d: %d cm\n", id, distance);
-		if(distance > 1200) distance = 0; //Distance higher than 1200 means object is closer than 2cm from sensor.
-		k_msleep(1000);
-		if(id == 3){
-		printk("\n\n");
-		}
-
-	}
-	return distance;
+        usec_spent = SYS_CLOCK_HW_CYCLES_TO_NS(cycles_spent);
+        *distance = usec_spent / 58000;
+        printk("Sensor %d: %d cm\n", id, *distance);
+        if(id == 3){
+            printk("\n\n");
+        }
+        k_msleep(10);
+        if(*distance > 1200) *distance = 0; //Distance higher than 1200 means object is closer than 2cm from sensor.
+    }
 }
  
-// K_THREAD_DEFINE(thread1_id, STACKSIZE, print1, NULL, NULL, NULL, 7, 0, 0);
-// K_THREAD_DEFINE(thread2_id, STACKSIZE, print2, NULL, NULL, NULL, 7, 0, 0);
-K_THREAD_DEFINE(sensor1_th_id, STACKSIZE, get_distance, 1, NULL, NULL, 5, 0, 0);
-K_THREAD_DEFINE(sensor2_th_id, STACKSIZE, get_distance, 2, NULL, NULL, 6, 0, 0);
-K_THREAD_DEFINE(sensor3_th_id, STACKSIZE, get_distance, 3, NULL, NULL, 7, 0, 0);
+void engine_test(){
+    while(1){
+        pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
+        pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
+    
+        if(front_dist < 20){
+            /* Stop the car */
+            gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
+            gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
+            gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
+            gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
+            pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 2000, 0);
+            pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 2000, 0);
+            k_msleep(100);
+    
+            /* Turn right */
+            int bool1 = false, bool2 = true;
+            if(right_dist < 10){
+               bool1 = true;
+               bool2 = false;
+            }
+            pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
+            pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
+            gpio_pin_set(gpio_engine_dev, IN1_PIN, bool1);
+            gpio_pin_set(gpio_engine_dev, IN2_PIN, bool2);
+            gpio_pin_set(gpio_engine_dev, IN3_PIN, bool2);
+            gpio_pin_set(gpio_engine_dev, IN4_PIN, bool1);
+            k_msleep(500);
+
+            /* Move forward */
+            gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
+            gpio_pin_set(gpio_engine_dev, IN1_PIN, false);
+            gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
+            gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
+        }
+    }
+}
  
-void main(void){   
+K_THREAD_DEFINE(sensor1_th_id, STACKSIZE, get_distance, 1, NULL, NULL, 4, 0, 0);
+K_THREAD_DEFINE(sensor2_th_id, STACKSIZE, get_distance, 2, NULL, NULL, 5, 0, 0);
+K_THREAD_DEFINE(sensor3_th_id, STACKSIZE, get_distance, 3, NULL, NULL, 6, 0, 0);
+K_THREAD_DEFINE(engines_id, STACKSIZE, engine_test, NULL, NULL, NULL, 7, 0, 0);
+ 
+void main(void){
     if(gpio_init()) printk("GPIO init failed.\n");
     if(pwm_init())  printk("PWM init failed.\n");
- 
 }
+ 
 // void main(void)
 // {
 //  gpio_init();
