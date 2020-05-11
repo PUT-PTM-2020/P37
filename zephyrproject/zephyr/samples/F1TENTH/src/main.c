@@ -55,12 +55,6 @@
 /* period of servo motor signal ->  2.4ms */
 #define PERIOD (USEC_PER_SEC / 490U)
  
-/* all in micro second */
-#define STEP 1
-//#define MINPULSEWIDTH 50 /* Servo 0 degrees */
-//#define MIDDLEPULSEWIDTH 1500 /* Servo 90 degrees */
-//#define MAXPULSEWIDTH 255 /* Servo 180 degrees */
- 
 #define STACKSIZE 1024
  
 struct device *gpio_engine_dev;
@@ -134,21 +128,7 @@ uint8_t pwm_init(void){
 
     return ret;
 }
- 
-void print1(void){
-    while(1){
-        printk("It's thread 1./n");
-        k_msleep(1000);
-    }
-}
- 
-void print2(void){
-    while(1){
-        printk("It's thread 2, should appear twice per every thread 1./n");
-        k_msleep(500);
-    }
-}
- 
+
 /* Returns distance measured by sensor with given id. */
 void get_distance(int id){
         int trig_pin = 0, echo_pin = 0;
@@ -252,48 +232,48 @@ void engine_test(){
 }
  
 void move_forward(const int velocity) {
-            /* Move forward */
-            printk("Moving forward!\n");
-            pwm_pin_set_usec(pwm2_dev, 1, PERIOD, velocity + 100, 0);
-            pwm_pin_set_usec(pwm2_dev, 2, PERIOD, velocity, 0);
-            gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
-            gpio_pin_set(gpio_engine_dev, IN1_PIN, false);
-            gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
-            gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
+    /* Move forward */
+    printk("Moving forward!\n");
+    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, velocity + 100, 0);
+    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, velocity, 0);
+    gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN1_PIN, false);
+    gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
 }
  
 void stop_car() {
-                /* Stop the car */
-            printk("Stopping!\n");
-            gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
-            gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
-            gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
-            gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
-            pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 2000, 0);
-            pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 2000, 0);
-            k_msleep(1000);
+    /* Stop the car */
+    printk("Stopping!\n");
+    gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
+    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 2000, 0);
+    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 2000, 0);
+    k_msleep(1000);
 }
  
 void turn_right() {
-            printk("Turning right!\n");
-            pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
-            pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
-            gpio_pin_set(gpio_engine_dev, IN1_PIN, false);
-            gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
-            gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
-            gpio_pin_set(gpio_engine_dev, IN4_PIN, false);
-            k_msleep(800);
+    printk("Turning right!\n");
+    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
+    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
+    gpio_pin_set(gpio_engine_dev, IN1_PIN, false);
+    gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN4_PIN, false);
+    k_msleep(800);
 }
  
 void turn_left() {
-            printk("Turning left!\n");
-            pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
-            pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
-            gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
-            gpio_pin_set(gpio_engine_dev, IN2_PIN, false);
-            gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
-            gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
-            k_msleep(800);
+    printk("Turning left!\n");
+    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
+    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
+    gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN2_PIN, false);
+    gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
+    gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
+    k_msleep(800);
 }
  
 void choose_direction(int *direction) {
@@ -308,8 +288,6 @@ void choose_direction(int *direction) {
             *direction-=90;
         } else *direction+=1000; //liczba wywolujaca stop jazdy
     }
- 
- 
     //pojazd jest odwrocony w prawo wzgledem celu, wiec bedzie probowac skrecic w lewo
     else if (*direction >= 90) {
         if(left_dist>20){
@@ -317,8 +295,6 @@ void choose_direction(int *direction) {
             *direction-=90;
         }
     }
- 
- 
     //pojazd jest odwrocony w lewo wzgledem celu, wiec bedzie probowac skrecic w prawo
     else if(*direction <= -90 ) {
         if(right_dist>20){
@@ -352,76 +328,31 @@ void autonomous_test(){
 }
 static const char *poll_data = "AT\r\n";
 
-int test_poll_read(void)
-{
-    int i;
-    for (i = 0; i < strlen(poll_data); i++) {
+void poll_out(char poll_data[]){
+    for (int i = 0; i < strlen(poll_data); i++) {
 		uart_poll_out(uart1_dev, poll_data[i]);
 	}
-    unsigned char recv_char;
-    while (1) {
-        //printk("dupa1");
-		while (uart_poll_in(uart1_dev, &recv_char) < 0) {
-		}
-        //printk("dupa");
-        printk("%c", recv_char);
-        //printk("%d\n", uart_poll_in(gpio_esp_dev, &recv_char));
-       // if ((recv_char == '\n') || (recv_char == '\r')) {
-		//	break;
-		//}
-    }
 }
 
+void poll_in(){
+    unsigned char recv_char;
+    while (1) {
+		while (uart_poll_in(uart1_dev, &recv_char) < 0) {
+		}
+        printk("%c", recv_char);
+    }
+}
 
 //K_THREAD_DEFINE(sensor1_th_id, STACKSIZE, get_distance, 1, NULL, NULL, 5, 0, 0);
 //K_THREAD_DEFINE(sensor2_th_id, STACKSIZE, get_distance, 2, NULL, NULL, 4, 0, 0);
 //K_THREAD_DEFINE(sensor3_th_id, STACKSIZE, get_distance, 3, NULL, NULL, 6, 0, 0);
-//K_THREAD_DEFINE(printk_id, STACKSIZE, get_distance_printk, NULL, NULL, NULL, 6, 0, 0);
-//K_THREAD_DEFINE(autonomous_id, STACKSIZE, autonomous_test, NULL, NULL, NULL, 7, 0, 0);
- 
+K_THREAD_DEFINE(printk_id, STACKSIZE, get_distance_printk, NULL, NULL, NULL, 6, 0, 0);
+K_THREAD_DEFINE(autonomous_id, STACKSIZE, autonomous_test, NULL, NULL, NULL, 7, 0, 0);
+K_THREAD_DEFINE(poll_in_id, STACKSIZE, poll_in, NULL, NULL, NULL, 5, 0, 0);
+
 void main(void){
     if(gpio_init()) printk("GPIO init failed.\n");
     if(pwm_init())  printk("PWM init failed.\n");
-    if(uart_init())  printk("uart init failed.\n");
+    if(uart_init())  printk("UART init failed.\n");
     test_poll_read();
 }
- 
-// void main(void)
-// {
-//  gpio_init();
-//  pwm_init();
-//  int fill = 500;
-   
-//  // while (1) {
-//  //  pwm_pin_set_usec(pwm2_dev, 1, PERIOD, fill, 0);
-//  //  pwm_pin_set_usec(pwm2_dev, 2, PERIOD, fill, 0);
-//  //  if (fill < 2040) {
-//  //      fill += STEP;
-//  //  } else {
-//  //      pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 0, 0);
-//  //      k_sleep(K_MSEC(800));
-//  //      fill = 300;
-//  //  }
-//  //  k_sleep(K_MSEC(10));
-//  // }
-//  u32_t start_time;
-//  u32_t stop_time;
-//  u32_t cycles_spent;
-//  u32_t usec_spent;
-//  float distance;
- 
-//  while(1){
-//      gpio_pin_set(gpio_sonic_sensor_dev, TRIG1_PIN, GPIO_OUTPUT_ACTIVE);
-//      k_sleep(K_USEC(11));
-//      gpio_pin_set(gpio_sonic_sensor_dev, TRIG1_PIN, GPIO_OUTPUT_INACTIVE);
- 
- 
-//      start_time = k_cycle_get_32();
-//      while(gpio_pin_get(gpio_sonic_sensor_dev, ECHO1_PIN)){}
-//      stop_time = k_cycle_get_32();
-//      cycles_spent = stop_time - start_time;
-//      usec_spent = SYS_CLOCK_HW_CYCLES_TO_US(cycles_spent);
-//      distance = usec_spent / 58.;
-//      printk("%f",distance);
-//  }
-// }
