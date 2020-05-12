@@ -82,6 +82,7 @@ version.h.in
 west.yml
 zephyr-env.cmd
 zephyr-env.sh
+.cache
 
 
 ##in zephyrproject/zephyr/boards ##
@@ -125,6 +126,8 @@ b_l072z_lrwan1
 bl652_dvk
 bl654_dvk
 black_f407_generic
+black_f407ve
+black_f407zg_pro
 cc1352r1_launchxl
 cc26x2r1_launchxl
 cc3220sf_launchxl
@@ -279,12 +282,15 @@ warp7_m4
 ##in zephyrproject/zephyr/drivers ##
 
 ##in zephyrproject/zephyr/samples##
+zephyrproject\zephyr\samples\boards
+zephyrproject\zephyr\samples\drivers
 application_development
 basic
 bluetooth
 classic.rst
 cpp_synchronization
 display
+F1tenth-nrf
 hello_world
 index.rst
 mpu
