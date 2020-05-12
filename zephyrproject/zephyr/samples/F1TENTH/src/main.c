@@ -304,8 +304,7 @@ void choose_direction(int *direction) {
     }
  
 }
- 
- 
+
 void autonomous_test(){
     int dir = 0;
     while(1){
@@ -321,12 +320,10 @@ void autonomous_test(){
             } 
             else {
                 move_forward(1000);
-               
             }
         }
     }
 }
-static const char *poll_data = "AT\r\n";
 
 void poll_out(char poll_data[]){
     for (int i = 0; i < strlen(poll_data); i++) {
@@ -354,5 +351,33 @@ void main(void){
     if(gpio_init()) printk("GPIO init failed.\n");
     if(pwm_init())  printk("PWM init failed.\n");
     if(uart_init())  printk("UART init failed.\n");
-    test_poll_read();
+    
+    char *poll_data = "AT\r\n";
+    poll_out(poll_data);
+    k_msleep(3000);
+
+    poll_data = "AT+RST\r\n";
+    poll_out(poll_data);
+    k_msleep(3000);
+
+    poll_data = "AT+CWMODE=1\r\n";
+    poll_out(poll_data);
+    k_msleep(3000);
+
+    poll_data = "AT+CWJAP=\"TP_LINK\",\"65223246\"\r\n";
+    poll_out(poll_data);
+    k_msleep(20000);
+
+    poll_data = "AT+PING=\"www.google.com\"\r\n";
+    poll_out(poll_data);
+    k_msleep(3000);
+
+    poll_data = "AT+PING=\"www.wp.pl\"\r\n";
+    poll_out(poll_data);
+    k_msleep(3000);
+// poll_data = "AT+CIPMUX=1\r\n";
+// poll_out(poll_data);
+// k_msleep(3000);
+// poll_data = "AT+CIPSERVER=1,80\r\n";
+// poll_out(poll_data);
 }
