@@ -42,6 +42,12 @@ doc/doc.warnings
 .vscode
 hide-defaults-note
 
+boards/arm/black_f407ve
+boards/arm/black_f407zg_pro
+samples/F1tenth-nrf
+samples/boards
+samples/drivers
+
 # Tag files
 GPATH
 GRTAGS
