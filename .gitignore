@@ -282,8 +282,8 @@ warp7_m4
 ##in zephyrproject/zephyr/drivers ##
 
 ##in zephyrproject/zephyr/samples##
-zephyrproject\zephyr\samples\boards
-zephyrproject\zephyr\samples\drivers
+zephyrproject/zephyr/samples/boards
+zephyrproject/zephyr/samples/drivers
 application_development
 basic
 bluetooth
