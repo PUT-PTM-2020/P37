@@ -29,10 +29,6 @@
 #define TRIG3_PIN 5
 #define ECHO3_PIN 4
  
-#define ESP_PORT "GPIOB"
-#define TX_PIN 7
-#define RX_PIN 6
-
 #define FLAGS 0
  
 #define DT_ALIAS_PWM_2_LABEL "PWM_2"
@@ -47,11 +43,11 @@
 #endif
  
 #define DT_ALIAS_UART_1_LABEL "UART_1"
-
+ 
 #ifndef DT_ALIAS_UART_1_LABEL
 #error "UART_1 device label not defined"
 #endif
-
+ 
 /* period of servo motor signal ->  2.4ms */
 #define PERIOD (USEC_PER_SEC / 490U)
  
@@ -63,15 +59,16 @@ struct device *uart1_dev;
 struct device *pwm2_dev, *pwm3_dev;
 int left_dist = 100, front_dist = 100, right_dist = 100;
 int *distance = NULL;
-
+unsigned char *recv_data;
+ 
 const struct uart_config uart_cfg = {
-		.baudrate = 115200,
-		.parity = UART_CFG_PARITY_NONE,
-		.stop_bits = UART_CFG_STOP_BITS_1,
-		.data_bits = UART_CFG_DATA_BITS_8,
-		.flow_ctrl = UART_CFG_FLOW_CTRL_NONE
-	};
-
+        .baudrate = 115200,
+        .parity = UART_CFG_PARITY_NONE,
+        .stop_bits = UART_CFG_STOP_BITS_1,
+        .data_bits = UART_CFG_DATA_BITS_8,
+        .flow_ctrl = UART_CFG_FLOW_CTRL_NONE
+    };
+ 
 void insertionSort(int array[], int size) {
   for (int step = 1; step < size; step++) {
     int key = array[step];
@@ -87,7 +84,7 @@ void insertionSort(int array[], int size) {
     array[j + 1] = key;
   }
 }
-
+ 
 uint8_t gpio_init(void){
     uint8_t ret = 0;
     gpio_engine_dev = device_get_binding(ENGINE_PORT);
@@ -112,12 +109,12 @@ uint8_t gpio_init(void){
  
     return ret;
 }
-
+ 
 uint8_t uart_init(void){
-	uint8_t ret = 0;
+    uint8_t ret = 0;
     uart1_dev = device_get_binding(DT_ALIAS_UART_1_LABEL);
     ret = uart_configure(uart1_dev, &uart_cfg);
-
+ 
     return ret;
 }
  
@@ -125,10 +122,10 @@ uint8_t pwm_init(void){
     uint8_t ret = 0;
     pwm2_dev = device_get_binding(DT_ALIAS_PWM_2_LABEL);
     pwm3_dev = device_get_binding(DT_ALIAS_PWM_3_LABEL);
-
+ 
     return ret;
 }
-
+ 
 /* Returns distance measured by sensor with given id. */
 void get_distance(int id){
         int trig_pin = 0, echo_pin = 0;
@@ -153,13 +150,13 @@ void get_distance(int id){
  
         int data[11];
         int size = 11;
-
+ 
         for(int i = 0; i < size; i++){
             int val;
             gpio_pin_set(gpio_sonic_sensor_dev, trig_pin, true);
             k_sleep(K_USEC(11));
             gpio_pin_set(gpio_sonic_sensor_dev, trig_pin, false);
-
+ 
             u32_t start_time;
             u32_t stop_time;
             u32_t cycles_spent;
@@ -174,11 +171,11 @@ void get_distance(int id){
             val = nsec_spent / 58000;
             data[i] = val;
         }
-
+ 
         insertionSort(data, size);
         *distance = data[5]; //distance = median of 11 measures
         if(*distance > 1200) *distance = 0; //Distance higher than 1200 means object is closer than 2cm from sensor.
-    
+   
 }
  
 void get_distance_printk(void){
@@ -192,8 +189,8 @@ void get_distance_printk(void){
         k_msleep(10);
     }
 }
-
-
+ 
+ 
 void engine_test(){
     while(1){
         pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
@@ -304,7 +301,7 @@ void choose_direction(int *direction) {
     }
  
 }
-
+ 
 void autonomous_test(){
     int dir = 0;
     while(1){
@@ -317,29 +314,44 @@ void autonomous_test(){
             {
                 stop_car();
                 break;
-            } 
+            }
             else {
                 move_forward(1000);
             }
         }
     }
 }
-
+ 
 void poll_out(char poll_data[]){
     for (int i = 0; i < strlen(poll_data); i++) {
-		uart_poll_out(uart1_dev, poll_data[i]);
-	}
+        uart_poll_out(uart1_dev, poll_data[i]);
+    }
 }
-
+ 
 void poll_in(){
     unsigned char recv_char;
+    int esp_recv_counter = 0;
+    char esp_pattern[5] = {'P','D',',','1',':'};
+    //char esp_pattern[] = "PD,1:";
+    for(int i = 0; i < sizeof(esp_pattern); i++){
+        printk("%d: %c\n", i, esp_pattern[i]);
+    }
     while (1) {
-		while (uart_poll_in(uart1_dev, &recv_char) < 0) {
-		}
-        printk("%c", recv_char);
+        while (uart_poll_in(uart1_dev, &recv_char) < 0) {
+        }
+        if (recv_char == esp_pattern[esp_recv_counter] || esp_recv_counter == 5) {
+            if (esp_recv_counter == 5){
+                recv_data = &recv_char;
+                //printk("\nrecv_char: %c", recv_char);
+                printk("\nrecv_data: %c\n\n", *recv_data);
+                esp_recv_counter = 0;
+            } else esp_recv_counter++;
+        } else esp_recv_counter = 0;
+        //printk("%c", recv_char);
     }
 }
 
+ 
 //K_THREAD_DEFINE(sensor1_th_id, STACKSIZE, get_distance, 1, NULL, NULL, 5, 0, 0);
 //K_THREAD_DEFINE(sensor2_th_id, STACKSIZE, get_distance, 2, NULL, NULL, 4, 0, 0);
 //K_THREAD_DEFINE(sensor3_th_id, STACKSIZE, get_distance, 3, NULL, NULL, 6, 0, 0);
@@ -352,29 +364,52 @@ void main(void){
     if(pwm_init())  printk("PWM init failed.\n");
     if(uart_init())  printk("UART init failed.\n");
     
-    char *poll_data = "AT\r\n";
+    
+
+    char *poll_data = "AT+RESTORE\r\n";
+    // poll_out(poll_data);
+    // k_msleep(3000);
+
+    // poll_data = "AT+CWMODE=3\r\n";
+    // poll_out(poll_data);
+    // k_msleep(3000);
+
+    // poll_data = "AT+CWJAP=\"TP_LINK\",\"65223246\"\r\n";
+    // poll_out(poll_data);
+    // k_msleep(10000);
+
+    // poll_data = "AT+CIFSR\r\n";
+    // poll_out(poll_data);
+    // k_msleep(3000);
+   
+    // poll_data = "AT+CIPSTART=\"TCP\",\"192.168.1.104\",5005\r\n";
+    // poll_out(poll_data);
+    // k_msleep(3000);
+
+    poll_data = "AT+CIPSEND=1\r\n";
     poll_out(poll_data);
     k_msleep(3000);
 
-    poll_data = "AT+RST\r\n";
+    poll_data = "2\n";
     poll_out(poll_data);
     k_msleep(3000);
 
-    poll_data = "AT+CWMODE=1\r\n";
+    poll_data = "AT+CIPSEND=2\r\n";
     poll_out(poll_data);
     k_msleep(3000);
 
-    poll_data = "AT+CWJAP=\"TP_LINK\",\"65223246\"\r\n";
-    poll_out(poll_data);
-    k_msleep(20000);
-
-    poll_data = "AT+PING=\"www.google.com\"\r\n";
+    poll_data = "33\n";
     poll_out(poll_data);
     k_msleep(3000);
 
-    poll_data = "AT+PING=\"www.wp.pl\"\r\n";
+    poll_data = "AT+CIPSEND=1\r\n";
     poll_out(poll_data);
     k_msleep(3000);
+
+    poll_data = "@\n";
+    poll_out(poll_data);
+    k_msleep(3000);
+
 // poll_data = "AT+CIPMUX=1\r\n";
 // poll_out(poll_data);
 // k_msleep(3000);
