@@ -29,6 +29,11 @@
 #define TRIG3_PIN 5
 #define ECHO3_PIN 4
  
+#define LEDS_PORT "GPIOD"
+#define ORANGE_LED 13
+#define GREEN_LED 12
+#define RED_LED 14
+#define BLUE_LED 15
 #define FLAGS 0
  
 #define DT_ALIAS_PWM_2_LABEL "PWM_2"
@@ -53,10 +58,9 @@
  
 #define STACKSIZE 1024
  
-struct device *gpio_engine_dev;
-struct device *gpio_sonic_sensor_dev;
-struct device *uart1_dev;
+struct device *gpio_engine_dev, *gpio_sonic_sensor_dev, *gpio_leds_dev;
 struct device *pwm2_dev, *pwm3_dev;
+struct device *uart1_dev;
 int left_dist = 100, front_dist = 100, right_dist = 100;
 int *distance = NULL;
 unsigned char *recv_data;
@@ -89,6 +93,7 @@ uint8_t gpio_init(void){
     uint8_t ret = 0;
     gpio_engine_dev = device_get_binding(ENGINE_PORT);
     gpio_sonic_sensor_dev = device_get_binding(SONIC_SENSOR_PORT);
+    gpio_leds_dev = device_get_binding(LEDS_PORT);
     if (gpio_engine_dev == NULL || gpio_sonic_sensor_dev == NULL) {
         return 1;
     }
@@ -106,7 +111,13 @@ uint8_t gpio_init(void){
     gpio_pin_configure(gpio_sonic_sensor_dev, TRIG1_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
     gpio_pin_configure(gpio_sonic_sensor_dev, TRIG2_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
     gpio_pin_configure(gpio_sonic_sensor_dev, TRIG3_PIN, GPIO_OUTPUT_INACTIVE | FLAGS);
- 
+    
+    /* In-board leds configuration */
+    gpio_pin_configure(gpio_leds_dev, ORANGE_LED, GPIO_OUTPUT_INACTIVE | FLAGS);
+    gpio_pin_configure(gpio_leds_dev, GREEN_LED,  GPIO_OUTPUT_INACTIVE | FLAGS);
+    gpio_pin_configure(gpio_leds_dev, RED_LED,    GPIO_OUTPUT_INACTIVE | FLAGS);
+    gpio_pin_configure(gpio_leds_dev, BLUE_LED,   GPIO_OUTPUT_INACTIVE | FLAGS);
+
     return ret;
 }
  
@@ -238,8 +249,19 @@ void move_forward(const int velocity) {
     gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
 }
+
+void move_backwards(const int velocity) {
+    /* Move forward */
+    printk("Moving backwards!\n");
+    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, velocity + 100, 0);
+    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, velocity, 0);
+    gpio_pin_set(gpio_engine_dev, IN2_PIN, false);
+    gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
+    gpio_pin_set(gpio_engine_dev, IN4_PIN, false);
+    gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
+}
  
-void stop_car() {
+void stop_vehicle() {
     /* Stop the car */
     printk("Stopping!\n");
     gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
@@ -248,10 +270,9 @@ void stop_car() {
     gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
     pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 2000, 0);
     pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 2000, 0);
-    k_msleep(1000);
 }
  
-void turn_right() {
+void turn_right(const int time) {
     printk("Turning right!\n");
     pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
     pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
@@ -259,10 +280,10 @@ void turn_right() {
     gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN4_PIN, false);
-    k_msleep(800);
+    if(time) k_msleep(time);
 }
  
-void turn_left() {
+void turn_left(const int time) {
     printk("Turning left!\n");
     pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
     pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
@@ -270,41 +291,40 @@ void turn_left() {
     gpio_pin_set(gpio_engine_dev, IN2_PIN, false);
     gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
     gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
-    k_msleep(800);
+    if(time) k_msleep(time);
 }
- 
+
 void choose_direction(int *direction) {
     printk("dir: %d\n", *direction);
     if(*direction == 0 ) {
         if(right_dist>20){
-            turn_right();
+            turn_right(800);
             *direction+=90;
         }
         else if(left_dist>20){
-            turn_left();
+            turn_left(800);
             *direction-=90;
         } else *direction+=1000; //liczba wywolujaca stop jazdy
     }
     //pojazd jest odwrocony w prawo wzgledem celu, wiec bedzie probowac skrecic w lewo
     else if (*direction >= 90) {
         if(left_dist>20){
-            turn_left();
+            turn_left(800);
             *direction-=90;
         }
     }
     //pojazd jest odwrocony w lewo wzgledem celu, wiec bedzie probowac skrecic w prawo
     else if(*direction <= -90 ) {
         if(right_dist>20){
-            turn_right();
+            turn_right(800);
             *direction+=90;
         }
     }
- 
 }
  
-void autonomous_test(){
+void autonomous_mode(){
     int dir = 0;
-    while(1){
+    while(*recv_data != 'M'){
         pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000 + 100, 0);
         pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
    
@@ -312,7 +332,7 @@ void autonomous_test(){
             choose_direction(&dir);
             if (dir >= 1000)
             {
-                stop_car();
+                stop_vehicle();
                 break;
             }
             else {
@@ -320,6 +340,49 @@ void autonomous_test(){
             }
         }
     }
+}
+
+void manual_mode(){
+    while(*recv_data != 'X'){
+        if(*recv_data == 'R'){
+            turn_right(0);
+        }
+        else if(*recv_data == 'L'){
+            turn_left(0);
+        }
+        else if(*recv_data == 'F'){
+            move_forward(1000);
+        }
+        else if(*recv_data == 'B'){
+            move_backwards(1000);
+        }
+        else if(*recv_data == 'A'){
+            autonomous_mode();
+        }
+        else stop_vehicle();
+    }
+}
+
+void connection_test(){
+    /* Light all in-boards user leds */
+    gpio_pin_set(gpio_leds_dev, ORANGE_LED, true);
+    k_msleep(500);
+    gpio_pin_set(gpio_leds_dev, GREEN_LED, true);
+    k_msleep(500);
+    gpio_pin_set(gpio_leds_dev, RED_LED, true);
+    k_msleep(500);
+    gpio_pin_set(gpio_leds_dev, BLUE_LED, true);
+    k_msleep(500);
+
+    /* Put all in-boards user leds out */
+    gpio_pin_set(gpio_leds_dev, ORANGE_LED, false);
+    k_msleep(500);
+    gpio_pin_set(gpio_leds_dev, GREEN_LED, false);
+    k_msleep(500);
+    gpio_pin_set(gpio_leds_dev, RED_LED, false);
+    k_msleep(500);
+    gpio_pin_set(gpio_leds_dev, BLUE_LED, false);
+    k_msleep(500);
 }
  
 void poll_out(char poll_data[]){
@@ -351,12 +414,28 @@ void poll_in(){
     }
 }
 
- 
+void main_thread(){
+    while(1){
+        if(*recv_data != '\0'){
+            if(*recv_data == 'M'){
+                manual_mode();
+            }
+            else if(*recv_data == 'A'){
+                autonomous_mode();
+            }
+            else if(*recv_data == 'C'){
+                connection_test();
+            }
+            *recv_data = '\0';  
+        }
+    }
+}
+
 //K_THREAD_DEFINE(sensor1_th_id, STACKSIZE, get_distance, 1, NULL, NULL, 5, 0, 0);
 //K_THREAD_DEFINE(sensor2_th_id, STACKSIZE, get_distance, 2, NULL, NULL, 4, 0, 0);
 //K_THREAD_DEFINE(sensor3_th_id, STACKSIZE, get_distance, 3, NULL, NULL, 6, 0, 0);
 K_THREAD_DEFINE(printk_id, STACKSIZE, get_distance_printk, NULL, NULL, NULL, 6, 0, 0);
-K_THREAD_DEFINE(autonomous_id, STACKSIZE, autonomous_test, NULL, NULL, NULL, 7, 0, 0);
+K_THREAD_DEFINE(main_th_id, STACKSIZE, main_thread, NULL, NULL, NULL, 7, 0, 0);
 K_THREAD_DEFINE(poll_in_id, STACKSIZE, poll_in, NULL, NULL, NULL, 5, 0, 0);
 
 void main(void){
