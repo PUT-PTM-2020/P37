@@ -8,6 +8,7 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
+  * [Required Devices](#required-devices)
   * [Built With](#built-with)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
@@ -33,6 +34,19 @@ F10 is a unviersity project where main goal is to use microcontroller STM32 in p
     <img src="vehicle1.gif">
   </a>
 </p>
+
+### Required devices
+You need to have all following devices to run project properly:
+* STM32F4 Discovery
+* 3x Sonic Sensor HC-S04
+* ESP8266 WiFi module
+* 2x DC Motor 3-6V
+* Motor Driver Board L298N
+* Power link +7.4 V 
+
+Motors and power link can be changed when these conditions are performed:
+* Power link must be at least +7.4V to power STM32
+* Motors must be able to work with voltage of power link minus 1.4 V (i.e. 7.4V - 1.4V = 6V)
 
 ### Built With
 To run project you will need following modules:
@@ -118,7 +132,7 @@ west build -p auto -b stm32f4_disco samples/f1tenth
 ```
 west flash
 ```
-5. Done.
+Done!
 
 ## Authors
 
