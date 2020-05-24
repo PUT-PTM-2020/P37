@@ -124,11 +124,11 @@ To get a local copy up and running follow these simple example steps.
 2. Edit files ```zephyrproject/zephyr/samples/F1TENTH/src/main.c``` in line 463 and ```F1TENTH-python-app/app.py``` in line 189. Change IP address to match your network adapter.
 3. Run python app.
 4. Run cmd and go to ```/zephyrproject/zephyr``` in project repository.
-3. Build project:
+5. Build project:
 ```
 west build -p auto -b stm32f4_disco samples/f1tenth
 ```
-4. Flash project:
+6. Flash project:
 ```
 west flash
 ```
