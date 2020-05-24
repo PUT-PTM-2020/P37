@@ -12,7 +12,9 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-* [Contact](#contact)
+  * [Pins Connection](#pins-connection)
+  * [Build and flash](#build-and-flash)
+* [Authors](#Authors)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -62,10 +64,61 @@ To get a local copy up and running follow these simple example steps.
 1. Install Zephyr Poject RTOS by following [this](https://docs.zephyrproject.org/latest/getting_started/index.html) instruction.
 2. Clone the repo to any folder
 	```
-	git clone https://github.com/PUT-PTM-2020/P37/
+	git clone https://github.com/PUT-PTM-2020/P37
 	```
 3. Copy zephyrproject from your local zephyr path to previously cloned folder but do not overwrite existing files.
 
+### Pins connection
+
+* STM32 <-> ESP8266 <br>
+
+| STM32 Pin | ESP8266 Pin |
+|-----------|-------------|
+| GND       | GND         |
+| PB7       | U0_TX       |
+| PB6       | U0_RX       |
+| VDD       | CHIP_EN     |
+| VDD       | VDD         |
+
+* STM32 <-> Sonic Sensors <br>
+
+| STM32 Pin | Sensor Pin  |
+|-----------|-------------|
+| GND       | GND         |
+| PE0       | ECHO_FRONT  |
+| PE1       | TRIG_FRONT  |
+| PE2       | ECHO_LEFT   |
+| PE3       | TRIG_LEFT   |
+| PE4       | ECHO_RIGHT  |
+| PE5       | TRIG_RIGHT  |
+| VDD +5V   | VDD         |
+
+* STM32 <-> Motor Driver Board
+
+| STM32 Pin | Driver Pin |
+|-----------|-------------|
+| MiniUSB   | GND, +5V    |
+| PA0       | ENA    	  |
+| PA1       | ENB  	  |
+| PA2       | IN2   	  |
+| PA3       | IN3	  |
+| PA4       | IN4 	  |
+| PA5       | IN1	  |
+
+### Build and flash
+1. Connect STM32 to PC via USB.
+2. Edit files ```zephyrproject/zephyr/samples/F1TENTH/src/main.c``` in line 463 and ```F1TENTH-python-app/app.py``` in line 189. Change IP address to match your network adapter.
+3. Run python app.
+4. Run cmd and go to ```/zephyrproject/zephyr``` in project repository.
+3. Build project:
+```
+west build -p auto -b stm32f4_disco samples/f1tenth
+```
+4. Flash project:
+```
+west flash
+```
+5. Done.
 
 ## Authors
 
