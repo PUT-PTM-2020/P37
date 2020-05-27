@@ -62,8 +62,8 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-1. Install Python. 
-	1.1. For Windows download the newest version from [here](https://www.python.org/downloads/).
+1. Install Python. <br>
+	1.1. For Windows download the newest version from [here](https://www.python.org/downloads/). <br>
 	1.2. For Linux (Ubuntu)  a add the deadsnakes PPA to your system’s sources list
 	```
 	$ sudo add-apt-repository ppa:deadsnakes/ppa
