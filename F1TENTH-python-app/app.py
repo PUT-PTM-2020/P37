@@ -3,17 +3,71 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 import sys
+import socket
+import time
+import traceback
+
+from socket import SHUT_RDWR
+
+def get_ip(): #getting IP (LAN) address
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+
+    print(f"naprawde twoje IP: {IP}")
+    return IP
+ip_address = get_ip()
+#print(f"twoje IP: {socket.gethostbyname(socket.gethostname())}")
+print(f"IP Address: {ip_address}")
+
+port = 5005
+BUFFER_SIZE = 1024
 
 
-class Color(QWidget):
+##MULTITHREAD
 
-    def __init__(self, color, *args, **kwargs):
-        super(Color, self).__init__(*args, **kwargs)
-        self.setAutoFillBackground(True)
 
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
+class WorkerSignals(QObject):
+
+    finished = pyqtSignal()
+    error = pyqtSignal(tuple)
+    result = pyqtSignal(object)
+    progress = pyqtSignal(int)
+
+
+class Worker(QRunnable):
+
+    def __init__(self, fn, *args, **kwargs):
+        super(Worker, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = WorkerSignals()
+
+        # Add the callback to our kwargs
+        self.kwargs['progress_callback'] = self.signals.progress
+
+    @pyqtSlot()
+    def run(self):
+        # Retrieve args/kwargs here; and fire processing using them
+        try:
+            result = self.fn(*self.args, **self.kwargs)
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.error.emit((exctype, value, traceback.format_exc()))
+        else:
+            self.signals.result.emit(result)  # Return the result of the processing
+        finally:
+            self.signals.finished.emit()  # Done
+
 
 
 ##setting the window
@@ -22,11 +76,15 @@ class MainWindow(QMainWindow):
     part = 1  # for instruction changing
     selectedButt = 10
     keyPressed = pyqtSignal(QEvent)
+    driveMode = 'M'
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    charToSend = '0'
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, *kwargs)
 
-        self.setWindowTitle("F10 control app v 0.3")
+        self.setWindowTitle("F10 control app v 0.4.1")
         ##
         self.menusManager = QStackedLayout()
 
@@ -86,6 +144,120 @@ class MainWindow(QMainWindow):
         # self.keyPressed.connect(self.on_key)
 
         self.setCentralWidget(self.baseWidget)
+
+        self.threadpool = QThreadPool()
+        #multiTHREADS
+        print("Thread: Init...")
+        self.TCP_initThread()
+        self.timer = QTimer()
+        self.timer.setInterval(150)
+        print("Thread: Starting timer...")
+        #self.timer.timeout.connect(self.TCP_thread)
+        self.timer.start()
+        print("Thread: Config succesfull! :D")
+
+
+    ##      MULTITHREAD FUNCTIONS (FOR TCP CONNECTION IN THE BACKGROUND)
+
+    ##TCP
+
+    def TCP_initThread(self):
+        # Pass the function to execute
+        initworker = Worker(self.TCP_init)  # Any other args, kwargs are passed to the run function
+        initworker.signals.result.connect(self.TCPoutput)
+        initworker.signals.finished.connect(self.TCPcomplete)
+        initworker.signals.progress.connect(self.TCPprogress)
+
+        # Execute
+        self.threadpool.start(initworker)
+
+    def TCP_init(self, progress_callback):
+        TCP_IP = '192.168.1.104'
+        TCP_PORT = 5005
+        BUFFER_SIZE = 1024  # Normally 1024, but we want fast response
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        binded = 0
+        while binded != -1:
+            time.sleep(0.1)
+            print(f"TCP: Binding... [ATTEMPT {binded}]")
+            try:
+                self.s.bind((TCP_IP, TCP_PORT))
+                print("TCP: Bind successed!")
+                binded = -1
+            except Exception:
+                print("TCP: Bind failed!")
+                binded += 1
+
+        print("TCP: Set listening...")
+        self.s.listen(1)
+        print("TCP: accepting connection...")
+        # while (1):
+        #     print("sprawdzam czy muli")
+        conn, addr = self.s.accept()
+
+        print("DZIALA WAZNE!!")
+        print('Connection address:', addr)
+        #self.TCP_thread()
+
+        while (1):
+            message = self.charToSend
+            if message == 'q':
+                print("TCP: INSIDE Sending loop")
+
+                try:
+                    #self.s.shutdown(SHUT_RDWR)
+                    print("TCP: shutdown connection ...")
+                    self.s.shutdown()
+                except Exception:
+                    print("TCP ERROR: during s.shutdown()")
+
+                try:
+                    #self.s.shutdown(SHUT_RDWR)
+                    print("TCP: closing connection ...")
+                    self.s.close()
+                except Exception:
+                    print("TCP ERROR: during s.close()")
+
+                try:
+                    print("TCP: closing SERVER connection")
+                    self.s.server_close()
+                except:
+                    print("TCP ERROR: during s.server_close()")
+
+                self.setChar('Q')
+                print("TCP: Closing whole app...")
+                QCoreApplication.instance().quit()
+                break
+            else:
+                self.sendChar(conn, message)
+        pass
+
+    def TCPprogress(self, n):
+        print("done", n)
+
+    def TCPoutput(self, s):
+        print(s)
+
+    def TCPcomplete(self):
+        print("THREAD COMPLETE!")
+
+    def setChar(self, character):
+        self.charToSend = character
+        print(f"TCP char set to {character}")
+        pass
+
+    def sendChar(self, connection, mess):
+        if mess != '0':
+            connection.send(mess.encode('utf-8'))
+            print(f"Char sent: {mess}")
+            time.sleep(0.1)
+            self.charToSend = '0'
+        #else:
+            #print("Nothing to send")
+        pass
+
 
     ##      MENUS
 
@@ -313,6 +485,7 @@ class MainWindow(QMainWindow):
 
     def createAutonomousButton(self):
         print("Autonomous Button Created")
+
         self.buttAuto = QPushButton()
         self.buttAuto.setIcon(QIcon(QPixmap("resources/Autonomous.png")))
         self.buttAuto.setIconSize(QSize(300, 75))
@@ -571,6 +744,7 @@ class MainWindow(QMainWindow):
 
     def connectionClicked(self):
         print("conncection test klik!")
+        self.setChar('C')
         # self.createConnectionMenu()
         self.menusManager.setCurrentIndex(1)
         self.buttGoBack.setIcon(QIcon(QPixmap("resources/GoBack.png")))
@@ -586,6 +760,7 @@ class MainWindow(QMainWindow):
 
     def controlClicked(self):
         print("control klik!")
+        self.setChar('M')
         # self.createControlMenu()
         self.menusManager.setCurrentIndex(2)
         self.buttGoBack.setIcon(QIcon(QPixmap("resources/GoBack.png")))
@@ -616,8 +791,22 @@ class MainWindow(QMainWindow):
 
     def goBackClicked(self):
         print("go back klik!")
-        # self.createMainMenu()
+        # self.createMainMenu();
+        if self.driveMode == 'A':
+            self.AutonomousClicked()
+        elif self.menusManager.currentIndex() == 1 or self.menusManager.currentIndex() == 2:
+            self.setChar('X')
         if self.menusManager.currentIndex() == 0:
+            self.setChar('q') #for closing TCP connection
+
+            countdown=2
+            while self.charToSend != 'Q':
+                time.sleep(1.1)
+                print("Waiting for TCP shutdown..." + self.charToSend)
+                countdown-=1
+                if countdown<=0: break
+
+            print("Closing app from GoBack event...")
             QCoreApplication.instance().quit()
         else:
             self.menusManager.setCurrentIndex(0)
@@ -642,6 +831,31 @@ class MainWindow(QMainWindow):
     def AutonomousClicked(self):
         print("Autonomous klik!")
 
+        if self.driveMode=='M':
+            self.setChar('A')
+
+            self.buttUP.setEnabled(False)
+            self.buttDOWN.setEnabled(False)
+            self.buttLEFT.setEnabled(False)
+            self.buttRIGHT.setEnabled(False)
+            self.buttSQUARE.setEnabled(False)
+
+
+
+            self.driveMode='A'
+
+        elif self.driveMode=='A':
+            self.setChar('M')
+
+            self.buttUP.setEnabled(True)
+            self.buttDOWN.setEnabled(True)
+            self.buttLEFT.setEnabled(True)
+            self.buttRIGHT.setEnabled(True)
+            self.buttSQUARE.setEnabled(True)
+
+            self.driveMode='M'
+
+
     def buttAutonomousOnHovered(self):
         self.buttAuto.setIcon(QIcon(QPixmap("resources/HOVER/Autonomous.png")))
 
@@ -652,6 +866,7 @@ class MainWindow(QMainWindow):
 
     def SQUAREClicked(self):
         print("SQUARE klik!")
+        self.setChar('S')
 
     def buttSQUAREOnHovered(self):
         self.buttSQUARE.setIcon(QIcon(QPixmap("resources/HOVER/Square.png")))
@@ -663,6 +878,7 @@ class MainWindow(QMainWindow):
 
     def UPclicked(self):
         print("UP klik!")
+        self.setChar('F')
         self.buttUP.setIcon(QIcon(QPixmap("resources/PRESS/UP.png")))
 
     def buttUPOnHovered(self):
@@ -675,6 +891,7 @@ class MainWindow(QMainWindow):
 
     def DOWNclicked(self):
         print("DOWN klik!")
+        self.setChar('B')
         self.buttDOWN.setIcon(QIcon(QPixmap("resources/PRESS/DOWN.png")))
 
     def buttDOWNOnHovered(self):
@@ -687,6 +904,7 @@ class MainWindow(QMainWindow):
 
     def LEFTclicked(self):
         print("LEFT klik!")
+        self.setChar('L')
         self.buttLEFT.setIcon(QIcon(QPixmap("resources/PRESS/LEFT.png")))
 
     def buttLEFTOnHovered(self):
@@ -698,6 +916,7 @@ class MainWindow(QMainWindow):
 
     def RIGHTclicked(self):
         print("RIGHT klik!")
+        self.setChar('R')
         self.buttRIGHT.setIcon(QIcon(QPixmap("resources/PRESS/RIGHT.png")))
 
     def buttRIGHTOnHovered(self):
@@ -821,13 +1040,17 @@ class MainWindow(QMainWindow):
 
         pass
 
-
 ##################      MAIN
 app = QApplication(sys.argv)
 app.setStyleSheet("QWidget {background-image: url(./resources/background2.png) }")
 window = MainWindow()
 window.setFixedSize(600, 800)
+# Hiding default system buttons
+window.setWindowFlags(window.windowFlags() | Qt.CustomizeWindowHint)
+window.setWindowFlags(window.windowFlags() & ~Qt.WindowMaximizeButtonHint)
+window.setWindowFlags(window.windowFlags() & ~Qt.WindowMinimizeButtonHint)
+window.setWindowFlags(window.windowFlags() & ~Qt.WindowCloseButtonHint)
+
 window.show()
 
 app.exec_()
-
