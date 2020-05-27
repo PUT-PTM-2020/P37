@@ -13,7 +13,7 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-  * [Pins Connection](#pins-connection)
+  * [Wiring scheme](#wiring-scheme)
   * [Build and flash](#build-and-flash)
 * [Authors](#Authors)
 
@@ -82,7 +82,7 @@ To get a local copy up and running follow these simple example steps.
 	```
 3. Copy zephyrproject from your local zephyr path to previously cloned folder but do not overwrite existing files.
 
-### Pins connection
+### Wiring scheme
 
 * STM32 <-> ESP8266 <br>
 
