@@ -43,5 +43,5 @@ zephyrproject/bootloader
 zephyrproject/modules
 zephyrproject/.west
 zephyrproject/zephyr
-!zephyrproject/zephyr/boards/arm/stm32f4_disco
-!zephyrproject/zephyr/samples/F1TENTH
+!*/zephyrproject/zephyr/boards/arm/stm32f4_disco
+!*/zephyrproject/zephyr/PTM_Project/F1TENTH
