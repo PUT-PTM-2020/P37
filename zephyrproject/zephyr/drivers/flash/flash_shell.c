@@ -17,19 +17,19 @@
 #define BUF_ARRAY_CNT 16
 #define TEST_ARR_SIZE 0x1000
 
-extern struct device __device_init_start[];
-extern struct device __device_init_end[];
+extern struct device __device_start[];
+extern struct device __device_end[];
 
-static u8_t test_arr[TEST_ARR_SIZE];
+static uint8_t test_arr[TEST_ARR_SIZE];
 
 static int parse_helper(const struct shell *shell, size_t *argc,
-		char **argv[], struct device **flash_dev, u32_t *addr)
+		char **argv[], struct device **flash_dev, uint32_t *addr)
 {
 	char *endptr;
 
 	*addr = strtoul((*argv)[1], &endptr, 16);
 	*flash_dev = device_get_binding((*endptr != '\0') ? (*argv)[1] :
-			DT_FLASH_DEV_NAME);
+			DT_CHOSEN_ZEPHYR_FLASH_CONTROLLER_LABEL);
 	if (!*flash_dev) {
 		shell_error(shell, "Flash driver was not found!");
 		return -ENODEV;
@@ -50,9 +50,9 @@ static int parse_helper(const struct shell *shell, size_t *argc,
 static int cmd_erase(const struct shell *shell, size_t argc, char *argv[])
 {
 	struct device *flash_dev;
-	u32_t page_addr;
+	uint32_t page_addr;
 	int result;
-	u32_t size;
+	uint32_t size;
 
 	result = parse_helper(shell, &argc, &argv, &flash_dev, &page_addr);
 	if (result) {
@@ -90,10 +90,10 @@ static int cmd_erase(const struct shell *shell, size_t argc, char *argv[])
 
 static int cmd_write(const struct shell *shell, size_t argc, char *argv[])
 {
-	u32_t check_array[BUF_ARRAY_CNT];
-	u32_t buf_array[BUF_ARRAY_CNT];
+	uint32_t check_array[BUF_ARRAY_CNT];
+	uint32_t buf_array[BUF_ARRAY_CNT];
 	struct device *flash_dev;
-	u32_t w_addr;
+	uint32_t w_addr;
 	int ret;
 	int j = 0;
 
@@ -138,7 +138,7 @@ static int cmd_write(const struct shell *shell, size_t argc, char *argv[])
 static int cmd_read(const struct shell *shell, size_t argc, char *argv[])
 {
 	struct device *flash_dev;
-	u32_t addr;
+	uint32_t addr;
 	int cnt;
 	int ret;
 
@@ -154,7 +154,7 @@ static int cmd_read(const struct shell *shell, size_t argc, char *argv[])
 	}
 
 	while (cnt--) {
-		u32_t data;
+		uint32_t data;
 
 		flash_read(flash_dev, addr, &data, sizeof(data));
 		shell_print(shell, "0x%08x ", data);
@@ -169,10 +169,10 @@ static int cmd_read(const struct shell *shell, size_t argc, char *argv[])
 static int cmd_test(const struct shell *shell, size_t argc, char *argv[])
 {
 	struct device *flash_dev;
-	u32_t repeat;
+	uint32_t repeat;
 	int result;
-	u32_t addr;
-	u32_t size;
+	uint32_t addr;
+	uint32_t size;
 
 	result = parse_helper(shell, &argc, &argv, &flash_dev, &addr);
 	if (result) {
@@ -189,8 +189,8 @@ static int cmd_test(const struct shell *shell, size_t argc, char *argv[])
 
 	flash_write_protection_set(flash_dev, 0);
 
-	for (u32_t i = 0; i < size; i++) {
-		test_arr[i] = (u8_t)i;
+	for (uint32_t i = 0; i < size; i++) {
+		test_arr[i] = (uint8_t)i;
 	}
 
 	while (repeat--) {
@@ -229,11 +229,11 @@ static void device_name_get(size_t idx, struct shell_static_entry *entry)
 	entry->help  = NULL;
 	entry->subcmd = &dsub_device_name;
 
-	for (dev = __device_init_start; dev != __device_init_end; dev++) {
+	for (dev = __device_start; dev != __device_end; dev++) {
 		if ((dev->driver_api != NULL) &&
-		strcmp(dev->config->name, "") && (dev->config->name != NULL)) {
+		strcmp(dev->name, "") && (dev->name != NULL)) {
 			if (idx == device_idx) {
-				entry->syntax = dev->config->name;
+				entry->syntax = dev->name;
 				break;
 			}
 			device_idx++;

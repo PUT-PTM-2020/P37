@@ -52,7 +52,7 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 #define RF2XX_ACK_FRAME_PENDING_BIT       (1 << 4)
 #define RF2XX_FRAME_CTRL_ACK_REQUEST_BIT  (1 << 5)
 
-static u8_t rf2xx_ack_psdu[RF2XX_ACK_FRAME_LEN] = { 0 };
+static uint8_t rf2xx_ack_psdu[RF2XX_ACK_FRAME_LEN] = { 0 };
 static struct net_buf rf2xx_ack_frame = {
 	.data  = rf2xx_ack_psdu,
 	.size  = RF2XX_ACK_FRAME_LEN,
@@ -70,7 +70,7 @@ static struct net_pkt rf2xx_ack_pkt = {
 /* Radio Transceiver ISR */
 static inline void trx_isr_handler(struct device *port,
 				   struct gpio_callback *cb,
-				   u32_t pins)
+				   uint32_t pins)
 {
 	struct rf2xx_context *ctx = CONTAINER_OF(cb,
 						 struct rf2xx_context,
@@ -101,7 +101,7 @@ static void rf2xx_trx_set_state(struct device *dev,
 
 static void rf2xx_trx_set_tx_state(struct device *dev)
 {
-	u8_t status;
+	uint8_t status;
 
 	/**
 	 * Ensures that RX automatically ACK will be sent when requested.
@@ -138,10 +138,10 @@ static void rf2xx_trx_rx(struct device *dev)
 {
 	struct rf2xx_context *ctx = dev->driver_data;
 	struct net_pkt *pkt = NULL;
-	u8_t rx_buf[RX2XX_MAX_FRAME_SIZE];
-	u8_t pkt_len;
-	u8_t frame_len;
-	u8_t trac;
+	uint8_t rx_buf[RX2XX_MAX_FRAME_SIZE];
+	uint8_t pkt_len;
+	uint8_t frame_len;
+	uint8_t trac;
 
 	/*
 	 * The rf2xx frame buffer can have length > 128 bytes. The
@@ -248,7 +248,7 @@ static void rf2xx_process_tx_frame(struct device *dev)
 
 static void rf2xx_process_trx_end(struct device *dev)
 {
-	u8_t trx_status = (rf2xx_iface_reg_read(dev, RF2XX_TRX_STATUS_REG) &
+	uint8_t trx_status = (rf2xx_iface_reg_read(dev, RF2XX_TRX_STATUS_REG) &
 			   RF2XX_TRX_PHY_STATUS_MASK);
 
 	if (trx_status == RF2XX_TRX_PHY_STATUS_TX_ARET_ON) {
@@ -262,7 +262,7 @@ static void rf2xx_thread_main(void *arg)
 {
 	struct device *dev = INT_TO_POINTER(arg);
 	struct rf2xx_context *ctx = dev->driver_data;
-	u8_t isr_status;
+	uint8_t isr_status;
 
 	while (true) {
 		k_sem_take(&ctx->trx_isr_lock, K_FOREVER);
@@ -305,18 +305,21 @@ static void rf2xx_thread_main(void *arg)
 	}
 }
 
-static inline u8_t *get_mac(struct device *dev)
+static inline uint8_t *get_mac(struct device *dev)
 {
+	const struct rf2xx_config *conf = dev->config_info;
 	struct rf2xx_context *ctx = dev->driver_data;
-	u32_t *ptr = (u32_t *)(ctx->mac_addr);
+	uint32_t *ptr = (uint32_t *)(ctx->mac_addr);
 
-	UNALIGNED_PUT(sys_rand32_get(), ptr);
-	ptr = (u32_t *)(ctx->mac_addr + 4);
-	UNALIGNED_PUT(sys_rand32_get(), ptr);
+	if (!conf->has_mac) {
+		UNALIGNED_PUT(sys_rand32_get(), ptr);
+		ptr = (uint32_t *)(ctx->mac_addr + 4);
+		UNALIGNED_PUT(sys_rand32_get(), ptr);
+	}
 
 	/*
 	 * Clear bit 0 to ensure it isn't a multicast address and set
-	 * bit 1 to indicate address is locally administrered and may
+	 * bit 1 to indicate address is locally administered and may
 	 * not be globally unique.
 	 */
 	ctx->mac_addr[0] = (ctx->mac_addr[0] & ~0x01) | 0x02;
@@ -343,9 +346,9 @@ static int rf2xx_cca(struct device *dev)
 	return 0;
 }
 
-static int rf2xx_set_channel(struct device *dev, u16_t channel)
+static int rf2xx_set_channel(struct device *dev, uint16_t channel)
 {
-	u8_t reg;
+	uint8_t reg;
 
 	if (channel < 11 || channel > 26) {
 		LOG_ERR("Unsupported channel %u", channel);
@@ -358,9 +361,9 @@ static int rf2xx_set_channel(struct device *dev, u16_t channel)
 	return 0;
 }
 
-static int rf2xx_set_txpower(struct device *dev, s16_t dbm)
+static int rf2xx_set_txpower(struct device *dev, int16_t dbm)
 {
-	u8_t reg;
+	uint8_t reg;
 
 	ARG_UNUSED(dbm);
 
@@ -374,21 +377,21 @@ static int rf2xx_set_txpower(struct device *dev, s16_t dbm)
 }
 
 static int rf2xx_set_ieee_addr(struct device *dev, bool set,
-			       const u8_t *ieee_addr)
+			       const uint8_t *ieee_addr)
 {
-	const u8_t *ptr_to_reg = ieee_addr;
+	const uint8_t *ptr_to_reg = ieee_addr;
 
 	LOG_DBG("IEEE address %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x",
 		ieee_addr[7], ieee_addr[6], ieee_addr[5], ieee_addr[4],
 		ieee_addr[3], ieee_addr[2], ieee_addr[1], ieee_addr[0]);
 
 	if (set) {
-		for (u8_t i = 0; i < 8; i++, ptr_to_reg++) {
+		for (uint8_t i = 0; i < 8; i++, ptr_to_reg++) {
 			rf2xx_iface_reg_write(dev, (RF2XX_IEEE_ADDR_0_REG + i),
 					      *ptr_to_reg);
 		}
 	} else {
-		for (u8_t i = 0; i < 8; i++) {
+		for (uint8_t i = 0; i < 8; i++) {
 			rf2xx_iface_reg_write(dev, (RF2XX_IEEE_ADDR_0_REG + i),
 					      0);
 		}
@@ -397,9 +400,9 @@ static int rf2xx_set_ieee_addr(struct device *dev, bool set,
 	return 0;
 }
 static int rf2xx_set_short_addr(struct device *dev, bool set,
-				u16_t short_addr)
+				uint16_t short_addr)
 {
-	u8_t short_addr_le[2] = { 0xFF, 0xFF };
+	uint8_t short_addr_le[2] = { 0xFF, 0xFF };
 
 	if (set) {
 		sys_put_le16(short_addr, short_addr_le);
@@ -415,9 +418,9 @@ static int rf2xx_set_short_addr(struct device *dev, bool set,
 
 	return 0;
 }
-static int rf2xx_set_pan_id(struct device *dev, bool set, u16_t pan_id)
+static int rf2xx_set_pan_id(struct device *dev, bool set, uint16_t pan_id)
 {
-	u8_t pan_id_le[2] = { 0xFF, 0xFF };
+	uint8_t pan_id_le[2] = { 0xFF, 0xFF };
 
 	if (set) {
 		sys_put_le16(pan_id, pan_id_le);
@@ -531,7 +534,7 @@ static int rf2xx_tx(struct device *dev,
 
 static int rf2xx_start(struct device *dev)
 {
-	const struct rf2xx_config *conf = dev->config->config_info;
+	const struct rf2xx_config *conf = dev->config_info;
 	struct rf2xx_context *ctx = dev->driver_data;
 
 	rf2xx_trx_set_state(dev, RF2XX_TRX_PHY_STATE_CMD_TRX_OFF);
@@ -545,7 +548,7 @@ static int rf2xx_start(struct device *dev)
 
 static int rf2xx_stop(struct device *dev)
 {
-	const struct rf2xx_config *conf = dev->config->config_info;
+	const struct rf2xx_config *conf = dev->config_info;
 	struct rf2xx_context *ctx = dev->driver_data;
 
 	gpio_pin_interrupt_configure(ctx->irq_gpio, conf->irq.pin,
@@ -568,9 +571,9 @@ int rf2xx_configure(struct device *dev, enum ieee802154_config_type type,
 
 static int power_on_and_setup(struct device *dev)
 {
-	const struct rf2xx_config *conf = dev->config->config_info;
+	const struct rf2xx_config *conf = dev->config_info;
 	struct rf2xx_context *ctx = dev->driver_data;
-	u8_t config;
+	uint8_t config;
 
 	rf2xx_iface_phy_rst(dev);
 
@@ -638,7 +641,7 @@ static int power_on_and_setup(struct device *dev)
 
 static inline int configure_gpios(struct device *dev)
 {
-	const struct rf2xx_config *conf = dev->config->config_info;
+	const struct rf2xx_config *conf = dev->config_info;
 	struct rf2xx_context *ctx = dev->driver_data;
 
 	/* Chip IRQ line */
@@ -699,7 +702,7 @@ static inline int configure_gpios(struct device *dev)
 static inline int configure_spi(struct device *dev)
 {
 	struct rf2xx_context *ctx = dev->driver_data;
-	const struct rf2xx_config *conf = dev->config->config_info;
+	const struct rf2xx_config *conf = dev->config_info;
 
 	/* Get SPI Driver Instance*/
 	ctx->spi = device_get_binding(conf->spi.devname);
@@ -741,7 +744,7 @@ static inline int configure_spi(struct device *dev)
 static int rf2xx_init(struct device *dev)
 {
 	struct rf2xx_context *ctx = dev->driver_data;
-	const struct rf2xx_config *conf = dev->config->config_info;
+	const struct rf2xx_config *conf = dev->config_info;
 	char thread_name[20];
 
 	LOG_DBG("\nInitialize RF2XX Transceiver\n");
@@ -773,7 +776,8 @@ static int rf2xx_init(struct device *dev)
 			dev, NULL, NULL,
 			K_PRIO_COOP(2), 0, K_NO_WAIT);
 
-	sprintf(thread_name, "802.15.4 main [%d]", conf->inst);
+	snprintk(thread_name, sizeof(thread_name),
+		 "rf2xx_trx [%d]", conf->inst);
 	k_thread_name_set(&ctx->trx_thread, thread_name);
 
 	return 0;
@@ -783,7 +787,7 @@ static void rf2xx_iface_init(struct net_if *iface)
 {
 	struct device *dev = net_if_get_device(iface);
 	struct rf2xx_context *ctx = dev->driver_data;
-	u8_t *mac = get_mac(dev);
+	uint8_t *mac = get_mac(dev);
 
 	net_if_set_link_addr(iface, mac, 8, NET_LINK_IEEE802154);
 
@@ -821,59 +825,73 @@ static struct ieee802154_radio_api rf2xx_radio_api = {
 /*
  * Optional features place holders, get a 0 if the "gpio" doesn't exist
  */
-#define DRV_INST_GPIO_LABEL(n, gpio_pha)	     \
-	UTIL_AND(DT_INST_NODE_HAS_PROP(n, gpio_pha), \
+
+#define DRV_INST_GPIO_LABEL(n, gpio_pha)				\
+	UTIL_AND(DT_INST_NODE_HAS_PROP(n, gpio_pha),			\
 		 DT_INST_GPIO_LABEL(n, gpio_pha))
-#define DRV_INST_GPIO_PIN(n, gpio_pha)	             \
-	UTIL_AND(DT_INST_NODE_HAS_PROP(n, gpio_pha), \
+
+#define DRV_INST_GPIO_PIN(n, gpio_pha)					\
+	UTIL_AND(DT_INST_NODE_HAS_PROP(n, gpio_pha),			\
 		 DT_INST_GPIO_PIN(n, gpio_pha))
-#define DRV_INST_GPIO_FLAGS(n, gpio_pha)	     \
-	UTIL_AND(DT_INST_NODE_HAS_PROP(n, gpio_pha), \
+
+#define DRV_INST_GPIO_FLAGS(n, gpio_pha)				\
+	UTIL_AND(DT_INST_NODE_HAS_PROP(n, gpio_pha),			\
 		 DT_INST_GPIO_FLAGS(n, gpio_pha))
-#define DRV_INST_SPI_DEV_CS_GPIOS_LABEL(n)           \
-	UTIL_AND(DT_INST_SPI_DEV_HAS_CS_GPIOS(n),    \
+
+#define DRV_INST_SPI_DEV_CS_GPIOS_LABEL(n)				\
+	UTIL_AND(DT_INST_SPI_DEV_HAS_CS_GPIOS(n),			\
 		 DT_INST_SPI_DEV_CS_GPIOS_LABEL(n))
-#define DRV_INST_SPI_DEV_CS_GPIOS_PIN(n)             \
-	UTIL_AND(DT_INST_SPI_DEV_HAS_CS_GPIOS(n),    \
+
+#define DRV_INST_SPI_DEV_CS_GPIOS_PIN(n)				\
+	UTIL_AND(DT_INST_SPI_DEV_HAS_CS_GPIOS(n),			\
 		 DT_INST_SPI_DEV_CS_GPIOS_PIN(n))
-#define DRV_INST_SPI_DEV_CS_GPIOS_FLAGS(n)           \
-	UTIL_AND(DT_INST_SPI_DEV_HAS_CS_GPIOS(n),    \
+
+#define DRV_INST_SPI_DEV_CS_GPIOS_FLAGS(n)				\
+	UTIL_AND(DT_INST_SPI_DEV_HAS_CS_GPIOS(n),			\
 		 DT_INST_SPI_DEV_CS_GPIOS_FLAGS(n))
 
-#define IEEE802154_RF2XX_DEVICE_CONFIG(n)					   \
-	static const struct rf2xx_config rf2xx_ctx_config_##n = {		   \
-		.inst = n,							   \
-										   \
-		.irq.devname = DRV_INST_GPIO_LABEL(n, irq_gpios),		   \
-		.irq.pin = DRV_INST_GPIO_PIN(n, irq_gpios),			   \
-		.irq.flags = DRV_INST_GPIO_FLAGS(n, irq_gpios),			   \
-										   \
-		.reset.devname = DRV_INST_GPIO_LABEL(n, reset_gpios),		   \
-		.reset.pin = DRV_INST_GPIO_PIN(n, reset_gpios),			   \
-		.reset.flags = DRV_INST_GPIO_FLAGS(n, reset_gpios),		   \
-										   \
-		.slptr.devname = DRV_INST_GPIO_LABEL(n, slptr_gpios),		   \
-		.slptr.pin = DRV_INST_GPIO_PIN(n, slptr_gpios),			   \
-		.slptr.flags = DRV_INST_GPIO_FLAGS(n, slptr_gpios),		   \
-										   \
-		.dig2.devname = DRV_INST_GPIO_LABEL(n, dig2_gpios),		   \
-		.dig2.pin = DRV_INST_GPIO_PIN(n, dig2_gpios),			   \
-		.dig2.flags = DRV_INST_GPIO_FLAGS(n, dig2_gpios),		   \
-										   \
-		.clkm.devname = DRV_INST_GPIO_LABEL(n, clkm_gpios),		   \
-		.clkm.pin = DRV_INST_GPIO_PIN(n, clkm_gpios),			   \
-		.clkm.flags = DRV_INST_GPIO_FLAGS(n, clkm_gpios),		   \
-										   \
-		.spi.devname = DT_INST_BUS_LABEL(n),				   \
-		.spi.addr = DT_INST_REG_ADDR(n),				   \
-		.spi.freq = DT_INST_PROP(n, spi_max_frequency),			   \
-		.spi.cs.devname = DRV_INST_SPI_DEV_CS_GPIOS_LABEL(n),		   \
-		.spi.cs.pin = DRV_INST_SPI_DEV_CS_GPIOS_PIN(n),			   \
-		.spi.cs.flags = DRV_INST_SPI_DEV_CS_GPIOS_FLAGS(n),		   \
-	};
+#define DRV_INST_LOCAL_MAC_ADDRESS(n)					\
+	UTIL_AND(DT_INST_NODE_HAS_PROP(n, local_mac_address),		\
+		 UTIL_AND(DT_INST_PROP_LEN(n, local_mac_address) == 8,	\
+			  DT_INST_PROP(n, local_mac_address)))
 
-#define IEEE802154_RF2XX_DEVICE_DATA(n)			   \
-	static struct rf2xx_context rf2xx_ctx_data_##n;
+#define IEEE802154_RF2XX_DEVICE_CONFIG(n)				\
+	static const struct rf2xx_config rf2xx_ctx_config_##n = {	\
+		.inst = n,						\
+		.has_mac = DT_INST_NODE_HAS_PROP(n, local_mac_address), \
+									\
+		.irq.devname = DRV_INST_GPIO_LABEL(n, irq_gpios),	\
+		.irq.pin = DRV_INST_GPIO_PIN(n, irq_gpios),		\
+		.irq.flags = DRV_INST_GPIO_FLAGS(n, irq_gpios),		\
+									\
+		.reset.devname = DRV_INST_GPIO_LABEL(n, reset_gpios),	\
+		.reset.pin = DRV_INST_GPIO_PIN(n, reset_gpios),		\
+		.reset.flags = DRV_INST_GPIO_FLAGS(n, reset_gpios),	\
+									\
+		.slptr.devname = DRV_INST_GPIO_LABEL(n, slptr_gpios),	\
+		.slptr.pin = DRV_INST_GPIO_PIN(n, slptr_gpios),		\
+		.slptr.flags = DRV_INST_GPIO_FLAGS(n, slptr_gpios),	\
+									\
+		.dig2.devname = DRV_INST_GPIO_LABEL(n, dig2_gpios),	\
+		.dig2.pin = DRV_INST_GPIO_PIN(n, dig2_gpios),		\
+		.dig2.flags = DRV_INST_GPIO_FLAGS(n, dig2_gpios),	\
+									\
+		.clkm.devname = DRV_INST_GPIO_LABEL(n, clkm_gpios),	\
+		.clkm.pin = DRV_INST_GPIO_PIN(n, clkm_gpios),		\
+		.clkm.flags = DRV_INST_GPIO_FLAGS(n, clkm_gpios),	\
+									\
+		.spi.devname = DT_INST_BUS_LABEL(n),			\
+		.spi.addr = DT_INST_REG_ADDR(n),			\
+		.spi.freq = DT_INST_PROP(n, spi_max_frequency),		\
+		.spi.cs.devname = DRV_INST_SPI_DEV_CS_GPIOS_LABEL(n),	\
+		.spi.cs.pin = DRV_INST_SPI_DEV_CS_GPIOS_PIN(n),		\
+		.spi.cs.flags = DRV_INST_SPI_DEV_CS_GPIOS_FLAGS(n),	\
+	}
+
+#define IEEE802154_RF2XX_DEVICE_DATA(n)                                \
+	static struct rf2xx_context rf2xx_ctx_data_##n = {              \
+		.mac_addr = DRV_INST_LOCAL_MAC_ADDRESS(n)               \
+	}
 
 #define IEEE802154_RF2XX_RAW_DEVICE_INIT(n)	   \
 	DEVICE_AND_API_INIT(			   \
@@ -900,24 +918,12 @@ static struct ieee802154_radio_api rf2xx_radio_api = {
 		L2_CTX_TYPE,			   \
 		MTU)
 
-#if DT_HAS_DRV_INST(0)
-	IEEE802154_RF2XX_DEVICE_CONFIG(0);
-	IEEE802154_RF2XX_DEVICE_DATA(0);
+#define IEEE802154_RF2XX_INIT(inst)				\
+	IEEE802154_RF2XX_DEVICE_CONFIG(inst);			\
+	IEEE802154_RF2XX_DEVICE_DATA(inst);			\
+								\
+	COND_CODE_1(CONFIG_IEEE802154_RAW_MODE,			\
+		    (IEEE802154_RF2XX_RAW_DEVICE_INIT(inst);),	\
+		    (IEEE802154_RF2XX_NET_DEVICE_INIT(inst);))
 
-	#if defined(CONFIG_IEEE802154_RAW_MODE)
-		IEEE802154_RF2XX_RAW_DEVICE_INIT(0);
-	#else
-		IEEE802154_RF2XX_NET_DEVICE_INIT(0);
-	#endif /* CONFIG_IEEE802154_RAW_MODE */
-#endif
-
-#if DT_HAS_DRV_INST(1)
-	IEEE802154_RF2XX_DEVICE_CONFIG(1);
-	IEEE802154_RF2XX_DEVICE_DATA(1);
-
-	#if defined(CONFIG_IEEE802154_RAW_MODE)
-		IEEE802154_RF2XX_RAW_DEVICE_INIT(1);
-	#else
-		IEEE802154_RF2XX_NET_DEVICE_INIT(1);
-	#endif /* CONFIG_IEEE802154_RAW_MODE */
-#endif
+DT_INST_FOREACH_STATUS_OKAY(IEEE802154_RF2XX_INIT)

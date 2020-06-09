@@ -23,8 +23,8 @@ struct rv32m1_lpi2c_config {
 	char *clock_controller;
 	clock_control_subsys_t clock_subsys;
 	clock_ip_name_t clock_ip_name;
-	u32_t clock_ip_src;
-	u32_t bitrate;
+	uint32_t clock_ip_src;
+	uint32_t bitrate;
 	void (*irq_config_func)(struct device *dev);
 };
 
@@ -35,12 +35,12 @@ struct rv32m1_lpi2c_data {
 	status_t completion_status;
 };
 
-static int rv32m1_lpi2c_configure(struct device *dev, u32_t dev_config)
+static int rv32m1_lpi2c_configure(struct device *dev, uint32_t dev_config)
 {
-	const struct rv32m1_lpi2c_config *config = dev->config->config_info;
+	const struct rv32m1_lpi2c_config *config = dev->config_info;
 	struct device *clk;
-	u32_t baudrate;
-	u32_t clk_freq;
+	uint32_t baudrate;
+	uint32_t clk_freq;
 	int err;
 
 	if (!(I2C_MODE_MASTER & dev_config)) {
@@ -111,9 +111,9 @@ static void rv32m1_lpi2c_master_transfer_callback(LPI2C_Type *base,
 	k_sem_give(&data->completion_sync);
 }
 
-static u32_t rv32m1_lpi2c_convert_flags(int msg_flags)
+static uint32_t rv32m1_lpi2c_convert_flags(int msg_flags)
 {
-	u32_t flags = 0U;
+	uint32_t flags = 0U;
 
 	if (!(msg_flags & I2C_MSG_STOP)) {
 		flags |= kLPI2C_TransferNoStopFlag;
@@ -127,9 +127,9 @@ static u32_t rv32m1_lpi2c_convert_flags(int msg_flags)
 }
 
 static int rv32m1_lpi2c_transfer(struct device *dev, struct i2c_msg *msgs,
-				 u8_t num_msgs, u16_t addr)
+				 uint8_t num_msgs, uint16_t addr)
 {
-	const struct rv32m1_lpi2c_config *config = dev->config->config_info;
+	const struct rv32m1_lpi2c_config *config = dev->config_info;
 	struct rv32m1_lpi2c_data *data = dev->driver_data;
 	lpi2c_master_transfer_t transfer;
 	status_t status;
@@ -202,7 +202,7 @@ out:
 static void rv32m1_lpi2c_isr(void *arg)
 {
 	struct device *dev = (struct device *)arg;
-	const struct rv32m1_lpi2c_config *config = dev->config->config_info;
+	const struct rv32m1_lpi2c_config *config = dev->config_info;
 	struct rv32m1_lpi2c_data *data = dev->driver_data;
 
 	LPI2C_MasterTransferHandleIRQ(config->base, &data->handle);
@@ -210,11 +210,11 @@ static void rv32m1_lpi2c_isr(void *arg)
 
 static int rv32m1_lpi2c_init(struct device *dev)
 {
-	const struct rv32m1_lpi2c_config *config = dev->config->config_info;
+	const struct rv32m1_lpi2c_config *config = dev->config_info;
 	struct rv32m1_lpi2c_data *data = dev->driver_data;
 	lpi2c_master_config_t master_config;
 	struct device *clk;
-	u32_t clk_freq, dev_cfg;
+	uint32_t clk_freq, dev_cfg;
 	int err;
 
 	CLOCK_SetIpSrc(config->clock_ip_name, config->clock_ip_src);
@@ -296,4 +296,4 @@ static const struct i2c_driver_api rv32m1_lpi2c_driver_api = {
 		irq_enable(DT_INST_IRQN(id));                                  \
 	}                                                                      \
 
-DT_INST_FOREACH(RV32M1_LPI2C_DEVICE)
+DT_INST_FOREACH_STATUS_OKAY(RV32M1_LPI2C_DEVICE)

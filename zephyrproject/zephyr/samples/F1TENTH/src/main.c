@@ -5,15 +5,10 @@
 #include <drivers/pwm.h>
 #include <drivers/uart.h>
 #include <kernel.h>
-#include <errno.h>
-#include <stddef.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <string.h>
-#include <arch/cpu.h>
-#include <sys/byteorder.h>
-#include <logging/log.h>
-#include <sys/util.h>
-#include <init.h>
+
  
 #define ENGINE_PORT "GPIOA"
 #define IN1_PIN 5
@@ -37,28 +32,22 @@
 #define FLAGS 0
  
 #define DT_ALIAS_PWM_2_LABEL "PWM_2"
-#define DT_ALIAS_PWM_3_LABEL "PWM_3"
- 
-#ifndef DT_ALIAS_PWM_2_LABEL
-#error "PWM_2 device label not defined"
-#endif
- 
-#ifndef DT_ALIAS_PWM_3_LABEL
-#error "PWM_3 device label not defined"
-#endif
- 
+#define DT_ALIAS_PWM_3_LABEL "PWM_3" 
 #define DT_ALIAS_UART_1_LABEL "UART_1"
- 
-#ifndef DT_ALIAS_UART_1_LABEL
-#error "UART_1 device label not defined"
-#endif
  
 /* period of servo motor signal ->  2.4ms */
 #define PERIOD (USEC_PER_SEC / 490U)
  
 #define STACKSIZE 1024
 
-extern const k_tid_t main_th_id;
+const k_tid_t main_th_id;
+k_tid_t get_distance_id;
+bool isGetDistanceAlive = false;
+
+const int velocity = 600;
+
+K_SEM_DEFINE(irq_sem, 1, 1);
+K_SEM_DEFINE(test_sem, 1, 1);
 
 struct device *gpio_engine_dev, *gpio_sonic_sensor_dev, *gpio_leds_dev;
 struct device *pwm2_dev, *pwm3_dev;
@@ -66,8 +55,7 @@ struct device *uart1_dev;
 int left_dist = 100, front_dist = 100, right_dist = 100;
 int *distance = NULL;
 int stopping_counter = 0; 
-u8_t *recv_data = '\0';
-u8_t esp_received[10];
+u8_t recv_data = '\0';
  
 const struct uart_config uart_cfg = {
         .baudrate = 115200,
@@ -165,7 +153,9 @@ void get_distance(int id){
  
         int data[11];
         int size = 11;
- 
+        
+        k_sched_lock();
+
         for(int i = 0; i < size; i++){
             u32_t start_time;
             u32_t stop_time;
@@ -194,19 +184,19 @@ void get_distance(int id){
  
         insertionSort(data, size);
         *distance = data[5]; //distance = median of 11 measures
-        if(*distance > 1200) *distance = 0; //Distance higher than 1200 means object is closer than 2cm from sensor.
-   
+        if(*distance > 400) *distance = 0; //Distance higher than 1200 means object is closer than 2cm from sensor.
+        k_sched_unlock();
+
 }
  
-void get_distance_printk(void){
-    while(1){
+void get_distance_printk(){
+    while(isGetDistanceAlive){
         get_distance(1);
         get_distance(2);
         get_distance(3);
-        printk("Sensor left: %d cm\n", left_dist);
-        printk("Sensor front: %d cm\n", front_dist);
-        printk("Sensor right: %d cm\n\n", right_dist);
-        k_msleep(10);
+        // printk("Sensor left: %d cm\n", left_dist);
+        // printk("Sensor front: %d cm\n", front_dist);
+        // printk("Sensor right: %d cm\n\n", right_dist);
     }
 }
 
@@ -247,7 +237,7 @@ void engine_test(){
     }
 }
  
-void move_forward(const int velocity) {
+void move_forward() {
     /* Move forward */
     pwm_pin_set_usec(pwm2_dev, 1, PERIOD, velocity, 0);
     pwm_pin_set_usec(pwm2_dev, 2, PERIOD, velocity, 0);
@@ -255,17 +245,17 @@ void move_forward(const int velocity) {
     gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN4_PIN, false);
-    printk("Moving forward!\n");
+    //printk("Moving forward!\n");
 }
-void move_backwards(const int velocity) {
-    /* Move forward */
+void move_backwards() {
+    /* Move backward */
     pwm_pin_set_usec(pwm2_dev, 1, PERIOD, velocity, 0);
     pwm_pin_set_usec(pwm2_dev, 2, PERIOD, velocity, 0);
     gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN2_PIN, false);
     gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
     gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
-    printk("Moving backwards!\n");
+    //printk("Moving backwards!\n");
 }
 void stop_vehicle() {
     /* Stop the car */
@@ -275,27 +265,26 @@ void stop_vehicle() {
     gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
     pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 2000, 0);
     pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 2000, 0);
-    printk("Stopping!\n");
 }
 void turn_right(const int time) {
-    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 500, 0);
-    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 500, 0);
+    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, velocity, 0);
+    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, velocity, 0);
     gpio_pin_set(gpio_engine_dev, IN1_PIN, false);
     gpio_pin_set(gpio_engine_dev, IN2_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN3_PIN, false);
     gpio_pin_set(gpio_engine_dev, IN4_PIN, true);
     if(time) k_msleep(time);
-    printk("Turning right!\n");
+    //printk("Turning right!\n");
 }
 void turn_left(const int time) {
-    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 500, 0);
-    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 500, 0);
+    pwm_pin_set_usec(pwm2_dev, 1, PERIOD, velocity, 0);
+    pwm_pin_set_usec(pwm2_dev, 2, PERIOD, velocity, 0);
     gpio_pin_set(gpio_engine_dev, IN1_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN2_PIN, false);
     gpio_pin_set(gpio_engine_dev, IN3_PIN, true);
     gpio_pin_set(gpio_engine_dev, IN4_PIN, false);
     if(time) k_msleep(time);
-    printk("Turning left!\n");
+    //printk("Turning left!\n");
 }
 
 void choose_direction(int *direction) {
@@ -325,17 +314,17 @@ void choose_direction(int *direction) {
         }
     }
 }
- 
+
 K_THREAD_STACK_DEFINE(my_stack, STACKSIZE);
 struct k_thread get_distance_th;
 
-
 void autonomous_mode(){
+    printk("Autonomous mode on\n\n");
     int dir = 0;
-    k_tid_t get_distance_id = k_thread_create(&get_distance_th, my_stack, STACKSIZE, get_distance_printk, NULL, NULL, NULL, 6, 0, K_NO_WAIT);
-    while(*recv_data != 'M'){
-        pwm_pin_set_usec(pwm2_dev, 1, PERIOD, 1000, 0);
-        pwm_pin_set_usec(pwm2_dev, 2, PERIOD, 1000, 0);
+    isGetDistanceAlive = true;
+    get_distance_id = k_thread_create(&get_distance_th, my_stack, STACKSIZE, get_distance_printk, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
+    while(recv_data != 'M'){
+        move_forward();
         if(front_dist < 20){
             choose_direction(&dir);
             if (dir >= 1000)
@@ -343,33 +332,35 @@ void autonomous_mode(){
                 stop_vehicle();
             }
             else {
-                move_forward(1000);
+                move_forward();
             }
         }
         k_msleep(10);
-    }    
+    }
+    isGetDistanceAlive = false;
+    printk("Autonomous mode off\n\n");
 }
 
 void manual_mode(){
     printk("manual modeon\n\n");
-    while(*recv_data != 'X' && *recv_data != 'q'){
-        if(*recv_data == 'R'){
+    while(recv_data != 'X' && recv_data != 'q'){
+        if(recv_data == 'R'){
             turn_right(0);
             stopping_counter = 0;
         }
-        else if(*recv_data == 'L'){
+        else if(recv_data == 'L'){
             turn_left(0);
             stopping_counter = 0;
         }
-        else if(*recv_data == 'F'){
-            move_forward(500);
+        else if(recv_data == 'F'){
+            move_forward();
             stopping_counter = 0;
         }
-        else if(*recv_data == 'B'){
-            move_backwards(500);
+        else if(recv_data == 'B'){
+            move_backwards();
             stopping_counter = 0;
         }
-        else if(*recv_data == 'A'){
+        else if(recv_data == 'A'){
             autonomous_mode();
             stopping_counter = 0;
         }
@@ -377,7 +368,7 @@ void manual_mode(){
             stopping_counter++;
         }
         else stop_vehicle();
-        //*recv_data = '\0';
+        recv_data = '\0';
         k_msleep(10);
     }
     printk("manual modeoff\n\n");
@@ -395,9 +386,6 @@ void connection_test(){
     gpio_pin_set(gpio_leds_dev, RED_LED, true);
     k_msleep(500);
 
-    printk("RECV_DATA: %c\n\n", *recv_data);
-
-
     /* Put all in-boards user leds out */
     gpio_pin_set(gpio_leds_dev, ORANGE_LED, false);
     k_msleep(500);
@@ -407,7 +395,7 @@ void connection_test(){
     k_msleep(500);
     gpio_pin_set(gpio_leds_dev, RED_LED, false);
     k_msleep(500);
-    *recv_data = '\0';
+    recv_data = '\0';
 }
  
 void poll_out(char poll_data[]){
@@ -428,36 +416,34 @@ void uart_fifo_callback_init(struct device *dev)
 	}
 
 	if (uart_irq_rx_ready(dev)) {
-		uart_fifo_read(dev, &recv_char, 7);
+		uart_fifo_read(dev, &recv_char, 1);
 		printk("%c", recv_char);
 	}
 }
 
 void uart_fifo_callback(struct device *dev)
 {
-	u8_t recv_char;
-    
-	if (!uart_irq_update(dev)) {
-		printk("retval should always be 1\n");
-		return;
-	}
-
-	if (uart_irq_rx_ready(dev)) {
-		uart_fifo_read(dev, &recv_char, 1);
-		printk("%c", recv_char);
-        esp_received[esp_recv_counter] = recv_char;
-        esp_recv_counter++;
-        if (recv_char == '\n') {
-            esp_recv_counter = 0;
-            printk("\n\n");
-            for(int i = 0; i < 10; i++) printk("%c", esp_received[i]);
-            printk("\n\n");
-            *recv_data = esp_received[7];
-            //printk("\n\nrecv_data: %c", *recv_data);
-        } 
-        
-	}
-    //printk("RECV_DATA: %d\n\n", (int)*recv_data);
+    u8_t recv_char;
+    const char esp_pattern[7] = {'+', 'I', 'P', 'D', ',' ,'1' ,':'};
+   
+    if (!uart_irq_update(dev)) {
+        printk("retval should always be 1\n");
+        return;
+    }
+ 
+    if (uart_irq_rx_ready(dev)) {
+        uart_fifo_read(dev, &recv_char, 1);
+        if (recv_char == esp_pattern[esp_recv_counter] || esp_recv_counter == 7) {
+            if (esp_recv_counter == 7){
+                if(k_sem_count_get(&irq_sem) == 1){
+                    k_sem_take(&irq_sem, K_NO_WAIT);
+                    recv_data = recv_char;
+                    esp_recv_counter = 0;
+                    k_sem_give(&irq_sem);   
+                }
+            } else esp_recv_counter++;
+        } else esp_recv_counter = 0;
+    }
 }
 
 
@@ -474,19 +460,15 @@ void fifo_read(void)
 
 void main_thread(){
     while(1){
-        //printk("\nrNiewiem: %c\n\n", *recv_data);
-        //if(*recv_data != '\0'){
-            if(*recv_data == 'M'){
+            if(recv_data == 'M'){
                 manual_mode();
             }
-            else if(*recv_data == 'A'){
+            else if(recv_data == 'A'){
                 autonomous_mode();
             }
-            else if(*recv_data == 'C'){
+            else if(recv_data == 'C'){
                 connection_test();
             }
-       // }
-        k_msleep(10);
     }
 }
 
@@ -498,7 +480,7 @@ void main(void){
     if(uart_init())  printk("UART init failed.\n");
     
     fifo_read_init(); 
-
+    
     char *poll_data = "AT+RESTORE\r\n";
     poll_out(poll_data);
     k_msleep(3000);
@@ -509,40 +491,16 @@ void main(void){
 
     poll_data = "AT+CWJAP=\"TP_LINK\",\"65223246\"\r\n";
     poll_out(poll_data);
+
     k_msleep(10000);
 
     poll_data = "AT+CIFSR\r\n";
     poll_out(poll_data);
-    k_msleep(5000);
+     k_msleep(5000);
    
-    poll_data = "AT+CIPSTART=\"TCP\",\"192.168.1.104\",5005\r\n";
+    poll_data = "AT+CIPSTART=\"TCP\",\"192.168.1.102\",5005\r\n";
     poll_out(poll_data);
     k_msleep(3000);
 
     fifo_read();
-
-    // poll_data = "AT+CIPSEND=1\r\n";
-    // poll_out(poll_data);
-    // k_msleep(3000);
-
-    // poll_data = "C\n";
-    // poll_out(poll_data);
-    // k_msleep(3000);
-
-    // poll_data = "AT+CIPSEND=2\r\n";
-    // poll_out(poll_data);
-    // k_msleep(3000);
-
-    // poll_data = "33\n";
-    // poll_out(poll_data);
-    // k_msleep(3000);
-
-    // poll_data = "AT+CIPSEND=1\r\n";
-    // poll_out(poll_data);
-    // k_msleep(3000);
-
-    // poll_data = "@\n";
-    // poll_out(poll_data);
-    // k_msleep(3000);
-
 }

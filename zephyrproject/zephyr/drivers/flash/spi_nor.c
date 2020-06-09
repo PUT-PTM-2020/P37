@@ -55,9 +55,9 @@ LOG_MODULE_REGISTER(spi_nor, CONFIG_FLASH_LOG_LEVEL);
 #define T_RES1_MS ceiling_fraction(DT_INST_PROP(0, t_exit_dpd), NSEC_PER_MSEC)
 #endif /* T_EXIT_DPD */
 #if DT_INST_NODE_HAS_PROP(0, dpd_wakeup_sequence)
-#define T_DPDD_MS ceiling_fraction(DT_INST_PROP(0, dpd_wakeup_sequence_0), NSEC_PER_MSEC)
-#define T_CRDP_MS ceiling_fraction(DT_INST_PROP(0, dpd_wakeup_sequence_1), NSEC_PER_MSEC)
-#define T_RDP_MS ceiling_fraction(DT_INST_PROP(0, dpd_wakeup_sequence_2), NSEC_PER_MSEC)
+#define T_DPDD_MS ceiling_fraction(DT_PROP_BY_IDX(DT_DRV_INST(0), dpd_wakeup_sequence, 0), NSEC_PER_MSEC)
+#define T_CRDP_MS ceiling_fraction(DT_PROP_BY_IDX(DT_DRV_INST(0), dpd_wakeup_sequence, 1), NSEC_PER_MSEC)
+#define T_RDP_MS ceiling_fraction(DT_PROP_BY_IDX(DT_DRV_INST(0), dpd_wakeup_sequence, 2), NSEC_PER_MSEC)
 #else /* DPD_WAKEUP_SEQUENCE */
 #define T_DPDD_MS 0
 #endif /* DPD_WAKEUP_SEQUENCE */
@@ -79,7 +79,7 @@ struct spi_nor_data {
 	/* Low 32-bits of uptime counter at which device last entered
 	 * deep power-down.
 	 */
-	u32_t ts_enter_dpd;
+	uint32_t ts_enter_dpd;
 #endif
 	struct k_sem sem;
 };
@@ -101,7 +101,7 @@ static inline void delay_until_exit_dpd_ok(const struct device *const dev)
 {
 #if DT_INST_NODE_HAS_PROP(0, has_dpd)
 	struct spi_nor_data *const driver_data = dev->driver_data;
-	s32_t since = (s32_t)(k_uptime_get_32() - driver_data->ts_enter_dpd);
+	int32_t since = (int32_t)(k_uptime_get_32() - driver_data->ts_enter_dpd);
 
 	/* If the time is negative the 32-bit counter has wrapped,
 	 * which is certainly long enough no further delay is
@@ -120,7 +120,7 @@ static inline void delay_until_exit_dpd_ok(const struct device *const dev)
 		 * until it reaches zero before we can proceed.
 		 */
 		if (since < 0) {
-			k_sleep(K_MSEC((u32_t)-since));
+			k_sleep(K_MSEC((uint32_t)-since));
 		}
 	}
 #endif /* DT_INST_NODE_HAS_PROP(0, has_dpd) */
@@ -139,12 +139,12 @@ static inline void delay_until_exit_dpd_ok(const struct device *const dev)
  * @return 0 on success, negative errno code otherwise
  */
 static int spi_nor_access(const struct device *const dev,
-			  u8_t opcode, bool is_addressed, off_t addr,
+			  uint8_t opcode, bool is_addressed, off_t addr,
 			  void *data, size_t length, bool is_write)
 {
 	struct spi_nor_data *const driver_data = dev->driver_data;
 
-	u8_t buf[4] = {
+	uint8_t buf[4] = {
 		opcode,
 		(addr & 0xFF0000) >> 16,
 		(addr & 0xFF00) >> 8,
@@ -281,7 +281,7 @@ static void release_device(struct device *dev)
 static inline int spi_nor_read_id(struct device *dev,
 				  const struct spi_nor_config *const flash_id)
 {
-	u8_t buf[SPI_NOR_MAX_ID_LEN];
+	uint8_t buf[SPI_NOR_MAX_ID_LEN];
 
 	if (spi_nor_cmd_read(dev, SPI_NOR_CMD_RDID, buf,
 	    SPI_NOR_MAX_ID_LEN) != 0) {
@@ -304,7 +304,7 @@ static inline int spi_nor_read_id(struct device *dev,
 static int spi_nor_wait_until_ready(struct device *dev)
 {
 	int ret;
-	u8_t reg;
+	uint8_t reg;
 
 	do {
 		ret = spi_nor_cmd_read(dev, SPI_NOR_CMD_RDSR, &reg, 1);
@@ -316,7 +316,7 @@ static int spi_nor_wait_until_ready(struct device *dev)
 static int spi_nor_read(struct device *dev, off_t addr, void *dest,
 			size_t size)
 {
-	const struct spi_nor_config *params = dev->config->config_info;
+	const struct spi_nor_config *params = dev->config_info;
 	int ret;
 
 	/* should be between 0 and flash size */
@@ -337,7 +337,7 @@ static int spi_nor_read(struct device *dev, off_t addr, void *dest,
 static int spi_nor_write(struct device *dev, off_t addr, const void *src,
 			 size_t size)
 {
-	const struct spi_nor_config *params = dev->config->config_info;
+	const struct spi_nor_config *params = dev->config_info;
 	int ret = 0;
 
 	/* should be between 0 and flash size */
@@ -369,7 +369,7 @@ static int spi_nor_write(struct device *dev, off_t addr, const void *src,
 		}
 
 		size -= to_write;
-		src = (const u8_t *)src + to_write;
+		src = (const uint8_t *)src + to_write;
 		addr += to_write;
 
 		spi_nor_wait_until_ready(dev);
@@ -382,7 +382,7 @@ out:
 
 static int spi_nor_erase(struct device *dev, off_t addr, size_t size)
 {
-	const struct spi_nor_config *params = dev->config->config_info;
+	const struct spi_nor_config *params = dev->config_info;
 	int ret = 0;
 
 	/* should be between 0 and flash size */
@@ -471,7 +471,7 @@ static int spi_nor_write_protection_set(struct device *dev, bool write_protect)
 static int spi_nor_configure(struct device *dev)
 {
 	struct spi_nor_data *data = dev->driver_data;
-	const struct spi_nor_config *params = dev->config->config_info;
+	const struct spi_nor_config *params = dev->config_info;
 
 	data->spi = device_get_binding(DT_INST_BUS_LABEL(0));
 	if (!data->spi) {

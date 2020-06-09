@@ -35,11 +35,11 @@ static int mcux_sim_off(struct device *dev, clock_control_subsys_t sub_system)
 
 static int mcux_sim_get_subsys_rate(struct device *dev,
 				    clock_control_subsys_t sub_system,
-				    u32_t *rate)
+				    uint32_t *rate)
 {
 	clock_name_t clock_name;
 
-	switch ((u32_t) sub_system) {
+	switch ((uint32_t) sub_system) {
 	case KINETIS_SIM_LPO_CLK:
 		clock_name = kCLOCK_LpoClk;
 		break;
@@ -53,7 +53,7 @@ static int mcux_sim_get_subsys_rate(struct device *dev,
 	return 0;
 }
 
-#if DT_HAS_NODE(DT_INST(0, nxp_kinetis_ke1xf_sim))
+#if DT_NODE_HAS_STATUS(DT_INST(0, nxp_kinetis_ke1xf_sim), okay)
 #define NXP_KINETIS_SIM_LABEL DT_LABEL(DT_INST(0, nxp_kinetis_ke1xf_sim))
 #if DT_NODE_HAS_PROP(DT_INST(0, nxp_kinetis_ke1xf_sim), clkout_source)
 	#define NXP_KINETIS_SIM_CLKOUT_SOURCE \

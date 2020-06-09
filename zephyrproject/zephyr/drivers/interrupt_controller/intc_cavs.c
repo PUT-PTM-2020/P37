@@ -33,10 +33,10 @@ struct cavs_registers *get_base_address(struct cavs_ictl_runtime *context)
 #endif
 }
 
-static ALWAYS_INLINE void cavs_ictl_dispatch_child_isrs(u32_t intr_status,
-						       u32_t isr_base_offset)
+static ALWAYS_INLINE void cavs_ictl_dispatch_child_isrs(uint32_t intr_status,
+						       uint32_t isr_base_offset)
 {
-	u32_t intr_bitpos, intr_offset;
+	uint32_t intr_bitpos, intr_offset;
 
 	/* Dispatch lower level ISRs depending upon the bit set */
 	while (intr_status) {
@@ -53,7 +53,7 @@ static void cavs_ictl_isr(void *arg)
 	struct device *port = (struct device *)arg;
 	struct cavs_ictl_runtime *context = port->driver_data;
 
-	const struct cavs_ictl_config *config = port->config->config_info;
+	const struct cavs_ictl_config *config = port->config_info;
 
 	volatile struct cavs_registers * const regs =
 					get_base_address(context);
@@ -152,4 +152,4 @@ static const struct irq_next_level_api cavs_apis = {
 			    DT_INST_IRQ(n, sense));			\
 	}
 
-DT_INST_FOREACH(CAVS_ICTL_INIT)
+DT_INST_FOREACH_STATUS_OKAY(CAVS_ICTL_INIT)

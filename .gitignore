@@ -87,7 +87,6 @@ zephyr-env.sh
 
 ##in zephyrproject/zephyr/boards ##
 arc
-CMakeLists.txt
 common
 deprecated.cmake
 index.rst

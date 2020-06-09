@@ -17,10 +17,10 @@ struct mcux_entropy_config {
 	TRNG_Type *base;
 };
 
-static int entropy_mcux_trng_get_entropy(struct device *dev, u8_t *buffer,
-					 u16_t length)
+static int entropy_mcux_trng_get_entropy(struct device *dev, uint8_t *buffer,
+					 uint16_t length)
 {
-	const struct mcux_entropy_config *config = dev->config->config_info;
+	const struct mcux_entropy_config *config = dev->config_info;
 	status_t status;
 
 	ARG_UNUSED(dev);
@@ -48,7 +48,7 @@ DEVICE_AND_API_INIT(entropy_mcux_trng, DT_INST_LABEL(0),
 
 static int entropy_mcux_trng_init(struct device *dev)
 {
-	const struct mcux_entropy_config *config = dev->config->config_info;
+	const struct mcux_entropy_config *config = dev->config_info;
 	trng_config_t conf;
 	status_t status;
 

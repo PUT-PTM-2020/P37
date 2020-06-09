@@ -27,7 +27,7 @@ struct spi_mcux_config {
 	char *clock_name;
 	clock_control_subsys_t clock_subsys;
 	clock_ip_name_t clock_ip_name;
-	u32_t clock_ip_src;
+	uint32_t clock_ip_src;
 	void (*irq_config_func)(struct device *dev);
 };
 
@@ -39,7 +39,7 @@ struct spi_mcux_data {
 
 static void spi_mcux_transfer_next_packet(struct device *dev)
 {
-	const struct spi_mcux_config *config = dev->config->config_info;
+	const struct spi_mcux_config *config = dev->config_info;
 	struct spi_mcux_data *data = dev->driver_data;
 	LPSPI_Type *base = config->base;
 	struct spi_context *ctx = &data->ctx;
@@ -63,12 +63,12 @@ static void spi_mcux_transfer_next_packet(struct device *dev)
 		transfer.dataSize = ctx->rx_len;
 	} else if (ctx->rx_len == 0) {
 		/* tx only, nothing to rx */
-		transfer.txData = (u8_t *) ctx->tx_buf;
+		transfer.txData = (uint8_t *) ctx->tx_buf;
 		transfer.rxData = NULL;
 		transfer.dataSize = ctx->tx_len;
 	} else if (ctx->tx_len == ctx->rx_len) {
 		/* rx and tx are the same length */
-		transfer.txData = (u8_t *) ctx->tx_buf;
+		transfer.txData = (uint8_t *) ctx->tx_buf;
 		transfer.rxData = ctx->rx_buf;
 		transfer.dataSize = ctx->tx_len;
 	} else if (ctx->tx_len > ctx->rx_len) {
@@ -76,7 +76,7 @@ static void spi_mcux_transfer_next_packet(struct device *dev)
 		 * rx into a longer intermediate buffer. Leave chip select
 		 * active between transfers.
 		 */
-		transfer.txData = (u8_t *) ctx->tx_buf;
+		transfer.txData = (uint8_t *) ctx->tx_buf;
 		transfer.rxData = ctx->rx_buf;
 		transfer.dataSize = ctx->rx_len;
 		transfer.configFlags |= kLPSPI_MasterPcsContinuous;
@@ -85,7 +85,7 @@ static void spi_mcux_transfer_next_packet(struct device *dev)
 		 * tx from a longer intermediate buffer. Leave chip select
 		 * active between transfers.
 		 */
-		transfer.txData = (u8_t *) ctx->tx_buf;
+		transfer.txData = (uint8_t *) ctx->tx_buf;
 		transfer.rxData = ctx->rx_buf;
 		transfer.dataSize = ctx->tx_len;
 		transfer.configFlags |= kLPSPI_MasterPcsContinuous;
@@ -106,7 +106,7 @@ static void spi_mcux_transfer_next_packet(struct device *dev)
 static void spi_mcux_isr(void *arg)
 {
 	struct device *dev = (struct device *)arg;
-	const struct spi_mcux_config *config = dev->config->config_info;
+	const struct spi_mcux_config *config = dev->config_info;
 	struct spi_mcux_data *data = dev->driver_data;
 	LPSPI_Type *base = config->base;
 
@@ -128,13 +128,13 @@ static void spi_mcux_master_transfer_callback(LPSPI_Type *base,
 static int spi_mcux_configure(struct device *dev,
 			      const struct spi_config *spi_cfg)
 {
-	const struct spi_mcux_config *config = dev->config->config_info;
+	const struct spi_mcux_config *config = dev->config_info;
 	struct spi_mcux_data *data = dev->driver_data;
 	LPSPI_Type *base = config->base;
 	lpspi_master_config_t master_config;
 	struct device *clock_dev;
-	u32_t clock_freq;
-	u32_t word_size;
+	uint32_t clock_freq;
+	uint32_t word_size;
 
 	if (spi_context_configured(&data->ctx, spi_cfg)) {
 		/* This configuration is already in use */
@@ -258,7 +258,7 @@ static int spi_mcux_release(struct device *dev,
 
 static int spi_mcux_init(struct device *dev)
 {
-	const struct spi_mcux_config *config = dev->config->config_info;
+	const struct spi_mcux_config *config = dev->config_info;
 	struct spi_mcux_data *data = dev->driver_data;
 
 	CLOCK_SetIpSrc(config->clock_ip_name, config->clock_ip_src);
@@ -311,4 +311,4 @@ static const struct spi_driver_api spi_mcux_driver_api = {
 		irq_enable(DT_INST_IRQN(n));				\
 	}
 
-DT_INST_FOREACH(SPI_RV32M1_INIT)
+DT_INST_FOREACH_STATUS_OKAY(SPI_RV32M1_INIT)

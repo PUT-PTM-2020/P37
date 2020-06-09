@@ -47,14 +47,14 @@ struct rtc_stm32_config {
 
 struct rtc_stm32_data {
 	counter_alarm_callback_t callback;
-	u32_t ticks;
+	uint32_t ticks;
 	void *user_data;
 };
 
 
 #define DEV_DATA(dev) ((struct rtc_stm32_data *)(dev)->driver_data)
 #define DEV_CFG(dev)	\
-((const struct rtc_stm32_config * const)(dev)->config->config_info)
+((const struct rtc_stm32_config * const)(dev)->config_info)
 
 
 static void rtc_stm32_irq_config(struct device *dev);
@@ -80,11 +80,11 @@ static int rtc_stm32_stop(struct device *dev)
 }
 
 
-static u32_t rtc_stm32_read(struct device *dev)
+static uint32_t rtc_stm32_read(struct device *dev)
 {
 	struct tm now = { 0 };
 	time_t ts;
-	u32_t rtc_date, rtc_time, ticks;
+	uint32_t rtc_date, rtc_time, ticks;
 
 	ARG_UNUSED(dev);
 
@@ -116,13 +116,13 @@ static u32_t rtc_stm32_read(struct device *dev)
 	return ticks;
 }
 
-static int rtc_stm32_get_value(struct device *dev, u32_t *ticks)
+static int rtc_stm32_get_value(struct device *dev, uint32_t *ticks)
 {
 	*ticks = rtc_stm32_read(dev);
 	return 0;
 }
 
-static int rtc_stm32_set_alarm(struct device *dev, u8_t chan_id,
+static int rtc_stm32_set_alarm(struct device *dev, uint8_t chan_id,
 				const struct counter_alarm_cfg *alarm_cfg)
 {
 	struct tm alarm_tm;
@@ -130,8 +130,8 @@ static int rtc_stm32_set_alarm(struct device *dev, u8_t chan_id,
 	LL_RTC_AlarmTypeDef rtc_alarm;
 	struct rtc_stm32_data *data = DEV_DATA(dev);
 
-	u32_t now = rtc_stm32_read(dev);
-	u32_t ticks = alarm_cfg->ticks;
+	uint32_t now = rtc_stm32_read(dev);
+	uint32_t ticks = alarm_cfg->ticks;
 
 	if (data->callback != NULL) {
 		LOG_DBG("Alarm busy\n");
@@ -143,7 +143,12 @@ static int rtc_stm32_set_alarm(struct device *dev, u8_t chan_id,
 	data->user_data = alarm_cfg->user_data;
 
 	if ((alarm_cfg->flags & COUNTER_ALARM_CFG_ABSOLUTE) == 0) {
-		ticks += now;
+		/* Add +1 in order to compensate the partially started tick.
+		 * Alarm will expire between requested ticks and ticks+1.
+		 * In case only 1 tick is requested, it will avoid
+		 * that tick+1 event occurs before alarm setting is finished.
+		 */
+		ticks += now + 1;
 	}
 
 	LOG_DBG("Set Alarm: %d\n", ticks);
@@ -180,7 +185,7 @@ static int rtc_stm32_set_alarm(struct device *dev, u8_t chan_id,
 }
 
 
-static int rtc_stm32_cancel_alarm(struct device *dev, u8_t chan_id)
+static int rtc_stm32_cancel_alarm(struct device *dev, uint8_t chan_id)
 {
 	LL_RTC_DisableWriteProtection(RTC);
 	LL_RTC_ClearFlag_ALRA(RTC);
@@ -194,15 +199,15 @@ static int rtc_stm32_cancel_alarm(struct device *dev, u8_t chan_id)
 }
 
 
-static u32_t rtc_stm32_get_pending_int(struct device *dev)
+static uint32_t rtc_stm32_get_pending_int(struct device *dev)
 {
 	return LL_RTC_IsActiveFlag_ALRA(RTC) != 0;
 }
 
 
-static u32_t rtc_stm32_get_top_value(struct device *dev)
+static uint32_t rtc_stm32_get_top_value(struct device *dev)
 {
-	const struct counter_config_info *info = dev->config->config_info;
+	const struct counter_config_info *info = dev->config_info;
 
 	return info->max_top_value;
 }
@@ -211,7 +216,7 @@ static u32_t rtc_stm32_get_top_value(struct device *dev)
 static int rtc_stm32_set_top_value(struct device *dev,
 				   const struct counter_top_cfg *cfg)
 {
-	const struct counter_config_info *info = dev->config->config_info;
+	const struct counter_config_info *info = dev->config_info;
 
 	if ((cfg->ticks != info->max_top_value) ||
 		!(cfg->flags & COUNTER_TOP_CFG_DONT_RESET)) {
@@ -224,9 +229,9 @@ static int rtc_stm32_set_top_value(struct device *dev,
 }
 
 
-static u32_t rtc_stm32_get_max_relative_alarm(struct device *dev)
+static uint32_t rtc_stm32_get_max_relative_alarm(struct device *dev)
 {
-	const struct counter_config_info *info = dev->config->config_info;
+	const struct counter_config_info *info = dev->config_info;
 
 	return info->max_top_value;
 }
@@ -238,7 +243,7 @@ void rtc_stm32_isr(void *arg)
 	struct rtc_stm32_data *data = DEV_DATA(dev);
 	counter_alarm_callback_t alarm_callback = data->callback;
 
-	u32_t now = rtc_stm32_read(dev);
+	uint32_t now = rtc_stm32_read(dev);
 
 	if (LL_RTC_IsActiveFlag_ALRA(RTC) != 0) {
 
@@ -254,7 +259,11 @@ void rtc_stm32_isr(void *arg)
 		}
 	}
 
+#if defined(CONFIG_SOC_SERIES_STM32H7X) && defined(CONFIG_CPU_CORTEX_M4)
+	LL_C2_EXTI_ClearFlag_0_31(RTC_EXTI_LINE);
+#else
 	LL_EXTI_ClearFlag_0_31(RTC_EXTI_LINE);
+#endif
 }
 
 
@@ -333,7 +342,11 @@ static int rtc_stm32_init(struct device *dev)
 	LL_RTC_EnableWriteProtection(RTC);
 #endif /* RTC_CR_BYPSHAD */
 
+#if defined(CONFIG_SOC_SERIES_STM32H7X) && defined(CONFIG_CPU_CORTEX_M4)
+	LL_C2_EXTI_EnableIT_0_31(RTC_EXTI_LINE);
+#else
 	LL_EXTI_EnableIT_0_31(RTC_EXTI_LINE);
+#endif
 	LL_EXTI_EnableRisingTrig_0_31(RTC_EXTI_LINE);
 
 	rtc_stm32_irq_config(dev);

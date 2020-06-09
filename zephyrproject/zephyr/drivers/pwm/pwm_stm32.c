@@ -23,7 +23,7 @@ LOG_MODULE_REGISTER(pwm_stm32);
 
 /* convenience defines */
 #define DEV_CFG(dev)							\
-	((const struct pwm_stm32_config * const)(dev)->config->config_info)
+	((const struct pwm_stm32_config * const)(dev)->config_info)
 #define DEV_DATA(dev)							\
 	((struct pwm_stm32_data * const)(dev)->driver_data)
 #define PWM_STRUCT(dev)					\
@@ -31,11 +31,11 @@ LOG_MODULE_REGISTER(pwm_stm32);
 
 #define CHANNEL_LENGTH 4
 
-static u32_t __get_tim_clk(u32_t bus_clk,
+static uint32_t __get_tim_clk(uint32_t bus_clk,
 			      clock_control_subsys_t *sub_system)
 {
 	struct stm32_pclken *pclken = (struct stm32_pclken *)(sub_system);
-	u32_t tim_clk, apb_psc;
+	uint32_t tim_clk, apb_psc;
 
 #if defined(CONFIG_SOC_SERIES_STM32H7X)
 	if (pclken->bus == STM32_CLOCK_BUS_APB1) {
@@ -107,14 +107,14 @@ static u32_t __get_tim_clk(u32_t bus_clk,
  *
  * return 0, or negative errno code
  */
-static int pwm_stm32_pin_set(struct device *dev, u32_t pwm,
-			     u32_t period_cycles, u32_t pulse_cycles,
+static int pwm_stm32_pin_set(struct device *dev, uint32_t pwm,
+			     uint32_t period_cycles, uint32_t pulse_cycles,
 			     pwm_flags_t flags)
 {
 	struct pwm_stm32_data *data = DEV_DATA(dev);
 	TIM_HandleTypeDef *TimerHandle = &data->hpwm;
 	TIM_OC_InitTypeDef sConfig;
-	u32_t channel;
+	uint32_t channel;
 	bool counter_32b;
 
 	if (period_cycles == 0U || pulse_cycles > period_cycles) {
@@ -194,12 +194,12 @@ static int pwm_stm32_pin_set(struct device *dev, u32_t pwm,
  *
  * return 0, or negative errno code
  */
-static int pwm_stm32_get_cycles_per_sec(struct device *dev, u32_t pwm,
-					u64_t *cycles)
+static int pwm_stm32_get_cycles_per_sec(struct device *dev, uint32_t pwm,
+					uint64_t *cycles)
 {
 	const struct pwm_stm32_config *cfg = DEV_CFG(dev);
 	struct pwm_stm32_data *data = DEV_DATA(dev);
-	u32_t bus_clk, tim_clk;
+	uint32_t bus_clk, tim_clk;
 
 	if (cycles == NULL) {
 		return -EINVAL;
@@ -215,7 +215,7 @@ static int pwm_stm32_get_cycles_per_sec(struct device *dev, u32_t pwm,
 	tim_clk = __get_tim_clk(bus_clk,
 			(clock_control_subsys_t *)&cfg->pclken);
 
-	*cycles = (u64_t)(tim_clk / (data->pwm_prescaler + 1));
+	*cycles = (uint64_t)(tim_clk / (data->pwm_prescaler + 1));
 
 	return 0;
 }
@@ -273,84 +273,6 @@ static int pwm_stm32_init(struct device *dev)
 			    &pwm_stm32_dev_data_##index,		\
 			    &pwm_stm32_dev_cfg_##index,			\
 			    POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEVICE,\
-			    &pwm_stm32_drv_api_funcs)
+			    &pwm_stm32_drv_api_funcs);
 
-#if DT_HAS_DRV_INST(0)
-PWM_DEVICE_INIT_STM32(0);
-#endif /* DT_HAS_DRV_INST(0) */
-
-#if DT_HAS_DRV_INST(1)
-PWM_DEVICE_INIT_STM32(1);
-#endif /* DT_HAS_DRV_INST(1) */
-
-#if DT_HAS_DRV_INST(2)
-PWM_DEVICE_INIT_STM32(2);
-#endif /* DT_HAS_DRV_INST(2) */
-
-#if DT_HAS_DRV_INST(3)
-PWM_DEVICE_INIT_STM32(3);
-#endif /* DT_HAS_DRV_INST(3) */
-
-#if DT_HAS_DRV_INST(4)
-PWM_DEVICE_INIT_STM32(4);
-#endif /* DT_HAS_DRV_INST(4) */
-
-#if DT_HAS_DRV_INST(5)
-PWM_DEVICE_INIT_STM32(5);
-#endif /* DT_HAS_DRV_INST(5) */
-
-#if DT_HAS_DRV_INST(6)
-PWM_DEVICE_INIT_STM32(6);
-#endif /* DT_HAS_DRV_INST(6) */
-
-#if DT_HAS_DRV_INST(7)
-PWM_DEVICE_INIT_STM32(7);
-#endif /* DT_HAS_DRV_INST(7) */
-
-#if DT_HAS_DRV_INST(8)
-PWM_DEVICE_INIT_STM32(8);
-#endif /* DT_HAS_DRV_INST(8) */
-
-#if DT_HAS_DRV_INST(9)
-PWM_DEVICE_INIT_STM32(9);
-#endif /* DT_HAS_DRV_INST(9) */
-
-#if DT_HAS_DRV_INST(10)
-PWM_DEVICE_INIT_STM32(10);
-#endif /* DT_HAS_DRV_INST(10) */
-
-#if DT_HAS_DRV_INST(11)
-PWM_DEVICE_INIT_STM32(11);
-#endif /* DT_HAS_DRV_INST(11) */
-
-#if DT_HAS_DRV_INST(12)
-PWM_DEVICE_INIT_STM32(12);
-#endif /* DT_HAS_DRV_INST(12) */
-
-#if DT_HAS_DRV_INST(13)
-PWM_DEVICE_INIT_STM32(13);
-#endif /* DT_HAS_DRV_INST(13) */
-
-#if DT_HAS_DRV_INST(14)
-PWM_DEVICE_INIT_STM32(14);
-#endif /* DT_HAS_DRV_INST(14) */
-
-#if DT_HAS_DRV_INST(15)
-PWM_DEVICE_INIT_STM32(15);
-#endif /* DT_HAS_DRV_INST(15) */
-
-#if DT_HAS_DRV_INST(16)
-PWM_DEVICE_INIT_STM32(16);
-#endif /* DT_HAS_DRV_INST(16) */
-
-#if DT_HAS_DRV_INST(17)
-PWM_DEVICE_INIT_STM32(17);
-#endif /* DT_HAS_DRV_INST(17) */
-
-#if DT_HAS_DRV_INST(18)
-PWM_DEVICE_INIT_STM32(18);
-#endif /* DT_HAS_DRV_INST(18) */
-
-#if DT_HAS_DRV_INST(19)
-PWM_DEVICE_INIT_STM32(19);
-#endif /* DT_HAS_DRV_INST(19) */
+DT_INST_FOREACH_STATUS_OKAY(PWM_DEVICE_INIT_STM32)

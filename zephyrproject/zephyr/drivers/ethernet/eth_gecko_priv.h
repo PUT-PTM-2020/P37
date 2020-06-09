@@ -63,8 +63,8 @@
 #define ETH_TX_DISABLE(base)  (base->NETWORKCTRL &= ~ETH_NETWORKCTRL_ENBTX)
 
 struct eth_buf_desc {
-	u32_t address;
-	u32_t status;
+	uint32_t address;
+	uint32_t status;
 };
 
 struct eth_gecko_pin_list {
@@ -76,7 +76,7 @@ struct eth_gecko_pin_list {
 struct eth_gecko_dev_cfg {
 	ETH_TypeDef *regs;
 	const struct eth_gecko_pin_list *pin_list;
-	u32_t pin_list_size;
+	uint32_t pin_list_size;
 	void (*config_func)(void);
 	struct phy_gecko_dev phy;
 };
@@ -84,7 +84,7 @@ struct eth_gecko_dev_cfg {
 /* Device run time data */
 struct eth_gecko_dev_data {
 	struct net_if *iface;
-	u8_t mac_addr[6];
+	uint8_t mac_addr[6];
 	struct k_sem tx_sem;
 	struct k_sem rx_sem;
 
@@ -94,9 +94,9 @@ struct eth_gecko_dev_data {
 	bool link_up;
 };
 
-#define DEV_NAME(dev) ((dev)->config->name)
+#define DEV_NAME(dev) ((dev)->name)
 #define DEV_CFG(dev) \
-	((struct eth_gecko_dev_cfg *)(dev)->config->config_info)
+	((const struct eth_gecko_dev_cfg *)(dev)->config_info)
 #define DEV_DATA(dev) \
 	((struct eth_gecko_dev_data *)(dev)->driver_data)
 

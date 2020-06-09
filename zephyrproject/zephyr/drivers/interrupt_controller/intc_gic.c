@@ -7,17 +7,12 @@
  */
 
 /*
- * NOTE: This driver currently implements the GICv1 and GICv2 interfaces. The
- *       GICv3 interface is not supported.
+ * NOTE: This driver implements the GICv1 and GICv2 interfaces.
  */
 
 #include <sw_isr_table.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 #include <drivers/interrupt_controller/gic.h>
-
-#if CONFIG_GIC_VER >= 3
-#error "GICv3 and above are not supported"
-#endif
 
 void arm_gic_irq_enable(unsigned int irq)
 {
@@ -53,10 +48,10 @@ bool arm_gic_irq_is_enabled(unsigned int irq)
 }
 
 void arm_gic_irq_set_priority(
-	unsigned int irq, unsigned int prio, u32_t flags)
+	unsigned int irq, unsigned int prio, uint32_t flags)
 {
 	int int_grp, int_off;
-	u32_t val;
+	uint32_t val;
 
 	/* Set priority */
 	sys_write8(prio & 0xff, GICD_IPRIORITYRn + irq);
@@ -149,7 +144,7 @@ static void gic_dist_init(void)
 static void gic_cpu_init(void)
 {
 	int i;
-	u32_t val;
+	uint32_t val;
 
 	/*
 	 * Deal with the banked PPI and SGI interrupts - disable all

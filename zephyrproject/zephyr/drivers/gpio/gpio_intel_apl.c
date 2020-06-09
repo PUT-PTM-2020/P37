@@ -106,17 +106,17 @@ BUILD_ASSERT(DT_INST_IRQN(0) == 14);
 struct gpio_intel_apl_config {
 	/* gpio_driver_config needs to be first */
 	struct gpio_driver_config common;
-	u32_t	reg_base;
+	uint32_t	reg_base;
 
-	u8_t	pin_offset;
-	u8_t	num_pins;
+	uint8_t	pin_offset;
+	uint8_t	num_pins;
 };
 
 struct gpio_intel_apl_data {
 	/* gpio_driver_data needs to be first */
 	struct gpio_driver_data common;
 	/* Pad base address */
-	u32_t		pad_base;
+	uint32_t		pad_base;
 
 	sys_slist_t	cb;
 };
@@ -126,15 +126,15 @@ struct gpio_intel_apl_data {
  * @brief Check if host has permission to alter this GPIO pin.
  *
  * @param "struct device *dev" Device struct
- * @param "u32_t raw_pin" Raw GPIO pin
+ * @param "uint32_t raw_pin" Raw GPIO pin
  *
  * @return true if host owns the GPIO pin, false otherwise
  */
-static bool check_perm(struct device *dev, u32_t raw_pin)
+static bool check_perm(struct device *dev, uint32_t raw_pin)
 {
-	const struct gpio_intel_apl_config *cfg = dev->config->config_info;
+	const struct gpio_intel_apl_config *cfg = dev->config_info;
 	struct gpio_intel_apl_data *data = dev->driver_data;
-	u32_t offset, val;
+	uint32_t offset, val;
 
 	/* First is to establish that host software owns the pin */
 
@@ -173,17 +173,18 @@ static int nr_isr_devs;
 
 static struct device *isr_devs[GPIO_INTEL_APL_NR_SUBDEVS];
 
-static int gpio_intel_apl_isr(struct device *dev)
+static void gpio_intel_apl_isr(void *arg)
 {
+	struct device *dev = (struct device *)arg;
 	const struct gpio_intel_apl_config *cfg;
 	struct gpio_intel_apl_data *data;
 	struct gpio_callback *cb, *tmp;
-	u32_t reg, int_sts, cur_mask, acc_mask;
+	uint32_t reg, int_sts, cur_mask, acc_mask;
 	int isr_dev;
 
 	for (isr_dev = 0; isr_dev < nr_isr_devs; ++isr_dev) {
 		dev = isr_devs[isr_dev];
-		cfg = dev->config->config_info;
+		cfg = dev->config_info;
 		data = dev->driver_data;
 
 		reg = cfg->reg_base + REG_GPI_INT_STS_BASE
@@ -203,16 +204,14 @@ static int gpio_intel_apl_isr(struct device *dev)
 		/* clear handled interrupt bits */
 		sys_write32(acc_mask, reg);
 	}
-
-	return 0;
 }
 
 static int gpio_intel_apl_config(struct device *dev,
 				 gpio_pin_t pin, gpio_flags_t flags)
 {
-	const struct gpio_intel_apl_config *cfg = dev->config->config_info;
+	const struct gpio_intel_apl_config *cfg = dev->config_info;
 	struct gpio_intel_apl_data *data = dev->driver_data;
-	u32_t raw_pin, reg, cfg0, cfg1;
+	uint32_t raw_pin, reg, cfg0, cfg1;
 
 	/* Only support push-pull mode */
 	if ((flags & GPIO_SINGLE_ENDED) != 0U) {
@@ -285,10 +284,10 @@ static int gpio_intel_apl_pin_interrupt_configure(struct device *dev,
 		gpio_pin_t pin, enum gpio_int_mode mode,
 		enum gpio_int_trig trig)
 {
-	const struct gpio_intel_apl_config *cfg = dev->config->config_info;
+	const struct gpio_intel_apl_config *cfg = dev->config_info;
 	struct gpio_intel_apl_data *data = dev->driver_data;
-	u32_t raw_pin, cfg0, cfg1;
-	u32_t reg, reg_en, reg_sts;
+	uint32_t raw_pin, cfg0, cfg1;
+	uint32_t reg, reg_en, reg_sts;
 
 	/* no double-edge triggering according to data sheet */
 	if (trig == GPIO_INT_TRIG_BOTH) {
@@ -333,6 +332,17 @@ static int gpio_intel_apl_pin_interrupt_configure(struct device *dev,
 			return -ENOTSUP;
 		}
 
+		/*
+		 * Do not enable interrupt with pin as output.
+		 * Hardware does not seem to support triggering
+		 * interrupt by setting line as both input/output
+		 * and then setting output to desired level.
+		 * So just say not supported.
+		 */
+		if ((cfg0 & PAD_CFG0_TXDIS) == 0U) {
+			return -ENOTSUP;
+		}
+
 		if (mode == GPIO_INT_MODE_LEVEL) {
 			/* level trigger */
 			cfg0 |= PAD_CFG0_RXEVCFG_LEVEL;
@@ -373,8 +383,8 @@ static int gpio_intel_apl_manage_callback(struct device *dev,
 static int gpio_intel_apl_enable_callback(struct device *dev,
 					  gpio_pin_t pin)
 {
-	const struct gpio_intel_apl_config *cfg = dev->config->config_info;
-	u32_t raw_pin, reg;
+	const struct gpio_intel_apl_config *cfg = dev->config_info;
+	uint32_t raw_pin, reg;
 
 	pin = k_array_index_sanitize(pin, cfg->num_pins + 1);
 
@@ -398,8 +408,8 @@ static int gpio_intel_apl_enable_callback(struct device *dev,
 static int gpio_intel_apl_disable_callback(struct device *dev,
 					   gpio_pin_t pin)
 {
-	const struct gpio_intel_apl_config *cfg = dev->config->config_info;
-	u32_t raw_pin, reg;
+	const struct gpio_intel_apl_config *cfg = dev->config_info;
+	uint32_t raw_pin, reg;
 
 	pin = k_array_index_sanitize(pin, cfg->num_pins + 1);
 
@@ -416,12 +426,12 @@ static int gpio_intel_apl_disable_callback(struct device *dev,
 	return 0;
 }
 
-static int port_get_raw(struct device *dev, u32_t mask, u32_t *value,
+static int port_get_raw(struct device *dev, uint32_t mask, uint32_t *value,
 			bool read_tx)
 {
-	const struct gpio_intel_apl_config *cfg = dev->config->config_info;
+	const struct gpio_intel_apl_config *cfg = dev->config_info;
 	struct gpio_intel_apl_data *data = dev->driver_data;
-	u32_t pin, raw_pin, reg_addr, reg_val, cmp;
+	uint32_t pin, raw_pin, reg_addr, reg_val, cmp;
 
 	if (read_tx) {
 		cmp = PAD_CFG0_TXSTATE;
@@ -456,11 +466,11 @@ static int port_get_raw(struct device *dev, u32_t mask, u32_t *value,
 	return 0;
 }
 
-static int port_set_raw(struct device *dev, u32_t mask, u32_t value)
+static int port_set_raw(struct device *dev, uint32_t mask, uint32_t value)
 {
-	const struct gpio_intel_apl_config *cfg = dev->config->config_info;
+	const struct gpio_intel_apl_config *cfg = dev->config_info;
 	struct gpio_intel_apl_data *data = dev->driver_data;
-	u32_t pin, raw_pin, reg_addr, reg_val;
+	uint32_t pin, raw_pin, reg_addr, reg_val;
 
 	while (mask != 0) {
 		pin = find_lsb_set(mask) - 1;
@@ -492,10 +502,10 @@ static int port_set_raw(struct device *dev, u32_t mask, u32_t value)
 	return 0;
 }
 
-static int gpio_intel_apl_port_set_masked_raw(struct device *dev, u32_t mask,
-					      u32_t value)
+static int gpio_intel_apl_port_set_masked_raw(struct device *dev, uint32_t mask,
+					      uint32_t value)
 {
-	u32_t port_val;
+	uint32_t port_val;
 
 	port_get_raw(dev, mask, &port_val, true);
 
@@ -506,19 +516,19 @@ static int gpio_intel_apl_port_set_masked_raw(struct device *dev, u32_t mask,
 	return 0;
 }
 
-static int gpio_intel_apl_port_set_bits_raw(struct device *dev, u32_t mask)
+static int gpio_intel_apl_port_set_bits_raw(struct device *dev, uint32_t mask)
 {
 	return gpio_intel_apl_port_set_masked_raw(dev, mask, mask);
 }
 
-static int gpio_intel_apl_port_clear_bits_raw(struct device *dev, u32_t mask)
+static int gpio_intel_apl_port_clear_bits_raw(struct device *dev, uint32_t mask)
 {
 	return gpio_intel_apl_port_set_masked_raw(dev, mask, 0);
 }
 
-static int gpio_intel_apl_port_toggle_bits(struct device *dev, u32_t mask)
+static int gpio_intel_apl_port_toggle_bits(struct device *dev, uint32_t mask)
 {
-	u32_t port_val;
+	uint32_t port_val;
 
 	port_get_raw(dev, mask, &port_val, true);
 
@@ -529,7 +539,7 @@ static int gpio_intel_apl_port_toggle_bits(struct device *dev, u32_t mask)
 	return 0;
 }
 
-static int gpio_intel_apl_port_get_raw(struct device *dev, u32_t *value)
+static int gpio_intel_apl_port_get_raw(struct device *dev, uint32_t *value)
 {
 	return port_get_raw(dev, 0xFFFFFFFF, value, false);
 }
@@ -549,7 +559,7 @@ static const struct gpio_driver_api gpio_intel_apl_api = {
 
 int gpio_intel_apl_init(struct device *dev)
 {
-	const struct gpio_intel_apl_config *cfg = dev->config->config_info;
+	const struct gpio_intel_apl_config *cfg = dev->config_info;
 	struct gpio_intel_apl_data *data = dev->driver_data;
 
 	data->pad_base = sys_read32(cfg->reg_base + REG_PAD_BASE_ADDR);
@@ -572,7 +582,7 @@ int gpio_intel_apl_init(struct device *dev)
 
 	/* route to IRQ 14 */
 
-	sys_bitfield_clear_bit(data->pad_base + REG_MISCCFG,
+	sys_bitfield_clear_bit(cfg->reg_base + REG_MISCCFG,
 			       MISCCFG_IRQ_ROUTE_POS);
 
 	dev->driver_api = &gpio_intel_apl_api;
@@ -599,7 +609,7 @@ DEVICE_AND_API_INIT(gpio_intel_apl_##n,					\
 		    &gpio_intel_apl_data_##n,				\
 		    &gpio_intel_apl_cfg_##n,				\
 		    POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEVICE,	\
-		    &gpio_intel_apl_api)
+		    &gpio_intel_apl_api);
 
 /* "sub" devices.  no more than GPIO_INTEL_APL_NR_SUBDEVS of these! */
-DT_INST_FOREACH(GPIO_INTEL_APL_DEV_CFG_DATA)
+DT_INST_FOREACH_STATUS_OKAY(GPIO_INTEL_APL_DEV_CFG_DATA)

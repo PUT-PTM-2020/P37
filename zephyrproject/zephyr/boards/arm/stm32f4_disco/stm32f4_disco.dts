@@ -17,6 +17,7 @@
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zephyr,ccm = &ccm0;
+		zephyr,can-primary = &can2;
 	};
 
 	leds {
@@ -48,7 +49,6 @@
 	};
 
 	aliases {
-		can-primary = &can2;
 		led0 = &green_led_4;
 		led1 = &orange_led_3;
 		led2 = &red_led_5;
@@ -60,12 +60,6 @@
 &usart1 {
 	current-speed = <115200>;
 	status = "okay";
-	
-	esp8266 {
-		compatible = "espressif,esp";
-		label = "esp8266";
-		status = "okay";
-	};
 };
 
 &usart2 {
@@ -73,16 +67,20 @@
 	status = "okay";
 };
 
-&timers2 {
+&timers1 {
 	status = "okay";
 
-	pwm {
+	pwm1: pwm {
 		status = "okay";
 	};
 };
 
-&spi1 {
+&timers2 {
 	status = "okay";
+
+	pwm2: pwm {
+		status = "okay";
+	};
 };
 
 &rtc {
@@ -95,7 +93,7 @@
 
 &can1 {
 	bus-speed = <125000>;
-	status = "okay";
+	status = "disabled";
 };
 
 &can2 {

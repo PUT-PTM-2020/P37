@@ -25,16 +25,16 @@ struct mcux_adc16_config {
 struct mcux_adc16_data {
 	struct device *dev;
 	struct adc_context ctx;
-	u16_t *buffer;
-	u16_t *repeat_buffer;
-	u32_t channels;
-	u8_t channel_id;
+	uint16_t *buffer;
+	uint16_t *repeat_buffer;
+	uint32_t channels;
+	uint8_t channel_id;
 };
 
 static int mcux_adc16_channel_setup(struct device *dev,
 				    const struct adc_channel_cfg *channel_cfg)
 {
-	u8_t channel_id = channel_cfg->channel_id;
+	uint8_t channel_id = channel_cfg->channel_id;
 
 	if (channel_id > (ADC_SC1_ADCH_MASK >> ADC_SC1_ADCH_SHIFT)) {
 		LOG_ERR("Channel %d is not valid", channel_id);
@@ -66,12 +66,12 @@ static int mcux_adc16_channel_setup(struct device *dev,
 
 static int start_read(struct device *dev, const struct adc_sequence *sequence)
 {
-	const struct mcux_adc16_config *config = dev->config->config_info;
+	const struct mcux_adc16_config *config = dev->config_info;
 	struct mcux_adc16_data *data = dev->driver_data;
 	adc16_hardware_average_mode_t mode;
 	adc16_resolution_t resolution;
 	int error;
-	u32_t tmp32;
+	uint32_t tmp32;
 	ADC_Type *base = config->base;
 
 	switch (sequence->resolution) {
@@ -162,11 +162,11 @@ static int mcux_adc16_read_async(struct device *dev,
 
 static void mcux_adc16_start_channel(struct device *dev)
 {
-	const struct mcux_adc16_config *config = dev->config->config_info;
+	const struct mcux_adc16_config *config = dev->config_info;
 	struct mcux_adc16_data *data = dev->driver_data;
 
 	adc16_channel_config_t channel_config;
-	u32_t channel_group = 0U;
+	uint32_t channel_group = 0U;
 
 	data->channel_id = find_lsb_set(data->channels) - 1;
 
@@ -205,11 +205,11 @@ static void adc_context_update_buffer_pointer(struct adc_context *ctx,
 static void mcux_adc16_isr(void *arg)
 {
 	struct device *dev = (struct device *)arg;
-	const struct mcux_adc16_config *config = dev->config->config_info;
+	const struct mcux_adc16_config *config = dev->config_info;
 	struct mcux_adc16_data *data = dev->driver_data;
 	ADC_Type *base = config->base;
-	u32_t channel_group = 0U;
-	u16_t result;
+	uint32_t channel_group = 0U;
+	uint16_t result;
 
 	result = ADC16_GetChannelConversionValue(base, channel_group);
 	LOG_DBG("Finished channel %d. Result is 0x%04x",
@@ -227,7 +227,7 @@ static void mcux_adc16_isr(void *arg)
 
 static int mcux_adc16_init(struct device *dev)
 {
-	const struct mcux_adc16_config *config = dev->config->config_info;
+	const struct mcux_adc16_config *config = dev->config_info;
 	struct mcux_adc16_data *data = dev->driver_data;
 	ADC_Type *base = config->base;
 	adc16_config_t adc_config;
@@ -304,4 +304,4 @@ static const struct adc_driver_api mcux_adc16_driver_api = {
 		irq_enable(DT_INST_IRQN(n));				\
 	}
 
-DT_INST_FOREACH(ACD16_MCUX_INIT)
+DT_INST_FOREACH_STATUS_OKAY(ACD16_MCUX_INIT)

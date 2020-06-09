@@ -44,55 +44,55 @@ struct gpio_cmsdk_ahb_dev_data {
 	sys_slist_t gpio_cb;
 };
 
-static int gpio_cmsdk_ahb_port_get_raw(struct device *dev, u32_t *value)
+static int gpio_cmsdk_ahb_port_get_raw(struct device *dev, uint32_t *value)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	*value = cfg->port->data;
 
 	return 0;
 }
 
-static int gpio_cmsdk_ahb_port_set_masked_raw(struct device *dev, u32_t mask,
-					 u32_t value)
+static int gpio_cmsdk_ahb_port_set_masked_raw(struct device *dev, uint32_t mask,
+					 uint32_t value)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	cfg->port->dataout = (cfg->port->dataout & ~mask) | (mask & value);
 
 	return 0;
 }
 
-static int gpio_cmsdk_ahb_port_set_bits_raw(struct device *dev, u32_t mask)
+static int gpio_cmsdk_ahb_port_set_bits_raw(struct device *dev, uint32_t mask)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	cfg->port->dataout |= mask;
 
 	return 0;
 }
 
-static int gpio_cmsdk_ahb_port_clear_bits_raw(struct device *dev, u32_t mask)
+static int gpio_cmsdk_ahb_port_clear_bits_raw(struct device *dev, uint32_t mask)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	cfg->port->dataout &= ~mask;
 
 	return 0;
 }
 
-static int gpio_cmsdk_ahb_port_toggle_bits(struct device *dev, u32_t mask)
+static int gpio_cmsdk_ahb_port_toggle_bits(struct device *dev, uint32_t mask)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	cfg->port->dataout ^= mask;
 
 	return 0;
 }
 
-static int cmsdk_ahb_gpio_config(struct device *dev, u32_t mask, gpio_flags_t flags)
+static int cmsdk_ahb_gpio_config(struct device *dev, uint32_t mask, gpio_flags_t flags)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	if (((flags & GPIO_INPUT) == 0) && ((flags & GPIO_OUTPUT) == 0)) {
 		return -ENOTSUP;
@@ -148,7 +148,7 @@ static int gpio_cmsdk_ahb_pin_interrupt_configure(struct device *dev,
 		gpio_pin_t pin, enum gpio_int_mode mode,
 		enum gpio_int_trig trig)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	if (trig == GPIO_INT_TRIG_BOTH) {
 		return -ENOTSUP;
@@ -187,9 +187,9 @@ static int gpio_cmsdk_ahb_pin_interrupt_configure(struct device *dev,
 static void gpio_cmsdk_ahb_isr(void *arg)
 {
 	struct device *dev = (struct device *)arg;
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 	struct gpio_cmsdk_ahb_dev_data *data = dev->driver_data;
-	u32_t int_stat;
+	uint32_t int_stat;
 
 	int_stat = cfg->port->intstatus;
 
@@ -212,7 +212,7 @@ static int gpio_cmsdk_ahb_manage_callback(struct device *dev,
 static int gpio_cmsdk_ahb_enable_callback(struct device *dev,
 					  gpio_pin_t pin)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	cfg->port->intenset |= BIT(pin);
 
@@ -222,7 +222,7 @@ static int gpio_cmsdk_ahb_enable_callback(struct device *dev,
 static int gpio_cmsdk_ahb_disable_callback(struct device *dev,
 					   gpio_pin_t pin)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 	cfg->port->intenclr |= BIT(pin);
 
@@ -250,7 +250,7 @@ static const struct gpio_driver_api gpio_cmsdk_ahb_drv_api_funcs = {
  */
 static int gpio_cmsdk_ahb_init(struct device *dev)
 {
-	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config->config_info;
+	const struct gpio_cmsdk_ahb_cfg * const cfg = dev->config_info;
 
 #ifdef CONFIG_CLOCK_CONTROL
 	/* Enable clock for subsystem */
@@ -306,4 +306,4 @@ static int gpio_cmsdk_ahb_init(struct device *dev)
 		irq_enable(DT_INST_IRQN(n));					\
 	}
 
-DT_INST_FOREACH(CMSDK_AHB_GPIO_DEVICE)
+DT_INST_FOREACH_STATUS_OKAY(CMSDK_AHB_GPIO_DEVICE)

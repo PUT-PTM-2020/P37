@@ -20,13 +20,13 @@
 #include "fsl_flash.h"
 #endif
 
-#if DT_HAS_NODE(DT_INST(0, nxp_kinetis_ftfa))
+#if DT_NODE_HAS_STATUS(DT_INST(0, nxp_kinetis_ftfa), okay)
 #define DT_DRV_COMPAT nxp_kinetis_ftfa
-#elif DT_HAS_NODE(DT_INST(0, nxp_kinetis_ftfe))
+#elif DT_NODE_HAS_STATUS(DT_INST(0, nxp_kinetis_ftfe), okay)
 #define DT_DRV_COMPAT nxp_kinetis_ftfe
-#elif DT_HAS_NODE(DT_INST(0, nxp_kinetis_ftfl))
+#elif DT_NODE_HAS_STATUS(DT_INST(0, nxp_kinetis_ftfl), okay)
 #define DT_DRV_COMPAT nxp_kinetis_ftfl
-#elif DT_HAS_NODE(DT_INST(0, nxp_lpc_iap))
+#elif DT_NODE_HAS_STATUS(DT_INST(0, nxp_lpc_iap), okay)
 #define DT_DRV_COMPAT nxp_lpc_iap
 #else
 #error No matching compatible for soc_flash_mcux.c
@@ -40,7 +40,7 @@ struct flash_priv {
 	 * HACK: flash write protection is managed in software.
 	 */
 	struct k_sem write_lock;
-	u32_t pflash_block_base;
+	uint32_t pflash_block_base;
 };
 
 /*
@@ -55,7 +55,7 @@ struct flash_priv {
 static int flash_mcux_erase(struct device *dev, off_t offset, size_t len)
 {
 	struct flash_priv *priv = dev->driver_data;
-	u32_t addr;
+	uint32_t addr;
 	status_t rc;
 	unsigned int key;
 
@@ -78,7 +78,7 @@ static int flash_mcux_read(struct device *dev, off_t offset,
 				void *data, size_t len)
 {
 	struct flash_priv *priv = dev->driver_data;
-	u32_t addr;
+	uint32_t addr;
 
 	/*
 	 * The MCUX supports different flash chips whose valid ranges are
@@ -96,7 +96,7 @@ static int flash_mcux_write(struct device *dev, off_t offset,
 				const void *data, size_t len)
 {
 	struct flash_priv *priv = dev->driver_data;
-	u32_t addr;
+	uint32_t addr;
 	status_t rc;
 	unsigned int key;
 
@@ -179,7 +179,7 @@ static int flash_mcux_init(struct device *dev)
 	FLASH_GetProperty(&priv->config, kFLASH_PropertyPflash0BlockBaseAddr,
 			  &pflash_block_base);
 #endif
-	priv->pflash_block_base = (u32_t) pflash_block_base;
+	priv->pflash_block_base = (uint32_t) pflash_block_base;
 
 	return (rc == kStatus_Success) ? 0 : -EIO;
 }

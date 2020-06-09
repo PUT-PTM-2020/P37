@@ -28,19 +28,19 @@ LOG_MODULE_REGISTER(adc_mcp320x, CONFIG_ADC_LOG_LEVEL);
 struct mcp320x_config {
 	const char *spi_dev_name;
 	const char *spi_cs_dev_name;
-	u8_t spi_cs_pin;
+	uint8_t spi_cs_pin;
 	struct spi_config spi_cfg;
-	u8_t channels;
+	uint8_t channels;
 };
 
 struct mcp320x_data {
 	struct adc_context ctx;
 	struct device *spi_dev;
 	struct spi_cs_control spi_cs;
-	u16_t *buffer;
-	u16_t *repeat_buffer;
-	u8_t channels;
-	u8_t differential;
+	uint16_t *buffer;
+	uint16_t *repeat_buffer;
+	uint8_t channels;
+	uint8_t differential;
 	struct k_thread thread;
 	struct k_sem sem;
 
@@ -51,7 +51,7 @@ struct mcp320x_data {
 static int mcp320x_channel_setup(struct device *dev,
 				 const struct adc_channel_cfg *channel_cfg)
 {
-	const struct mcp320x_config *config = dev->config->config_info;
+	const struct mcp320x_config *config = dev->config_info;
 	struct mcp320x_data *data = dev->driver_data;
 
 	if (channel_cfg->gain != ADC_GAIN_1) {
@@ -85,10 +85,10 @@ static int mcp320x_channel_setup(struct device *dev,
 static int mcp320x_validate_buffer_size(struct device *dev,
 					const struct adc_sequence *sequence)
 {
-	const struct mcp320x_config *config = dev->config->config_info;
-	u8_t channels = 0;
+	const struct mcp320x_config *config = dev->config_info;
+	uint8_t channels = 0;
 	size_t needed;
-	u32_t mask;
+	uint32_t mask;
 
 	for (mask = BIT(config->channels - 1); mask != 0; mask >>= 1) {
 		if (mask & sequence->channels) {
@@ -96,7 +96,7 @@ static int mcp320x_validate_buffer_size(struct device *dev,
 		}
 	}
 
-	needed = channels * sizeof(u16_t);
+	needed = channels * sizeof(uint16_t);
 	if (sequence->options) {
 		needed *= (1 + sequence->options->extra_samplings);
 	}
@@ -111,7 +111,7 @@ static int mcp320x_validate_buffer_size(struct device *dev,
 static int mcp320x_start_read(struct device *dev,
 			      const struct adc_sequence *sequence)
 {
-	const struct mcp320x_config *config = dev->config->config_info;
+	const struct mcp320x_config *config = dev->config_info;
 	struct mcp320x_data *data = dev->driver_data;
 	int err;
 
@@ -178,12 +178,12 @@ static void adc_context_update_buffer_pointer(struct adc_context *ctx,
 	}
 }
 
-static int mcp320x_read_channel(struct device *dev, u8_t channel, u16_t *result)
+static int mcp320x_read_channel(struct device *dev, uint8_t channel, uint16_t *result)
 {
-	const struct mcp320x_config *config = dev->config->config_info;
+	const struct mcp320x_config *config = dev->config_info;
 	struct mcp320x_data *data = dev->driver_data;
-	u8_t tx_bytes[2];
-	u8_t rx_bytes[2];
+	uint8_t tx_bytes[2];
+	uint8_t rx_bytes[2];
 	int err;
 	const struct spi_buf tx_buf[2] = {
 		{
@@ -239,8 +239,8 @@ static int mcp320x_read_channel(struct device *dev, u8_t channel, u16_t *result)
 static void mcp320x_acquisition_thread(struct device *dev)
 {
 	struct mcp320x_data *data = dev->driver_data;
-	u16_t result = 0;
-	u8_t channel;
+	uint16_t result = 0;
+	uint8_t channel;
 	int err;
 
 	while (true) {
@@ -272,7 +272,7 @@ static void mcp320x_acquisition_thread(struct device *dev)
 
 static int mcp320x_init(struct device *dev)
 {
-	const struct mcp320x_config *config = dev->config->config_info;
+	const struct mcp320x_config *config = dev->config_info;
 	struct mcp320x_data *data = dev->driver_data;
 
 	k_sem_init(&data->sem, 0, 1);
@@ -316,7 +316,7 @@ static const struct adc_driver_api mcp320x_adc_api = {
 #endif
 };
 
-#define DT_INST_MCP320X(inst, t) DT_INST(inst, microchip_mcp##t)
+#define INST_DT_MCP320X(inst, t) DT_INST(inst, microchip_mcp##t)
 
 #define MCP320X_DEVICE(t, n, ch) \
 	static struct mcp320x_data mcp##t##_data_##n = { \
@@ -325,29 +325,29 @@ static const struct adc_driver_api mcp320x_adc_api = {
 		ADC_CONTEXT_INIT_SYNC(mcp##t##_data_##n, ctx), \
 	}; \
 	static const struct mcp320x_config mcp##t##_config_##n = { \
-		.spi_dev_name = DT_BUS_LABEL(DT_INST_MCP320X(n, t)), \
+		.spi_dev_name = DT_BUS_LABEL(INST_DT_MCP320X(n, t)), \
 		.spi_cs_dev_name = \
 			UTIL_AND( \
-			DT_SPI_DEV_HAS_CS_GPIOS(DT_INST_MCP320X(n, t)), \
-			DT_SPI_DEV_CS_GPIOS_LABEL(DT_INST_MCP320X(n, t)) \
+			DT_SPI_DEV_HAS_CS_GPIOS(INST_DT_MCP320X(n, t)), \
+			DT_SPI_DEV_CS_GPIOS_LABEL(INST_DT_MCP320X(n, t)) \
 			), \
 		.spi_cs_pin = \
 			UTIL_AND( \
-			DT_SPI_DEV_HAS_CS_GPIOS(DT_INST_MCP320X(n, t)), \
-			DT_SPI_DEV_CS_GPIOS_PIN(DT_INST_MCP320X(n, t)) \
+			DT_SPI_DEV_HAS_CS_GPIOS(INST_DT_MCP320X(n, t)), \
+			DT_SPI_DEV_CS_GPIOS_PIN(INST_DT_MCP320X(n, t)) \
 			), \
 		.spi_cfg = { \
 			.operation = (SPI_OP_MODE_MASTER | SPI_TRANSFER_MSB | \
 				     SPI_WORD_SET(8)), \
-			.frequency = DT_PROP(DT_INST_MCP320X(n, t), \
+			.frequency = DT_PROP(INST_DT_MCP320X(n, t), \
 					     spi_max_frequency), \
-			.slave = DT_REG_ADDR(DT_INST_MCP320X(n, t)), \
+			.slave = DT_REG_ADDR(INST_DT_MCP320X(n, t)), \
 			.cs = &mcp##t##_data_##n.spi_cs, \
 		}, \
 		.channels = ch, \
 	}; \
 	DEVICE_AND_API_INIT(mcp##t##_##n, \
-			    DT_LABEL(DT_INST_MCP320X(n, t)), \
+			    DT_LABEL(INST_DT_MCP320X(n, t)), \
 			    &mcp320x_init, &mcp##t##_data_##n, \
 			    &mcp##t##_config_##n, POST_KERNEL, \
 			    CONFIG_ADC_MCP320X_INIT_PRIORITY, \
@@ -365,8 +365,9 @@ static const struct adc_driver_api mcp320x_adc_api = {
 
 #define CALL_WITH_ARG(arg, expr) expr(arg);
 
-#define DT_INST_MCP320X_FOREACH(t, inst_expr) \
-	UTIL_LISTIFY(DT_NUM_INST(microchip_mcp##t), CALL_WITH_ARG, inst_expr)
+#define INST_DT_MCP320X_FOREACH(t, inst_expr)				\
+	UTIL_LISTIFY(DT_NUM_INST_STATUS_OKAY(microchip_mcp##t),	\
+		     CALL_WITH_ARG, inst_expr)
 
-DT_INST_MCP320X_FOREACH(3204, MCP3204_DEVICE);
-DT_INST_MCP320X_FOREACH(3208, MCP3208_DEVICE);
+INST_DT_MCP320X_FOREACH(3204, MCP3204_DEVICE);
+INST_DT_MCP320X_FOREACH(3208, MCP3208_DEVICE);

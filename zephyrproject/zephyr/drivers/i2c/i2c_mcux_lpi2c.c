@@ -22,8 +22,8 @@ struct mcux_lpi2c_config {
 	char *clock_name;
 	clock_control_subsys_t clock_subsys;
 	void (*irq_config_func)(struct device *dev);
-	u32_t bitrate;
-	u32_t bus_idle_timeout_ns;
+	uint32_t bitrate;
+	uint32_t bus_idle_timeout_ns;
 };
 
 struct mcux_lpi2c_data {
@@ -32,13 +32,13 @@ struct mcux_lpi2c_data {
 	status_t callback_status;
 };
 
-static int mcux_lpi2c_configure(struct device *dev, u32_t dev_config_raw)
+static int mcux_lpi2c_configure(struct device *dev, uint32_t dev_config_raw)
 {
-	const struct mcux_lpi2c_config *config = dev->config->config_info;
+	const struct mcux_lpi2c_config *config = dev->config_info;
 	LPI2C_Type *base = config->base;
 	struct device *clock_dev;
-	u32_t clock_freq;
-	u32_t baudrate;
+	uint32_t clock_freq;
+	uint32_t baudrate;
 
 	if (!(I2C_MODE_MASTER & dev_config_raw)) {
 		return -EINVAL;
@@ -90,9 +90,9 @@ static void mcux_lpi2c_master_transfer_callback(LPI2C_Type *base,
 	k_sem_give(&data->device_sync_sem);
 }
 
-static u32_t mcux_lpi2c_convert_flags(int msg_flags)
+static uint32_t mcux_lpi2c_convert_flags(int msg_flags)
 {
-	u32_t flags = 0U;
+	uint32_t flags = 0U;
 
 	if (!(msg_flags & I2C_MSG_STOP)) {
 		flags |= kLPI2C_TransferNoStopFlag;
@@ -106,9 +106,9 @@ static u32_t mcux_lpi2c_convert_flags(int msg_flags)
 }
 
 static int mcux_lpi2c_transfer(struct device *dev, struct i2c_msg *msgs,
-		u8_t num_msgs, u16_t addr)
+		uint8_t num_msgs, uint16_t addr)
 {
-	const struct mcux_lpi2c_config *config = dev->config->config_info;
+	const struct mcux_lpi2c_config *config = dev->config_info;
 	struct mcux_lpi2c_data *data = dev->driver_data;
 	LPI2C_Type *base = config->base;
 	lpi2c_master_transfer_t transfer;
@@ -169,7 +169,7 @@ static int mcux_lpi2c_transfer(struct device *dev, struct i2c_msg *msgs,
 static void mcux_lpi2c_isr(void *arg)
 {
 	struct device *dev = (struct device *)arg;
-	const struct mcux_lpi2c_config *config = dev->config->config_info;
+	const struct mcux_lpi2c_config *config = dev->config_info;
 	struct mcux_lpi2c_data *data = dev->driver_data;
 	LPI2C_Type *base = config->base;
 
@@ -178,11 +178,11 @@ static void mcux_lpi2c_isr(void *arg)
 
 static int mcux_lpi2c_init(struct device *dev)
 {
-	const struct mcux_lpi2c_config *config = dev->config->config_info;
+	const struct mcux_lpi2c_config *config = dev->config_info;
 	struct mcux_lpi2c_data *data = dev->driver_data;
 	LPI2C_Type *base = config->base;
 	struct device *clock_dev;
-	u32_t clock_freq, bitrate_cfg;
+	uint32_t clock_freq, bitrate_cfg;
 	lpi2c_master_config_t master_config;
 	int error;
 
@@ -254,4 +254,4 @@ static const struct i2c_driver_api mcux_lpi2c_driver_api = {
 		irq_enable(DT_INST_IRQN(n));				\
 	}
 
-DT_INST_FOREACH(I2C_MCUX_LPI2C_INIT)
+DT_INST_FOREACH_STATUS_OKAY(I2C_MCUX_LPI2C_INIT)

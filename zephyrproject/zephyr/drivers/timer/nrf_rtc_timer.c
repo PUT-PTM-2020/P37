@@ -14,6 +14,7 @@
 #include <spinlock.h>
 
 #define RTC NRF_RTC1
+#define RTC_IRQn NRFX_IRQ_NUMBER_GET(RTC)
 
 #define COUNTER_SPAN BIT(24)
 #define COUNTER_MAX (COUNTER_SPAN - 1U)
@@ -25,19 +26,19 @@
 
 static struct k_spinlock lock;
 
-static u32_t last_count;
+static uint32_t last_count;
 
-static u32_t counter_sub(u32_t a, u32_t b)
+static uint32_t counter_sub(uint32_t a, uint32_t b)
 {
 	return (a - b) & COUNTER_MAX;
 }
 
-static void set_comparator(u32_t cyc)
+static void set_comparator(uint32_t cyc)
 {
 	nrf_rtc_cc_set(RTC, 0, cyc & COUNTER_MAX);
 }
 
-static u32_t get_comparator(void)
+static uint32_t get_comparator(void)
 {
 	return nrf_rtc_cc_get(RTC, 0);
 }
@@ -62,7 +63,7 @@ static void int_enable(void)
 	nrf_rtc_int_enable(RTC, NRF_RTC_INT_COMPARE0_MASK);
 }
 
-static u32_t counter(void)
+static uint32_t counter(void)
 {
 	return nrf_rtc_counter_get(RTC);
 }
@@ -70,8 +71,8 @@ static u32_t counter(void)
 /* Function ensures that previous CC value will not set event */
 static void prevent_false_prev_evt(void)
 {
-	u32_t now = counter();
-	u32_t prev_val;
+	uint32_t now = counter();
+	uint32_t prev_val;
 
 	/* First take care of a risk of an event coming from CC being set to
 	 * next tick. Reconfigure CC to future (now tick is the furtherest
@@ -88,13 +89,18 @@ static void prevent_false_prev_evt(void)
 		k_busy_wait(15);
 		event_clear();
 	}
+
+	/* Clear interrupt that may have fired as we were setting the
+	 * comparator.
+	 */
+	NVIC_ClearPendingIRQ(RTC_IRQn);
 }
 
 /* If settings is next tick from now, function attempts to set next tick. If
  * counter progresses during that time it means that 1 tick elapsed and
  * interrupt is set pending.
  */
-static void handle_next_tick_case(u32_t t)
+static void handle_next_tick_case(uint32_t t)
 {
 	set_comparator(t + 2);
 	while (t != counter()) {
@@ -110,10 +116,10 @@ static void handle_next_tick_case(u32_t t)
  * less than MAX_TICKS from now. It detects late setting and also handles
  * +1 tick case.
  */
-static void set_absolute_ticks(u32_t abs_val)
+static void set_absolute_ticks(uint32_t abs_val)
 {
-	u32_t diff;
-	u32_t t = counter();
+	uint32_t diff;
+	uint32_t t = counter();
 
 	diff = counter_sub(abs_val, t);
 	if (diff == 1) {
@@ -141,7 +147,7 @@ static void set_absolute_ticks(u32_t abs_val)
 /* Sets relative ticks alarm from any context. Function is lockless. It only
  * blocks RTC interrupt.
  */
-static void set_protected_absolute_ticks(u32_t ticks)
+static void set_protected_absolute_ticks(uint32_t ticks)
 {
 	int_disable();
 
@@ -160,13 +166,13 @@ static void set_protected_absolute_ticks(u32_t ticks)
  * it by pointer at runtime, maybe?) so we don't have this leaky
  * symbol.
  */
-void rtc1_nrf_isr(void *arg)
+void rtc_nrf_isr(void *arg)
 {
 	ARG_UNUSED(arg);
 	event_clear();
 
-	u32_t t = get_comparator();
-	u32_t dticks = counter_sub(t, last_count) / CYC_PER_TICK;
+	uint32_t t = get_comparator();
+	uint32_t dticks = counter_sub(t, last_count) / CYC_PER_TICK;
 
 	last_count += dticks * CYC_PER_TICK;
 
@@ -177,7 +183,7 @@ void rtc1_nrf_isr(void *arg)
 		set_absolute_ticks(last_count + CYC_PER_TICK);
 	}
 
-	z_clock_announce(IS_ENABLED(CONFIG_TICKLESS_KERNEL) ? dticks : 1);
+	z_clock_announce(IS_ENABLED(CONFIG_TICKLESS_KERNEL) ? dticks : (dticks > 0));
 }
 
 int z_clock_driver_init(struct device *device)
@@ -196,11 +202,11 @@ int z_clock_driver_init(struct device *device)
 	/* TODO: replace with counter driver to access RTC */
 	nrf_rtc_prescaler_set(RTC, 0);
 	event_clear();
-	NVIC_ClearPendingIRQ(RTC1_IRQn);
+	NVIC_ClearPendingIRQ(RTC_IRQn);
 	int_enable();
 
-	IRQ_CONNECT(RTC1_IRQn, 1, rtc1_nrf_isr, 0, 0);
-	irq_enable(RTC1_IRQn);
+	IRQ_CONNECT(RTC_IRQn, 1, rtc_nrf_isr, 0, 0);
+	irq_enable(RTC_IRQn);
 
 	nrf_rtc_task_trigger(RTC, NRF_RTC_TASK_CLEAR);
 	nrf_rtc_task_trigger(RTC, NRF_RTC_TASK_START);
@@ -212,19 +218,19 @@ int z_clock_driver_init(struct device *device)
 	return 0;
 }
 
-void z_clock_set_timeout(s32_t ticks, bool idle)
+void z_clock_set_timeout(int32_t ticks, bool idle)
 {
 	ARG_UNUSED(idle);
-	u32_t cyc;
+	uint32_t cyc;
 
 	if (!IS_ENABLED(CONFIG_TICKLESS_KERNEL)) {
 		return;
 	}
 
 	ticks = (ticks == K_TICKS_FOREVER) ? MAX_TICKS : ticks;
-	ticks = MAX(MIN(ticks - 1, (s32_t)MAX_TICKS), 0);
+	ticks = MAX(MIN(ticks - 1, (int32_t)MAX_TICKS), 0);
 
-	u32_t unannounced = counter_sub(counter(), last_count);
+	uint32_t unannounced = counter_sub(counter(), last_count);
 
 	/* If we haven't announced for more than half the 24-bit wrap
 	 * duration, then force an announce to avoid loss of a wrap
@@ -253,23 +259,23 @@ void z_clock_set_timeout(s32_t ticks, bool idle)
 	set_protected_absolute_ticks(cyc);
 }
 
-u32_t z_clock_elapsed(void)
+uint32_t z_clock_elapsed(void)
 {
 	if (!IS_ENABLED(CONFIG_TICKLESS_KERNEL)) {
 		return 0;
 	}
 
 	k_spinlock_key_t key = k_spin_lock(&lock);
-	u32_t ret = counter_sub(counter(), last_count) / CYC_PER_TICK;
+	uint32_t ret = counter_sub(counter(), last_count) / CYC_PER_TICK;
 
 	k_spin_unlock(&lock, key);
 	return ret;
 }
 
-u32_t z_timer_cycle_get_32(void)
+uint32_t z_timer_cycle_get_32(void)
 {
 	k_spinlock_key_t key = k_spin_lock(&lock);
-	u32_t ret = counter_sub(counter(), last_count) + last_count;
+	uint32_t ret = counter_sub(counter(), last_count) + last_count;
 
 	k_spin_unlock(&lock, key);
 	return ret;
