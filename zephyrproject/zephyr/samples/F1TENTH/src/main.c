@@ -55,7 +55,7 @@ struct device *uart1_dev;
 int left_dist = 100, front_dist = 100, right_dist = 100;
 int *distance = NULL;
 int stopping_counter = 0; 
-u8_t recv_data = '\0';
+uint8_t recv_data = '\0';
  
 const struct uart_config uart_cfg = {
         .baudrate = 115200,
@@ -157,10 +157,10 @@ void get_distance(int id){
         k_sched_lock();
 
         for(int i = 0; i < size; i++){
-            u32_t start_time;
-            u32_t stop_time;
-            u32_t cycles_spent;
-            u32_t nsec_spent = 0;
+            uint32_t start_time;
+            uint32_t stop_time;
+            uint32_t cycles_spent;
+            uint32_t nsec_spent = 0;
 
             int val;
             gpio_pin_set(gpio_sonic_sensor_dev, trig_pin, true);
@@ -168,7 +168,7 @@ void get_distance(int id){
             while(nsec_spent <= 11000){
                 stop_time = k_cycle_get_32();
                 cycles_spent = stop_time - start_time;
-                nsec_spent = SYS_CLOCK_HW_CYCLES_TO_NS(cycles_spent);
+                nsec_spent = k_cyc_to_ns_ceil32(cycles_spent);
             }
 
             gpio_pin_set(gpio_sonic_sensor_dev, trig_pin, false);
@@ -177,7 +177,7 @@ void get_distance(int id){
             while(gpio_pin_get(gpio_sonic_sensor_dev, echo_pin));
             stop_time = k_cycle_get_32();
             cycles_spent = stop_time - start_time;
-            nsec_spent = SYS_CLOCK_HW_CYCLES_TO_NS(cycles_spent);
+            nsec_spent = k_cyc_to_ns_ceil32(cycles_spent);
             val = nsec_spent / 58000;
             data[i] = val;
         }
@@ -408,7 +408,7 @@ int esp_recv_counter = 0;
 
 void uart_fifo_callback_init(struct device *dev)
 {
-	u8_t recv_char;
+	uint8_t recv_char;
     
 	if (!uart_irq_update(dev)) {
 		printk("retval should always be 1\n");
@@ -423,7 +423,7 @@ void uart_fifo_callback_init(struct device *dev)
 
 void uart_fifo_callback(struct device *dev)
 {
-    u8_t recv_char;
+    uint8_t recv_char;
     const char esp_pattern[7] = {'+', 'I', 'P', 'D', ',' ,'1' ,':'};
    
     if (!uart_irq_update(dev)) {
